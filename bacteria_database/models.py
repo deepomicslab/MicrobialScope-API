@@ -1,11 +1,14 @@
 from django.db import models
 
+from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
+
 
 # MAG Bacteria Models
 # -------------------
 class MAGBacteria(models.Model):
-    bacteria_id_GCA = models.CharField(max_length=100, db_index=True, blank=True)
-    bacteria_id_GCF = models.CharField(max_length=100, db_index=True, blank=True)
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    bacteria_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
     taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
     species = models.CharField(max_length=255, blank=True)
@@ -21,7 +24,7 @@ class MAGBacteria(models.Model):
         verbose_name_plural = "MAG Bacteria Genomes"
 
     def __str__(self):
-        return f"{self.organism_name} ({self.bacteria_id_GCA})"
+        return f"{self.organism_name} ({self.unique_id})"
 
 
 class MAGBacteriaTaxonomy(models.Model):
@@ -119,13 +122,21 @@ class MAGBacteriaCRISPRCas(models.Model):
     cas_id = models.CharField(max_length=100, blank=True)
     cas_start = models.BigIntegerField(null=True, blank=True)
     cas_end = models.BigIntegerField(null=True, blank=True)
-    cas_subtype = models.CharField(max_length=255, blank=True)
+    cas_subtype = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
         verbose_name = "MAG Bacteria CRISPRC CAS Annotation"
         verbose_name_plural = "MAG Bacteria CRISPRC CAS Annotations"
+        indexes = [
+            GinIndex(fields=['cas_subtype'], name='mb_cas_subtype_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.cas_id} ({self.cas_subtype})"
@@ -188,7 +199,12 @@ class MAGBacteriaSecondaryMetaboliteRegion(models.Model):
 
     start = models.BigIntegerField(null=True, blank=True)
     end = models.BigIntegerField(null=True, blank=True)
-    type = models.CharField(max_length=255, blank=True)
+    type = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
 
     most_similar_cluster = models.TextField(blank=True)
     similarity = models.CharField(max_length=255, blank=True)
@@ -196,6 +212,9 @@ class MAGBacteriaSecondaryMetaboliteRegion(models.Model):
     class Meta:
         verbose_name = "MAG Bacteria Secondary Metabolite Region"
         verbose_name_plural = "MAG Bacteria Secondary Metabolite Regions"
+        indexes = [
+            GinIndex(fields=['type'], name='mb_sm_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.bacteria_id} - {self.region} ({self.type})"
@@ -275,7 +294,12 @@ class MAGBacteriaAntibioticResistance(models.Model):
     best_identities = models.FloatField(null=True, blank=True)
     aro = models.IntegerField(null=True, blank=True)
 
-    drug_class = models.TextField(blank=True)
+    drug_class = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     resistance_mechanism = models.CharField(max_length=255, blank=True)
     amr_gene_family = models.CharField(max_length=255, blank=True)
 
@@ -288,6 +312,9 @@ class MAGBacteriaAntibioticResistance(models.Model):
     class Meta:
         verbose_name = "MAG Bacteria Antibiotic Resistance Gene"
         verbose_name_plural = "MAG Bacteria Antibiotic Resistance Genes"
+        indexes = [
+            GinIndex(fields=['drug_class'], name='mb_arg_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} - {self.best_hit_aro}"
@@ -331,8 +358,8 @@ class MAGBacteriaHelices(models.Model):
 # unMAG Bacteria Models
 # -------------------
 class UnMAGBacteria(models.Model):
-    bacteria_id_GCA = models.CharField(max_length=100, db_index=True, blank=True)
-    bacteria_id_GCF = models.CharField(max_length=100, db_index=True, blank=True)
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    bacteria_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
     taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
     species = models.CharField(max_length=255, blank=True)
@@ -348,7 +375,7 @@ class UnMAGBacteria(models.Model):
         verbose_name_plural = "UnMAG Bacteria Genomes"
 
     def __str__(self):
-        return f"{self.organism_name} ({self.bacteria_id_GCA})"
+        return f"{self.organism_name} ({self.unique_id})"
 
 
 class UnMAGBacteriaTaxonomy(models.Model):
@@ -446,13 +473,21 @@ class UnMAGBacteriaCRISPRCas(models.Model):
     cas_id = models.CharField(max_length=100, blank=True)
     cas_start = models.BigIntegerField(null=True, blank=True)
     cas_end = models.BigIntegerField(null=True, blank=True)
-    cas_subtype = models.CharField(max_length=255, blank=True)
+    cas_subtype = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Bacteria CRISPRC CAS Annotation"
         verbose_name_plural = "UnMAG Bacteria CRISPRC CAS Annotations"
+        indexes = [
+            GinIndex(fields=['cas_subtype'], name='umb_cas_subtype_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.cas_id} ({self.cas_subtype})"
@@ -515,7 +550,12 @@ class UnMAGBacteriaSecondaryMetaboliteRegion(models.Model):
 
     start = models.BigIntegerField(null=True, blank=True)
     end = models.BigIntegerField(null=True, blank=True)
-    type = models.CharField(max_length=255, blank=True)
+    type = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
 
     most_similar_cluster = models.TextField(blank=True)
     similarity = models.CharField(max_length=255, blank=True)
@@ -523,6 +563,9 @@ class UnMAGBacteriaSecondaryMetaboliteRegion(models.Model):
     class Meta:
         verbose_name = "UnMAG Bacteria Secondary Metabolite Region"
         verbose_name_plural = "UnMAG Bacteria Secondary Metabolite Regions"
+        indexes = [
+            GinIndex(fields=['type'], name='umb_sm_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.bacteria_id} - {self.region} ({self.type})"
@@ -602,7 +645,12 @@ class UnMAGBacteriaAntibioticResistance(models.Model):
     best_identities = models.FloatField(null=True, blank=True)
     aro = models.IntegerField(null=True, blank=True)
 
-    drug_class = models.TextField(blank=True)
+    drug_class = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     resistance_mechanism = models.CharField(max_length=255, blank=True)
     amr_gene_family = models.CharField(max_length=255, blank=True)
 
@@ -615,6 +663,9 @@ class UnMAGBacteriaAntibioticResistance(models.Model):
     class Meta:
         verbose_name = "UnMAG Bacteria Antibiotic Resistance Gene"
         verbose_name_plural = "UnMAG Bacteria Antibiotic Resistance Genes"
+        indexes = [
+            GinIndex(fields=['drug_class'], name='umb_arg_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} - {self.best_hit_aro}"
