@@ -1,11 +1,14 @@
 from django.db import models
 
+from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
+
 
 # MAG Fungi Models
 # ----------------
 class MAGFungi(models.Model):
-    fungi_id_GCA = models.CharField(max_length=100, db_index=True, blank=True)
-    fungi_id_GCF = models.CharField(max_length=100, db_index=True, blank=True)
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    fungi_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
     taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
     species = models.CharField(max_length=255, blank=True)
@@ -21,7 +24,7 @@ class MAGFungi(models.Model):
         verbose_name_plural = "MAG Fungi Genomes"
 
     def __str__(self):
-        return f"{self.organism_name} ({self.fungi_id_GCA})"
+        return f"{self.organism_name} ({self.unique_id})"
 
 
 class MAGFungiTaxonomy(models.Model):
@@ -121,7 +124,12 @@ class MAGFungiSecondaryMetaboliteRegion(models.Model):
 
     start = models.BigIntegerField(null=True, blank=True)
     end = models.BigIntegerField(null=True, blank=True)
-    type = models.CharField(max_length=255, blank=True)
+    type = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
 
     most_similar_cluster = models.TextField(blank=True)
     similarity = models.CharField(max_length=255, blank=True)
@@ -129,6 +137,9 @@ class MAGFungiSecondaryMetaboliteRegion(models.Model):
     class Meta:
         verbose_name = "MAG Fungi Secondary Metabolite Region"
         verbose_name_plural = "MAG Fungi Secondary Metabolite Regions"
+        indexes = [
+            GinIndex(fields=['type'], name='mf_sm_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.fungi_id} - {self.region} ({self.type})"
@@ -200,7 +211,12 @@ class MAGFungiAntibioticResistance(models.Model):
     best_identities = models.FloatField(null=True, blank=True)
     aro = models.IntegerField(null=True, blank=True)
 
-    drug_class = models.TextField(blank=True)
+    drug_class = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     resistance_mechanism = models.CharField(max_length=255, blank=True)
     amr_gene_family = models.CharField(max_length=255, blank=True)
 
@@ -213,6 +229,9 @@ class MAGFungiAntibioticResistance(models.Model):
     class Meta:
         verbose_name = "MAG Fungi Antibiotic Resistance Gene"
         verbose_name_plural = "MAG Fungi Antibiotic Resistance Genes"
+        indexes = [
+            GinIndex(fields=['drug_class'], name='mf_arg_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} - {self.best_hit_aro}"
@@ -256,8 +275,8 @@ class MAGFungiHelices(models.Model):
 # unMAG Fungi Models.
 # -------------------
 class UnMAGFungi(models.Model):
-    fungi_id_GCA = models.CharField(max_length=100, db_index=True, blank=True)
-    fungi_id_GCF = models.CharField(max_length=100, db_index=True, blank=True)
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    fungi_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
     taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
     species = models.CharField(max_length=255, blank=True)
@@ -273,7 +292,7 @@ class UnMAGFungi(models.Model):
         verbose_name_plural = "UnMAG Fungi Genomes"
 
     def __str__(self):
-        return f"{self.organism_name} ({self.fungi_id_GCA})"
+        return f"{self.organism_name} ({self.unique_id})"
 
 
 class UnMAGFungiTaxonomy(models.Model):
@@ -373,7 +392,12 @@ class UnMAGFungiSecondaryMetaboliteRegion(models.Model):
 
     start = models.BigIntegerField(null=True, blank=True)
     end = models.BigIntegerField(null=True, blank=True)
-    type = models.CharField(max_length=255, blank=True)
+    type = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
 
     most_similar_cluster = models.TextField(blank=True)
     similarity = models.CharField(max_length=255, blank=True)
@@ -381,6 +405,9 @@ class UnMAGFungiSecondaryMetaboliteRegion(models.Model):
     class Meta:
         verbose_name = "UnMAG Fungi Secondary Metabolite Region"
         verbose_name_plural = "UnMAG Fungi Secondary Metabolite Regions"
+        indexes = [
+            GinIndex(fields=['type'], name='umf_sm_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.fungi_id} - {self.region} ({self.type})"
@@ -452,7 +479,12 @@ class UnMAGFungiAntibioticResistance(models.Model):
     best_identities = models.FloatField(null=True, blank=True)
     aro = models.IntegerField(null=True, blank=True)
 
-    drug_class = models.TextField(blank=True)
+    drug_class = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     resistance_mechanism = models.CharField(max_length=255, blank=True)
     amr_gene_family = models.CharField(max_length=255, blank=True)
 
@@ -465,6 +497,9 @@ class UnMAGFungiAntibioticResistance(models.Model):
     class Meta:
         verbose_name = "UnMAG Fungi Antibiotic Resistance Gene"
         verbose_name_plural = "UnMAG Fungi Antibiotic Resistance Genes"
+        indexes = [
+            GinIndex(fields=['drug_class'], name='umf_arg_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} - {self.best_hit_aro}"

@@ -92,8 +92,8 @@ def mag_fungi_import():
         objs = []
         for _, row in chunk.iterrows():
             obj = MAGFungi(
-                fungi_id_GCA=next((id_ for id_ in row['Fungi_ID'].split(', ') if id_.startswith('GCA_')), None),
-                fungi_id_GCF=next((id_ for id_ in row['Fungi_ID'].split(', ') if id_.startswith('GCF_')), None),
+                unique_id=row['Unique_ID'],
+                fungi_id=row['Fungi_ID'],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -129,8 +129,8 @@ def unmag_fungi_import():
         objs = []
         for _, row in chunk.iterrows():
             obj = UnMAGFungi(
-                fungi_id_GCA=next((id_ for id_ in row['Fungi_ID'].split(', ') if id_.startswith('GCA_')), None),
-                fungi_id_GCF=next((id_ for id_ in row['Fungi_ID'].split(', ') if id_.startswith('GCF_')), None),
+                unique_id=row['Unique_ID'],
+                fungi_id=row['Fungi_ID'],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -424,7 +424,7 @@ def mag_fungi_secondary_metabolite_region_import():
                 region=row['Region'],
                 start=row['Start'],
                 end=row['End'],
-                type=row['Type'],
+                type=[t.strip() for t in row['Type'].split(',')] if pd.notna(row['Type']) else [],
                 most_similar_cluster=row['Most similar known cluster'],
                 similarity=row['Similarity']
             )
@@ -459,7 +459,7 @@ def unmag_fungi_secondary_metabolite_region_import():
                 region=row['Region'],
                 start=row['Start'],
                 end=row['End'],
-                type=row['Type'],
+                type=[t.strip() for t in row['Type'].split(',')] if pd.notna(row['Type']) else [],
                 most_similar_cluster=row['Most similar known cluster'],
                 similarity=row['Similarity']
             )
@@ -657,7 +657,7 @@ def mag_fungi_antibiotic_resistance_import():
                 best_hit_aro=row['Best_Hit_ARO'],
                 best_identities=row['Best_Identities'],
                 aro=row['ARO'],
-                drug_class=row['Drug Class'],
+                drug_class=[item.strip() for item in row['Drug Class'].split(';') if item.strip()],
                 resistance_mechanism=row['Resistance Mechanism'],
                 amr_gene_family=row['AMR Gene Family'],
                 antibiotic=row['Antibiotic'],
@@ -701,7 +701,7 @@ def unmag_fungi_antibiotic_resistance_import():
                 best_hit_aro=row['Best_Hit_ARO'],
                 best_identities=row['Best_Identities'],
                 aro=row['ARO'],
-                drug_class=row['Drug Class'],
+                drug_class=[item.strip() for item in row['Drug Class'].split(';') if item.strip()],
                 resistance_mechanism=row['Resistance Mechanism'],
                 amr_gene_family=row['AMR Gene Family'],
                 antibiotic=row['Antibiotic'],

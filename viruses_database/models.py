@@ -1,11 +1,14 @@
 from django.db import models
 
+from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
+
 
 # MAG Viruses Models.
 # ------------------
 class MAGViruses(models.Model):
-    viruses_id_GCA = models.CharField(max_length=100, db_index=True, blank=True)
-    viruses_id_GCF = models.CharField(max_length=100, db_index=True, blank=True)
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    viruses_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
     taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
     species = models.CharField(max_length=255, blank=True)
@@ -21,7 +24,7 @@ class MAGViruses(models.Model):
         verbose_name_plural = "MAG Viruses Genomes"
 
     def __str__(self):
-        return f"{self.organism_name} ({self.viruses_id_GCA})"
+        return f"{self.organism_name} ({self.unique_id})"
 
 
 class MAGVirusesTaxonomy(models.Model):
@@ -120,13 +123,21 @@ class MAGVirusesCRISPRCas(models.Model):
     cas_id = models.CharField(max_length=100, blank=True)
     cas_start = models.BigIntegerField(null=True, blank=True)
     cas_end = models.BigIntegerField(null=True, blank=True)
-    cas_subtype = models.CharField(max_length=255, blank=True)
+    cas_subtype = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
         verbose_name = "MAG Viruses CRISPRC CAS Annotation"
         verbose_name_plural = "MAG Viruses CRISPRC CAS Annotations"
+        indexes = [
+            GinIndex(fields=['cas_subtype'], name='mv_cas_subtype_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.cas_id} ({self.cas_subtype})"
@@ -230,7 +241,12 @@ class MAGVirusesAntibioticResistance(models.Model):
     best_identities = models.FloatField(null=True, blank=True)
     aro = models.IntegerField(null=True, blank=True)
 
-    drug_class = models.TextField(blank=True)
+    drug_class = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     resistance_mechanism = models.CharField(max_length=255, blank=True)
     amr_gene_family = models.CharField(max_length=255, blank=True)
 
@@ -243,6 +259,9 @@ class MAGVirusesAntibioticResistance(models.Model):
     class Meta:
         verbose_name = "MAG Viruses Antibiotic Resistance Gene"
         verbose_name_plural = "MAG Viruses Antibiotic Resistance Genes"
+        indexes = [
+            GinIndex(fields=['drug_class'], name='mv_arg_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} - {self.best_hit_aro}"
@@ -286,8 +305,8 @@ class MAGVirusesHelices(models.Model):
 # unMAG Viruses models.
 # ---------------------
 class UnMAGViruses(models.Model):
-    viruses_id_GCA = models.CharField(max_length=100, db_index=True, blank=True)
-    viruses_id_GCF = models.CharField(max_length=100, db_index=True, blank=True)
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    viruses_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
     taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
     species = models.CharField(max_length=255, blank=True)
@@ -303,7 +322,7 @@ class UnMAGViruses(models.Model):
         verbose_name_plural = "UnMAG Viruses Genomes"
 
     def __str__(self):
-        return f"{self.organism_name} ({self.viruses_id_GCA})"
+        return f"{self.organism_name} ({self.unique_id})"
 
 
 class UnMAGVirusesTaxonomy(models.Model):
@@ -402,13 +421,21 @@ class UnMAGVirusesCRISPRCas(models.Model):
     cas_id = models.CharField(max_length=100, blank=True)
     cas_start = models.BigIntegerField(null=True, blank=True)
     cas_end = models.BigIntegerField(null=True, blank=True)
-    cas_subtype = models.CharField(max_length=255, blank=True)
+    cas_subtype = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Viruses CRISPRC CAS Annotation"
         verbose_name_plural = "UnMAG Viruses CRISPRC CAS Annotations"
+        indexes = [
+            GinIndex(fields=['cas_subtype'], name='umv_cas_subtype_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.cas_id} ({self.cas_subtype})"
@@ -512,7 +539,12 @@ class UnMAGVirusesAntibioticResistance(models.Model):
     best_identities = models.FloatField(null=True, blank=True)
     aro = models.IntegerField(null=True, blank=True)
 
-    drug_class = models.TextField(blank=True)
+    drug_class = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     resistance_mechanism = models.CharField(max_length=255, blank=True)
     amr_gene_family = models.CharField(max_length=255, blank=True)
 
@@ -525,6 +557,9 @@ class UnMAGVirusesAntibioticResistance(models.Model):
     class Meta:
         verbose_name = "UnMAG Viruses Antibiotic Resistance Gene"
         verbose_name_plural = "UnMAG Viruses Antibiotic Resistance Genes"
+        indexes = [
+            GinIndex(fields=['drug_class'], name='umv_arg_type_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} - {self.best_hit_aro}"

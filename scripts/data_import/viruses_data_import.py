@@ -94,8 +94,8 @@ def mag_viruses_import():
         objs = []
         for _, row in chunk.iterrows():
             obj = MAGViruses(
-                viruses_id_GCA=next((id_ for id_ in row['Viruses_ID'].split(', ') if id_.startswith('GCA_')), None),
-                viruses_id_GCF=next((id_ for id_ in row['Viruses_ID'].split(', ') if id_.startswith('GCF_')), None),
+                unique_id=row['Unique_ID'],
+                viruses_id=row['Viruses_ID'],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -131,8 +131,8 @@ def unmag_viruses_import():
         objs = []
         for _, row in chunk.iterrows():
             obj = UnMAGViruses(
-                viruses_id_GCA=next((id_ for id_ in row['Viruses_ID'].split(', ') if id_.startswith('GCA_')), None),
-                viruses_id_GCF=next((id_ for id_ in row['Viruses_ID'].split(', ') if id_.startswith('GCF_')), None),
+                unique_id=row['Unique_ID'],
+                viruses_id=row['Viruses_ID'],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -432,7 +432,7 @@ def mag_viruses_crispr_cas_import():
                     cas_id=row['Cas_ID'],
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
-                    cas_subtype=row['Cas Subtype'],
+                    cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
                     consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
@@ -503,7 +503,7 @@ def unmag_viruses_crispr_cas_import():
                     cas_id=row['Cas_ID'],
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
-                    cas_subtype=row['Cas Subtype'],
+                    cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
                     consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
@@ -755,7 +755,7 @@ def mag_viruses_antibiotic_resistance_import():
                 best_hit_aro=row['Best_Hit_ARO'],
                 best_identities=row['Best_Identities'],
                 aro=row['ARO'],
-                drug_class=row['Drug Class'],
+                drug_class=[item.strip() for item in row['Drug Class'].split(';') if item.strip()],
                 resistance_mechanism=row['Resistance Mechanism'],
                 amr_gene_family=row['AMR Gene Family'],
                 antibiotic=row['Antibiotic'],
@@ -799,7 +799,7 @@ def unmag_viruses_antibiotic_resistance_import():
                 best_hit_aro=row['Best_Hit_ARO'],
                 best_identities=row['Best_Identities'],
                 aro=row['ARO'],
-                drug_class=row['Drug Class'],
+                drug_class=[item.strip() for item in row['Drug Class'].split(';') if item.strip()],
                 resistance_mechanism=row['Resistance Mechanism'],
                 amr_gene_family=row['AMR Gene Family'],
                 antibiotic=row['Antibiotic'],
