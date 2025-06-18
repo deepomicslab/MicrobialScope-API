@@ -6,10 +6,10 @@ from archaea_database.models import MAGArchaeaTRNA, UnMAGArchaeaTRNA
 class MAGArchaeaTRNASerializer(serializers.ModelSerializer):
     class Meta:
         model = MAGArchaeaTRNA
-        exclude = ['sequence']
+        fields = '__all__'
 
 
 class UnMAGArchaeaTRNASerializer(serializers.ModelSerializer):
     class Meta:
         model = UnMAGArchaeaTRNA
-        exclude = ['sequence']
+        fields = '__all__'

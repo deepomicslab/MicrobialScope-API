@@ -1,11 +1,15 @@
 from rest_framework import serializers
 
-from archaea_database.models import MAGArchaeaAntiCRISPRAnnotation
+from archaea_database.models import MAGArchaeaAntiCRISPRAnnotation, UnMAGArchaeaAntiCRISPRAnnotation
 
 
 class MAGArchaeaAntiCRISPRAnnotationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MAGArchaeaAntiCRISPRAnnotation
-        exclude = [
-            'acr_aca', 'mge_metadata', 'acr_hit_pident', 'sequence', 'self_target_within_5kb', 'self_target_outside_5kb'
-        ]
+        fields = '__all__'
+
+
+class UnMAGArchaeaAntiCRISPRAnnotationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnMAGArchaeaAntiCRISPRAnnotation
+        fields = '__all__'

@@ -361,14 +361,14 @@ class UnMAGArchaea(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
     archaea_id = models.TextField(blank=True)
     organism_name = models.CharField(max_length=255, blank=True)
-    taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
+    taxonomic_id = models.CharField(max_length=255, blank=True)
     species = models.CharField(max_length=255, blank=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
-    total_chromosomes = models.PositiveIntegerField(null=True, blank=True)
-    contig_n50 = models.BigIntegerField(null=True, blank=True)
-    scaffold_n50 = models.BigIntegerField(null=True, blank=True)
+    total_chromosomes = models.CharField(max_length=255, blank=True)
+    contig_n50 = models.CharField(max_length=255, blank=True)
+    scaffold_n50 = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Archaea Genome"

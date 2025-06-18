@@ -11,9 +11,9 @@ import csv
 from datetime import datetime
 
 from archaea_database.views.base import GenericTableQueryView, GenericSingleDownloadView, GenericBatchDownloadView
-from archaea_database.models import MAGArchaeaCRISPRCas, MAGArchaeaCRISPR
+from archaea_database.models import MAGArchaeaCRISPRCas, MAGArchaeaCRISPR, UnMAGArchaeaCRISPRCas, UnMAGArchaeaCRISPR
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
-from archaea_database.serializers.crisprcas_serializers import MAGArchaeaCRISPRSerializer
+from archaea_database.serializers.crisprcas_serializers import MAGArchaeaCRISPRSerializer, UnMAGArchaeaCRISPRSerializer
 from utils.pagination import CustomPostPagination
 
 
@@ -32,6 +32,32 @@ def get_CRISPR_Cas_systems_filter_q(filters):
     return q_obj
 
 
+def get_csv_header():
+    return ['Archaea_ID', 'Contig_ID', 'Cas_ID', 'Cas_start', 'Cas_end', 'Cas Subtype', 'CRISPR_ID', 'CRISPR_start',
+            'CRISPR_end', 'CRISPR Subtype', 'CRISPR-Cas Consenus Prediction', 'Consensus Repeat Sequence',
+            'Cas Genes']
+
+
+def to_csv_row(crispr, cas):
+    return [
+        cas.archaea_id,
+        cas.contig_id,
+        cas.cas_id,
+        cas.cas_start,
+        cas.cas_end,
+        ' or '.join(cas.cas_subtype),
+        crispr.crispr_id,
+        crispr.crispr_start,
+        crispr.crispr_end,
+        crispr.crispr_subtype,
+        cas.consensus_prediction,
+        crispr.repeat_sequence,
+        cas.cas_genes
+    ]
+
+
+# MAG CRISPR/Cas System Views
+# -----------------------------
 class ArchaeaCRISPRCasSystemsView(GenericTableQueryView):
     pagination_class = CustomPostPagination
     queryset = MAGArchaeaCRISPR.objects.all()
@@ -100,28 +126,10 @@ class ArchaeaCRISPRCasSystemsSingleDownloadView(GenericSingleDownloadView):
             buffer = StringIO()
             writer = csv.writer(buffer)
 
-            writer.writerow([
-                'Archaea_ID', 'Contig_ID', 'Cas_ID', 'Cas_start', 'Cas_end', 'Cas Subtype', 'CRISPR_ID', 'CRISPR_start',
-                'CRISPR_end', 'CRISPR Subtype', 'CRISPR-Cas Consenus Prediction', 'Consensus Repeat Sequence',
-                'Cas Genes'
-            ])
+            writer.writerow(get_csv_header())
 
             cas = crispr.cas
-            writer.writerow([
-                cas.archaea_id,
-                cas.contig_id,
-                cas.cas_id,
-                cas.cas_start,
-                cas.cas_end,
-                ' or '.join(cas.cas_subtype),
-                crispr.crispr_id,
-                crispr.crispr_start,
-                crispr.crispr_end,
-                crispr.crispr_subtype,
-                cas.consensus_prediction,
-                crispr.repeat_sequence,
-                cas.cas_genes
-            ])
+            writer.writerow(to_csv_row(crispr, cas))
 
             buffer.seek(0)
 
@@ -148,29 +156,125 @@ class ArchaeaCRISPRCasSystemsBatchDownloadView(GenericBatchDownloadView):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
-        writer.writerow([
-            'Archaea_ID', 'Contig_ID', 'Cas_ID', 'Cas_start', 'Cas_end', 'Cas Subtype', 'CRISPR_ID', 'CRISPR_start',
-            'CRISPR_end', 'CRISPR Subtype', 'CRISPR-Cas Consenus Prediction', 'Consensus Repeat Sequence',
-            'Cas Genes'
-        ])
+        writer.writerow(get_csv_header())
 
         for crispr in queryset:
             cas = crispr.cas
-            writer.writerow([
-                cas.archaea_id,
-                cas.contig_id,
-                cas.cas_id,
-                cas.cas_start,
-                cas.cas_end,
-                ' or '.join(cas.cas_subtype),
-                crispr.crispr_id,
-                crispr.crispr_start,
-                crispr.crispr_end,
-                crispr.crispr_subtype,
-                cas.consensus_prediction,
-                crispr.repeat_sequence,
-                cas.cas_genes
-            ])
+            writer.writerow(to_csv_row(crispr, cas))
+
+        buffer.seek(0)
+
+        return buffer
+
+    def get_filter_q(self, payload):
+        return get_CRISPR_Cas_systems_filter_q(payload)
+
+
+# UnMAG CRISPR/Cas System Views
+# -----------------------------
+class UnMAGArchaeaCRISPRCasSystemsView(GenericTableQueryView):
+    pagination_class = CustomPostPagination
+    queryset = UnMAGArchaeaCRISPR.objects.all()
+    serializer_class = UnMAGArchaeaCRISPRSerializer
+    request_serializer_class = CommonTableRequestParamsSerializer
+    search_fields = [
+        'crispr_id', 'crispr_start', 'crispr_end', 'repeat_sequence', 'cas__archaea_id',
+        'cas__contig_id', 'cas__consensus_prediction', 'cas__cas_id'
+    ]
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('cas')
+
+    def get_filter_params(self, filters):
+        return get_CRISPR_Cas_systems_filter_q(filters)
+
+
+class UnMAGArchaeaCRISPRCasSystemsFilterOptionsView(APIView):
+    def sort_key(self, value):
+        if value == "Unknown":
+            return float('inf'), ''
+        parts = value.split('-')
+        try:
+            roman_part = parts[0].strip()
+            letter_part = parts[1] if len(parts) > 1 else ''
+            roman_to_int = {
+                'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
+                'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10
+            }
+            num = roman_to_int.get(roman_part, 99)
+            return num, letter_part
+        except Exception:
+            return 99, value
+
+    def get(self, request):
+        cas_subtype_values = list(
+            UnMAGArchaeaCRISPRCas.objects.order_by().values_list('cas_subtype', flat=True).distinct()
+        )
+        cas_subtype_values = sorted({
+            subtype.strip()
+            for sublist in cas_subtype_values if sublist
+            for subtype in sublist
+        }, key=self.sort_key)
+
+        crispr_subtype_values = sorted(list(
+            UnMAGArchaeaCRISPR.objects.order_by().values_list('crispr_subtype', flat=True).distinct()
+        ), key=self.sort_key)
+
+        return Response({
+            'crispr_subtype': crispr_subtype_values,
+            'cas__cas_subtype': cas_subtype_values
+        })
+
+
+class UnMAGArchaeaCRISPRCasSystemsSingleDownloadView(GenericSingleDownloadView):
+    model = UnMAGArchaeaCRISPR
+
+    def get_object(self, pk):
+        return get_object_or_404(
+            self.model.objects.select_related('cas'),
+            pk=pk,
+        )
+
+    def get_file_response(self, crispr, file_type):
+        if file_type == 'meta':
+            buffer = StringIO()
+            writer = csv.writer(buffer)
+
+            writer.writerow(get_csv_header())
+
+            cas = crispr.cas
+            writer.writerow(to_csv_row(crispr, cas))
+
+            buffer.seek(0)
+
+            filename = f'{cas.archaea_id}_{cas.contig_id}_{cas.cas_id}_{crispr.crispr_id}_CRISPR/Cas_Systems_meta.csv'
+            return HttpResponse(
+                buffer,
+                content_type='text/csv',
+                headers={
+                    'Content-Disposition': f'attachment; filename="{filename}"'
+                }
+            )
+
+        return Response('Invalid Data Type', status=status.HTTP_400_BAD_REQUEST)
+
+
+class UnMAGArchaeaCRISPRCasSystemsBatchDownloadView(GenericBatchDownloadView):
+    model = UnMAGArchaeaCRISPR
+    entity_name = 'CRISPR/Cas_Systems'
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('cas')
+
+    def build_csv(self, queryset):
+        buffer = StringIO()
+        writer = csv.writer(buffer)
+
+        writer.writerow(get_csv_header())
+
+        for crispr in queryset:
+            cas = crispr.cas
+            writer.writerow(to_csv_row(crispr, cas))
 
         buffer.seek(0)
 

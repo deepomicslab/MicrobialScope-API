@@ -11,9 +11,9 @@ import csv
 import re
 
 from archaea_database.views.base import GenericTableQueryView, GenericSingleDownloadView, GenericBatchDownloadView
-from archaea_database.models import MAGArchaeaTRNA
+from archaea_database.models import MAGArchaeaTRNA, UnMAGArchaeaTRNA
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
-from archaea_database.serializers.tRNAs_serializers import MAGArchaeaTRNASerializer
+from archaea_database.serializers.tRNAs_serializers import MAGArchaeaTRNASerializer, UnMAGArchaeaTRNASerializer
 from utils.pagination import CustomPostPagination
 
 
@@ -35,6 +35,26 @@ def get_trna_filter_q(filters):
     return q_obj
 
 
+def get_csv_header():
+    return ['Archaea_ID', 'Contig_ID', 'tRNA_ID', 'tRNA Type', 'Start', 'End', 'Strand', 'Length', 'Sequence']
+
+
+def to_csv_row(trna):
+    return [
+        trna.archaea_id,
+        trna.contig_id,
+        trna.trna_id,
+        trna.trna_type,
+        trna.start,
+        trna.end,
+        trna.strand,
+        trna.length,
+        trna.sequence
+    ]
+
+
+# MAG tRNA Views
+# --------------
 class ArchaeaTRNAsView(GenericTableQueryView):
     pagination_class = CustomPostPagination
     queryset = MAGArchaeaTRNA.objects.all()
@@ -71,25 +91,12 @@ class ArchaeaTRNASingleDownloadView(GenericSingleDownloadView):
 
     def get_file_response(self, trna, file_type):
         if file_type == 'meta':
-            trna = get_object_or_404(MAGArchaeaTRNA, pk=trna.pk)
             buffer = StringIO()
             writer = csv.writer(buffer)
 
-            writer.writerow([
-                'Archaea_ID', 'Contig_ID', 'tRNA_ID', 'tRNA Type', 'Start', 'End', 'Strand', 'Length', 'Sequence'
-            ])
+            writer.writerow(get_csv_header())
 
-            writer.writerow([
-                trna.archaea_id,
-                trna.contig_id,
-                trna.trna_id,
-                trna.trna_type,
-                trna.start,
-                trna.end,
-                trna.strand,
-                trna.length,
-                trna.sequence
-            ])
+            writer.writerow(to_csv_row(trna))
 
             buffer.seek(0)
 
@@ -113,22 +120,90 @@ class ArchaeaTRNABatchDownloadView(GenericBatchDownloadView):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
-        writer.writerow([
-            'Archaea_ID', 'Contig_ID', 'tRNA_ID', 'tRNA Type', 'Start', 'End', 'Strand', 'Length', 'Sequence'
-        ])
+        writer.writerow(get_csv_header())
 
         for trna in queryset:
-            writer.writerow([
-                trna.archaea_id,
-                trna.contig_id,
-                trna.trna_id,
-                trna.trna_type,
-                trna.start,
-                trna.end,
-                trna.strand,
-                trna.length,
-                trna.sequence
-            ])
+            writer.writerow(to_csv_row(trna))
+
+        buffer.seek(0)
+
+        return buffer
+
+    def get_filter_q(self, payload):
+        return get_trna_filter_q(payload)
+
+
+# UnMAG tRNA Views
+# ----------------
+class UnMAGArchaeaTRNAsView(GenericTableQueryView):
+    pagination_class = CustomPostPagination
+    queryset = UnMAGArchaeaTRNA.objects.all()
+    serializer_class = UnMAGArchaeaTRNASerializer
+    request_serializer_class = CommonTableRequestParamsSerializer
+    search_fields = [
+        'archaea_id', 'contig_id', 'trna_id', 'trna_type', 'start', 'end', 'strand', 'length'
+    ]
+
+    def get_filter_params(self, filters):
+        return get_trna_filter_q(filters)
+
+
+class UnMAGArchaeaTRNAFilterOptionsView(APIView):
+    def get(self, request):
+        trna_types = list(
+            UnMAGArchaeaTRNA.objects.order_by().values_list('trna_type', flat=True).distinct()
+        )
+
+        trna_types = set(
+            re.sub(r'\(.*\)', '', trna).strip()
+            for trna in trna_types if trna and trna.startswith('tRNA-')
+        )
+
+        trna_types = sorted(trna_types, key=lambda x: (x == 'tRNA-???', x))
+
+        return Response({
+            'trna_type': trna_types
+        })
+
+
+class UnMAGArchaeaTRNASingleDownloadView(GenericSingleDownloadView):
+    model = UnMAGArchaeaTRNA
+
+    def get_file_response(self, trna, file_type):
+        if file_type == 'meta':
+            buffer = StringIO()
+            writer = csv.writer(buffer)
+
+            writer.writerow(get_csv_header())
+
+            writer.writerow(to_csv_row(trna))
+
+            buffer.seek(0)
+
+            filename = f'{trna.archaea_id}_{trna.contig_id}_{trna.trna_id}_tRNA_meta.csv'
+            return HttpResponse(
+                buffer,
+                content_type='text/csv',
+                headers={
+                    'Content-Disposition': f'attachment; filename="{filename}"'
+                }
+            )
+
+        return Response('Invalid Data Type', status=status.HTTP_400_BAD_REQUEST)
+
+
+class UnMAGArchaeaTRNABatchDownloadView(GenericBatchDownloadView):
+    model = UnMAGArchaeaTRNA
+    entity_name = 'tRNA'
+
+    def build_csv(self, queryset):
+        buffer = StringIO()
+        writer = csv.writer(buffer)
+
+        writer.writerow(get_csv_header())
+
+        for trna in queryset:
+            writer.writerow(to_csv_row(trna))
 
         buffer.seek(0)
 
