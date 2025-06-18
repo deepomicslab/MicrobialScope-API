@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MicrobialScope_api.settings')
 django.setup()
 
 
-from archaea_database.models import MAGArchaeaAntibioticResistance, UnMAGArchaeaAntibioticResistance
+from archaea_database.models import UnMAGArchaea
 from bacteria_database.models import MAGBacteriaAntibioticResistance, UnMAGBacteriaAntibioticResistance
 from fungi_database.models import MAGFungiAntibioticResistance, UnMAGFungiAntibioticResistance
 from viruses_database.models import MAGVirusesAntibioticResistance, UnMAGVirusesAntibioticResistance
@@ -16,17 +16,17 @@ from viruses_database.models import MAGVirusesAntibioticResistance, UnMAGViruses
 
 if __name__ == '__main__':
     # Archaea
-    MAGArchaeaAntibioticResistance.objects.all().delete()
-    UnMAGArchaeaAntibioticResistance.objects.all().delete()
+    # MAGArchaeaAntibioticResistance.objects.all().delete()
+    UnMAGArchaea.objects.all().delete()
 
-    # Bacteria
-    MAGBacteriaAntibioticResistance.objects.all().delete()
-    UnMAGBacteriaAntibioticResistance.objects.all().delete()
-
-    # Fungi
-    MAGFungiAntibioticResistance.objects.all().delete()
-    UnMAGFungiAntibioticResistance.objects.all().delete()
-
-    # Viruses
-    MAGVirusesAntibioticResistance.objects.all().delete()
-    UnMAGVirusesAntibioticResistance.objects.all().delete()
+    # # Bacteria
+    # MAGBacteriaAntibioticResistance.objects.all().delete()
+    # UnMAGBacteriaAntibioticResistance.objects.all().delete()
+    #
+    # # Fungi
+    # MAGFungiAntibioticResistance.objects.all().delete()
+    # UnMAGFungiAntibioticResistance.objects.all().delete()
+    #
+    # # Viruses
+    # MAGVirusesAntibioticResistance.objects.all().delete()
+    # UnMAGVirusesAntibioticResistance.objects.all().delete()

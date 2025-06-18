@@ -18,3 +18,7 @@ class CommonBatchDownloadRequestParamsSerializer(serializers.Serializer):
     downloadType = serializers.CharField(required=True)
     fileType = serializers.CharField(required=True)
     payload = serializers.JSONField(required=True)
+
+
+class GenomeDetailSerializer(serializers.Serializer):
+    genomeId = serializers.CharField(required=True)

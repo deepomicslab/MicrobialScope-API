@@ -89,8 +89,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "MicrobialScope",
-        "USER": "",
-        "PASSWORD": "",
+        "USER": "postgres",
+        "PASSWORD": "w13655050226",
         "HOST": "localhost",
         "PORT": "5432",
     }
