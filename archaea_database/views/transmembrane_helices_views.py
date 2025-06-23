@@ -15,6 +15,9 @@ from archaea_database.models import MAGArchaeaTransmembraneHelices, UnMAGArchaea
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.transmembrane_helices_serializers import MAGArchaeaTransmembraneHelicesSerializer, \
     UnMAGArchaeaTransmembraneHelicesSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -57,9 +60,8 @@ class ArchaeaTransmembraneHelicesView(GenericTableQueryView):
 
 class ArchaeaTransmembraneHelicesFilterOptionsView(APIView):
     def get(self, request):
-        predicted_tmh_count_values = sorted(list(
-            MAGArchaeaTransmembraneHelices.objects.order_by().values_list('predicted_tmh_count', flat=True).distinct()
-        ))
+        predicted_tmh_count_values = (
+            MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaTransmembraneHelicesTMHCount').value)
 
         return Response({
             'predicted_tmh_count': predicted_tmh_count_values
@@ -141,9 +143,8 @@ class UnMAGArchaeaTransmembraneHelicesView(GenericTableQueryView):
 
 class UnMAGArchaeaTransmembraneHelicesFilterOptionsView(APIView):
     def get(self, request):
-        predicted_tmh_count_values = sorted(list(
-            UnMAGArchaeaTransmembraneHelices.objects.order_by().values_list('predicted_tmh_count', flat=True).distinct()
-        ))
+        predicted_tmh_count_values = (
+            MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaTransmembraneHelicesTMHCount').value)
 
         return Response({
             'predicted_tmh_count': predicted_tmh_count_values

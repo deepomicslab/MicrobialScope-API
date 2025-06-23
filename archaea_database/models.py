@@ -8,20 +8,28 @@ from django.contrib.postgres.indexes import GinIndex
 # ------------------
 class MAGArchaea(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
-    archaea_id = models.TextField(blank=True)
-    organism_name = models.CharField(max_length=255, blank=True)
-    taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
-    species = models.CharField(max_length=255, blank=True)
+    archaea_id = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
+    organism_name = models.CharField(max_length=255, blank=True, db_index=True)
+    taxonomic_id = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True, db_index=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
-    total_chromosomes = models.PositiveIntegerField(null=True, blank=True)
-    contig_n50 = models.BigIntegerField(null=True, blank=True)
-    scaffold_n50 = models.BigIntegerField(null=True, blank=True)
+    total_chromosomes = models.CharField(max_length=255, blank=True)
+    contig_n50 = models.CharField(max_length=255, blank=True)
+    scaffold_n50 = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "MAG Archaea Genome"
         verbose_name_plural = "MAG Archaea Genomes"
+        indexes = [
+            GinIndex(fields=['archaea_id'], name='ma_archaea_id_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.organism_name} ({self.unique_id})"
@@ -64,7 +72,12 @@ class MAGArchaeaProtein(models.Model):
 
     product = models.TextField(blank=True)
     function_prediction_source = models.CharField(max_length=255, blank=True)
-    cog_category = models.CharField(max_length=255, blank=True)
+    cog_category = ArrayField(
+        base_field=models.CharField(max_length=10),
+        default=list,
+        blank=True,
+        null=True,
+    )
     description = models.TextField(blank=True)
     preferred_name = models.CharField(max_length=255, blank=True)
 
@@ -86,6 +99,9 @@ class MAGArchaeaProtein(models.Model):
     class Meta:
         verbose_name = "MAG Archaea Protein Annotation"
         verbose_name_plural = "MAG Archaea Protein Annotations"
+        indexes = [
+            GinIndex(fields=['cog_category'], name='ma_cog_category_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} ({self.archaea_id})"
@@ -128,7 +144,6 @@ class MAGArchaeaCRISPRCas(models.Model):
         blank=True,
         null=True,
     )
-    consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
@@ -149,6 +164,7 @@ class MAGArchaeaCRISPR(models.Model):
     crispr_end = models.BigIntegerField(null=True, blank=True)
     crispr_subtype = models.CharField(max_length=255, blank=True)
     repeat_sequence = models.TextField(blank=True)
+    consensus_prediction = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "MAG Archaea CRISPR Annotation"
@@ -359,10 +375,15 @@ class MAGArchaeaHelices(models.Model):
 # ------------------
 class UnMAGArchaea(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
-    archaea_id = models.TextField(blank=True)
-    organism_name = models.CharField(max_length=255, blank=True)
+    archaea_id = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
+    organism_name = models.CharField(max_length=255, blank=True, db_index=True)
     taxonomic_id = models.CharField(max_length=255, blank=True)
-    species = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True, db_index=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
@@ -373,6 +394,9 @@ class UnMAGArchaea(models.Model):
     class Meta:
         verbose_name = "UnMAG Archaea Genome"
         verbose_name_plural = "UnMAG Archaea Genomes"
+        indexes = [
+            GinIndex(fields=['archaea_id'], name='uma_archaea_id_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.organism_name} ({self.unique_id})"
@@ -415,7 +439,12 @@ class UnMAGArchaeaProtein(models.Model):
 
     product = models.TextField(blank=True)
     function_prediction_source = models.CharField(max_length=255, blank=True)
-    cog_category = models.CharField(max_length=255, blank=True)
+    cog_category = ArrayField(
+        base_field=models.CharField(max_length=10),
+        default=list,
+        blank=True,
+        null=True,
+    )
     description = models.TextField(blank=True)
     preferred_name = models.CharField(max_length=255, blank=True)
 
@@ -437,6 +466,9 @@ class UnMAGArchaeaProtein(models.Model):
     class Meta:
         verbose_name = "UnMAG Archaea Protein Annotation"
         verbose_name_plural = "UnMAG Archaea Protein Annotations"
+        indexes = [
+            GinIndex(fields=['cog_category'], name='uma_cog_category_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} ({self.archaea_id})"
@@ -479,7 +511,6 @@ class UnMAGArchaeaCRISPRCas(models.Model):
         blank=True,
         null=True,
     )
-    consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
@@ -500,6 +531,7 @@ class UnMAGArchaeaCRISPR(models.Model):
     crispr_end = models.BigIntegerField(null=True, blank=True)
     crispr_subtype = models.CharField(max_length=255, blank=True)
     repeat_sequence = models.TextField(blank=True)
+    consensus_prediction = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Archaea CRISPR Annotation"

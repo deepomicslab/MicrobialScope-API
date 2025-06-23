@@ -15,6 +15,9 @@ from archaea_database.models import MAGArchaeaSecondaryMetaboliteRegion, UnMAGAr
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.secondary_metabolites_serializers import MAGArchaeaSecondaryMetaboliteSerializer, \
     UnMAGArchaeaSecondaryMetaboliteSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -69,14 +72,7 @@ class ArchaeaSecondaryMetabolitesView(GenericTableQueryView):
 
 class ArchaeaSecondaryMetabolitesFilterOptionsView(APIView):
     def get(self, request):
-        type_values = list(
-            MAGArchaeaSecondaryMetaboliteRegion.objects.order_by().values_list('type', flat=True).distinct()
-        )
-        type_values = sorted({
-            sm_type
-            for sublist in type_values if sublist
-            for sm_type in sublist
-        })
+        type_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaSecondaryMetabolitesTypes').value
 
         return Response({
             'type': type_values
@@ -149,14 +145,7 @@ class UnMAGArchaeaSecondaryMetabolitesView(GenericTableQueryView):
 
 class UnMAGArchaeaSecondaryMetabolitesFilterOptionsView(APIView):
     def get(self, request):
-        type_values = list(
-            UnMAGArchaeaSecondaryMetaboliteRegion.objects.order_by().values_list('type', flat=True).distinct()
-        )
-        type_values = sorted({
-            sm_type
-            for sublist in type_values if sublist
-            for sm_type in sublist
-        })
+        type_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaSecondaryMetabolitesTypes').value
 
         return Response({
             'type': type_values

@@ -14,6 +14,9 @@ from archaea_database.views.base import GenericTableQueryView, GenericSingleDown
 from archaea_database.models import MAGArchaeaProtein, UnMAGArchaeaProtein
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.proteins_serializers import MAGArchaeaProteinSerializer, UnMAGArchaeaProteinSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -63,10 +66,7 @@ def get_protein_filter_q(filters):
                 continue
 
             if key == 'cog_category':
-                sub_q = Q()
-                for v in value:
-                    sub_q |= Q(**{f'{key}__icontains': v})
-                q_obj &= sub_q
+                q_obj &= Q(**{f'{key}__overlap': value})
             else:
                 q_obj &= Q(**{f'{key}__in': value})
 
@@ -93,18 +93,9 @@ class ArchaeaProteinsView(GenericTableQueryView):
 
 class ArchaeaProteinsFilterOptionsView(APIView):
     def get(self, request):
-        strand_values = list(
-            MAGArchaeaProtein.objects.order_by().values_list('strand', flat=True).distinct()
-        )
+        strand_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaProteinStrand').value
 
-        cog_category_values = list(
-            MAGArchaeaProtein.objects.order_by().values_list('cog_category', flat=True).distinct()
-        )
-        cog_category_values = sorted({
-            letter
-            for val in cog_category_values if val
-            for letter in val
-        })
+        cog_category_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaProteinCOGCategory').value
 
         return Response({
             'strand': strand_values,
@@ -179,18 +170,9 @@ class UnMAGArchaeaProteinsView(GenericTableQueryView):
 
 class UnMAGArchaeaProteinsFilterOptionsView(APIView):
     def get(self, request):
-        strand_values = list(
-            UnMAGArchaeaProtein.objects.order_by().values_list('strand', flat=True).distinct()
-        )
+        strand_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaProteinStrand').value
 
-        cog_category_values = list(
-            UnMAGArchaeaProtein.objects.order_by().values_list('cog_category', flat=True).distinct()
-        )
-        cog_category_values = sorted({
-            letter
-            for val in cog_category_values if val
-            for letter in val
-        })
+        cog_category_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaProteinCOGCategory').value
 
         return Response({
             'strand': strand_values,

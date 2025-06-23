@@ -14,6 +14,9 @@ from archaea_database.views.base import GenericTableQueryView, GenericSingleDown
 from archaea_database.models import MAGArchaeaTRNA, UnMAGArchaeaTRNA
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.tRNAs_serializers import MAGArchaeaTRNASerializer, UnMAGArchaeaTRNASerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -70,16 +73,7 @@ class ArchaeaTRNAsView(GenericTableQueryView):
 
 class ArchaeaTRNAFilterOptionsView(APIView):
     def get(self, request):
-        trna_types = list(
-            MAGArchaeaTRNA.objects.order_by().values_list('trna_type', flat=True).distinct()
-        )
-
-        trna_types = set(
-            re.sub(r'\(.*\)', '', trna).strip()
-            for trna in trna_types if trna and trna.startswith('tRNA-')
-        )
-
-        trna_types = sorted(trna_types, key=lambda x: (x == 'tRNA-???', x))
+        trna_types = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaTRNATypes').value
 
         return Response({
             'trna_type': trna_types
@@ -150,16 +144,7 @@ class UnMAGArchaeaTRNAsView(GenericTableQueryView):
 
 class UnMAGArchaeaTRNAFilterOptionsView(APIView):
     def get(self, request):
-        trna_types = list(
-            UnMAGArchaeaTRNA.objects.order_by().values_list('trna_type', flat=True).distinct()
-        )
-
-        trna_types = set(
-            re.sub(r'\(.*\)', '', trna).strip()
-            for trna in trna_types if trna and trna.startswith('tRNA-')
-        )
-
-        trna_types = sorted(trna_types, key=lambda x: (x == 'tRNA-???', x))
+        trna_types = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaTRNATypes').value
 
         return Response({
             'trna_type': trna_types

@@ -15,6 +15,9 @@ from archaea_database.models import MAGArchaeaSignalPeptidePrediction, UnMAGArch
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.signal_peptide_serializers import MAGSignalPeptideSerializer, \
     UnMAGSignalPeptideSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -56,9 +59,7 @@ class ArchaeaSignalPeptidesView(GenericTableQueryView):
 
 class ArchaeaSignalPeptidesFilterOptionsView(APIView):
     def get(self, request):
-        prediction_values = sorted(list(
-            MAGArchaeaSignalPeptidePrediction.objects.order_by().values_list('prediction', flat=True).distinct()
-        ))
+        prediction_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaSignalPeptidePredictions').value
 
         return Response({
             'prediction': prediction_values
@@ -124,9 +125,7 @@ class UnMAGArchaeaSignalPeptidesView(GenericTableQueryView):
 
 class UnMAGArchaeaSignalPeptidesFilterOptionsView(APIView):
     def get(self, request):
-        prediction_values = sorted(list(
-            UnMAGArchaeaSignalPeptidePrediction.objects.order_by().values_list('prediction', flat=True).distinct()
-        ))
+        prediction_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaSignalPeptidePredictions').value
 
         return Response({
             'prediction': prediction_values

@@ -15,6 +15,9 @@ from archaea_database.models import MAGArchaeaAntiCRISPRAnnotation, UnMAGArchaea
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.anti_crispr_serializers import MAGArchaeaAntiCRISPRAnnotationSerializer, \
     UnMAGArchaeaAntiCRISPRAnnotationSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -58,9 +61,7 @@ class ArchaeaAntiCRISPRAnnotationsView(GenericTableQueryView):
 
 class ArchaeaAntiCRISPRAnnotationsFilterOptionsView(APIView):
     def get(self, request):
-        classification_values = list(
-            MAGArchaeaAntiCRISPRAnnotation.objects.order_by().values_list('classification', flat=True).distinct()
-        )
+        classification_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaAntiCRISPRClassifications').value
 
         return Response({
             'classification': classification_values
@@ -126,9 +127,7 @@ class UnMAGArchaeaAntiCRISPRAnnotationsView(GenericTableQueryView):
 
 class UnMAGArchaeaAntiCRISPRAnnotationsFilterOptionsView(APIView):
     def get(self, request):
-        classification_values = list(
-            UnMAGArchaeaAntiCRISPRAnnotation.objects.order_by().values_list('classification', flat=True).distinct()
-        )
+        classification_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaAntiCRISPRClassifications').value
 
         return Response({
             'classification': classification_values

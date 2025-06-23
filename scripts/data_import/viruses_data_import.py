@@ -16,7 +16,7 @@ from viruses_database.models import MAGViruses, MAGVirusesTaxonomy, MAGVirusesPr
 from microbe_database.models import MicrobeStatistic
 
 VIRUSES_DATA_DIR = 'E:\\WebProject\\MicrobialScope\\Data\\Demo\\Viruses'
-BATCH_SIZE = 1000
+BATCH_SIZE = 3000
 
 
 def viruses_data_import():
@@ -24,60 +24,60 @@ def viruses_data_import():
     print('Importing MAG Viruses data...')
     mag_viruses_import()
     print('MAG Viruses data import is complete.')
-    print('Importing MAG Viruses Taxonomy data...')
-    mag_viruses_taxonomy_import()
-    print('MAG Viruses Taxonomy data is complete.')
+    # print('Importing MAG Viruses Taxonomy data...')
+    # mag_viruses_taxonomy_import()
+    # print('MAG Viruses Taxonomy data is complete.')
     print('Importing MAG Viruses Protein data...')
     mag_viruses_protein_import()
     print('MAG Viruses Protein data is complete.')
-    print('Importing MAG Viruses TRNA data...')
-    mag_viruses_trna_import()
-    print('MAG Viruses TRNA data is complete.')
+    # print('Importing MAG Viruses TRNA data...')
+    # mag_viruses_trna_import()
+    # print('MAG Viruses TRNA data is complete.')
     print('Importing MAG Viruses CRISPR Cas data...')
     mag_viruses_crispr_cas_import()
     print('MAG Viruses CRISPR Cas data is complete.')
-    print('Importing MAG Viruses Anti CRISPR Annotation data..')
-    mag_viruses_anti_crispr_annotation_import()
-    print('MAG Viruses Anti CRISPR Annotation data is complete.')
-    print('Importing MAG Viruses Virulence Factor data...')
-    mag_viruses_virulence_factor_import()
-    print('MAG Viruses Virulence Factor data is complete.')
-    print('Importing MAG Viruses Antibiotic Resistance data...')
-    mag_viruses_antibiotic_resistance_import()
-    print('MAG Viruses Antibiotic Resistance data is complete.')
-    print('Importing MAG Viruses Transmembrane Helices data...')
-    mag_viruses_transmembrane_helices_import()
-    print('MAG Viruses Transmembrane Helices data is complete.')
+    # print('Importing MAG Viruses Anti CRISPR Annotation data..')
+    # mag_viruses_anti_crispr_annotation_import()
+    # print('MAG Viruses Anti CRISPR Annotation data is complete.')
+    # print('Importing MAG Viruses Virulence Factor data...')
+    # mag_viruses_virulence_factor_import()
+    # print('MAG Viruses Virulence Factor data is complete.')
+    # print('Importing MAG Viruses Antibiotic Resistance data...')
+    # mag_viruses_antibiotic_resistance_import()
+    # print('MAG Viruses Antibiotic Resistance data is complete.')
+    # print('Importing MAG Viruses Transmembrane Helices data...')
+    # mag_viruses_transmembrane_helices_import()
+    # print('MAG Viruses Transmembrane Helices data is complete.')
     print('===============Import Viruses MAG Data Done===============')
     print()
     print('===============Import Viruses unMAG Data===============')
     print('Importing unMAG Viruses data...')
     unmag_viruses_import()
     print('unMAG Viruses data import is complete.')
-    print('Importing unMAG Viruses Taxonomy data...')
-    unmag_viruses_taxonomy_import()
-    print('unMAG Viruses Taxonomy data is complete.')
+    # print('Importing unMAG Viruses Taxonomy data...')
+    # unmag_viruses_taxonomy_import()
+    # print('unMAG Viruses Taxonomy data is complete.')
     print('Importing unMAG Viruses Protein data...')
     unmag_viruses_protein_import()
     print('unMAG Viruses Protein data is complete.')
-    print('Importing unMAG Viruses TRNA data...')
-    unmag_viruses_trna_import()
-    print('unMAG Viruses TRNA data is complete.')
+    # print('Importing unMAG Viruses TRNA data...')
+    # unmag_viruses_trna_import()
+    # print('unMAG Viruses TRNA data is complete.')
     print('Importing unMAG Viruses CRISPR Cas data...')
     unmag_viruses_crispr_cas_import()
     print('unMAG Viruses CRISPR Cas data is complete.')
-    print('Importing unMAG Viruses Anti CRISPR Annotation data..')
-    unmag_viruses_anti_crispr_annotation_import()
-    print('unMAG Viruses Anti CRISPR Annotation data is complete.')
-    print('Importing unMAG Viruses Virulence Factor data...')
-    unmag_viruses_virulence_factor_import()
-    print('unMAG Viruses Virulence Factor data is complete.')
-    print('Importing unMAG Viruses Antibiotic Resistance data...')
-    unmag_viruses_antibiotic_resistance_import()
-    print('unMAG Viruses Antibiotic Resistance data is complete.')
-    print('Importing unMAG Viruses Transmembrane Helices data...')
-    unmag_viruses_transmembrane_helices_import()
-    print('unMAG Viruses Transmembrane Helices data is complete.')
+    # print('Importing unMAG Viruses Anti CRISPR Annotation data..')
+    # unmag_viruses_anti_crispr_annotation_import()
+    # print('unMAG Viruses Anti CRISPR Annotation data is complete.')
+    # print('Importing unMAG Viruses Virulence Factor data...')
+    # unmag_viruses_virulence_factor_import()
+    # print('unMAG Viruses Virulence Factor data is complete.')
+    # print('Importing unMAG Viruses Antibiotic Resistance data...')
+    # unmag_viruses_antibiotic_resistance_import()
+    # print('unMAG Viruses Antibiotic Resistance data is complete.')
+    # print('Importing unMAG Viruses Transmembrane Helices data...')
+    # unmag_viruses_transmembrane_helices_import()
+    # print('unMAG Viruses Transmembrane Helices data is complete.')
     print('===============Import Viruses unMAG Data Done===============')
 
 
@@ -95,7 +95,7 @@ def mag_viruses_import():
         for _, row in chunk.iterrows():
             obj = MAGViruses(
                 unique_id=row['Unique_ID'],
-                viruses_id=row['Viruses_ID'],
+                viruses_id=[x.strip() for x in row['Viruses_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -132,7 +132,7 @@ def unmag_viruses_import():
         for _, row in chunk.iterrows():
             obj = UnMAGViruses(
                 unique_id=row['Unique_ID'],
-                viruses_id=row['Viruses_ID'],
+                viruses_id=[x.strip() for x in row['Viruses_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -255,7 +255,7 @@ def mag_viruses_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -308,7 +308,7 @@ def unmag_viruses_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -418,7 +418,7 @@ def mag_viruses_crispr_cas_import():
     )
     viruses_crispr_cas_created_num = 0
     viruses_crispr_created_num = 0
-    cas_cache = []
+    cas_cache = set()
 
     for chunk in pd.read_csv(viruses_crispr_cas_file_path, sep='\t', chunksize=BATCH_SIZE):
         cas_objs = []
@@ -433,10 +433,9 @@ def mag_viruses_crispr_cas_import():
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
                     cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
-                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
-                cas_cache.append(cas_key)
+                cas_cache.add(cas_key)
                 cas_objs.append(cas_obj)
 
         MAGVirusesCRISPRCas.objects.bulk_create(cas_objs, batch_size=BATCH_SIZE)
@@ -467,6 +466,7 @@ def mag_viruses_crispr_cas_import():
                     crispr_end=row['CRISPR_end'],
                     crispr_subtype=row['CRISPR Subtype'],
                     repeat_sequence=row['Consensus Repeat Sequence'],
+                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                 )
                 crispr_objs.append(crispr_obj)
 
@@ -489,7 +489,7 @@ def unmag_viruses_crispr_cas_import():
     )
     viruses_crispr_cas_created_num = 0
     viruses_crispr_created_num = 0
-    cas_cache = []
+    cas_cache = set()
 
     for chunk in pd.read_csv(viruses_crispr_cas_file_path, sep='\t', chunksize=BATCH_SIZE):
         cas_objs = []
@@ -504,10 +504,9 @@ def unmag_viruses_crispr_cas_import():
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
                     cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
-                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
-                cas_cache.append(cas_key)
+                cas_cache.add(cas_key)
                 cas_objs.append(cas_obj)
 
         UnMAGVirusesCRISPRCas.objects.bulk_create(cas_objs, batch_size=BATCH_SIZE)
@@ -538,6 +537,7 @@ def unmag_viruses_crispr_cas_import():
                     crispr_end=row['CRISPR_end'],
                     crispr_subtype=row['CRISPR Subtype'],
                     repeat_sequence=row['Consensus Repeat Sequence'],
+                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                 )
                 crispr_objs.append(crispr_obj)
 
@@ -828,7 +828,7 @@ def mag_viruses_transmembrane_helices_import():
     )
     viruses_transmembrane_helices_created_num = 0
     viruses_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(viruses_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -847,7 +847,7 @@ def mag_viruses_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         MAGVirusesTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)
@@ -899,7 +899,7 @@ def unmag_viruses_transmembrane_helices_import():
     )
     viruses_transmembrane_helices_created_num = 0
     viruses_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(viruses_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -918,7 +918,7 @@ def unmag_viruses_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         UnMAGVirusesTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)

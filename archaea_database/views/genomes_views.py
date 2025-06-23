@@ -4,6 +4,7 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Q
 
 from io import StringIO
 import csv
@@ -38,6 +39,8 @@ from archaea_database.serializers.transmembrane_helices_serializers import MAGAr
     UnMAGArchaeaTransmembraneHelicesSerializer
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer, GenomeDetailSerializer
 
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 from MicrobialScope_api.constant import MEDIA_DATA_DIR
@@ -64,6 +67,16 @@ def to_csv_row(genome):
     ]
 
 
+def get_genome_search_q(search_content):
+    if not search_content['value']:
+        return Q()
+
+    if search_content['field'] == 'archaea_id':
+        return Q(**{f"{search_content['field']}__contains": [search_content['value']]})
+
+    return Q(**{f"{search_content['field']}__startswith": search_content['value']})
+
+
 # MAG Genome Views
 # -----------------
 class ArchaeaGenomesView(GenericTableQueryView):
@@ -75,6 +88,9 @@ class ArchaeaGenomesView(GenericTableQueryView):
         'unique_id', 'archaea_id', 'organism_name', 'taxonomic_id', 'species', 'total_sequence_length', 'gc_content',
         'assembly_level', 'total_chromosomes', 'contig_n50', 'scaffold_n50'
     ]
+
+    def get_search_q(self, search_content):
+        return get_genome_search_q(search_content)
 
 
 class ArchaeaGenomeDetailView(APIView):
@@ -257,7 +273,7 @@ class ArchaeaGenomeFASTAView(APIView):
 
 class ArchaeaGenomesFilterOptionsView(APIView):
     def get(self, request):
-        assembly_level_values = list(MAGArchaea.objects.order_by().values_list('assembly_level', flat=True).distinct())
+        assembly_level_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaAssemblyLevel').value
 
         return Response({
             'assembly_level': assembly_level_values
@@ -319,6 +335,9 @@ class UnMAGArchaeaGenomesView(GenericTableQueryView):
         'unique_id', 'archaea_id', 'organism_name', 'taxonomic_id', 'species', 'total_sequence_length', 'gc_content',
         'assembly_level', 'total_chromosomes', 'contig_n50', 'scaffold_n50'
     ]
+
+    def get_search_q(self, search_content):
+        return get_genome_search_q(search_content)
 
 
 class UnArchaeaGenomeDetailView(APIView):
@@ -502,9 +521,7 @@ class UnMAGArchaeaGenomeFASTAView(APIView):
 
 class UnMAGArchaeaGenomesFilterOptionsView(APIView):
     def get(self, request):
-        assembly_level_values = list(
-            UnMAGArchaea.objects.order_by().values_list('assembly_level', flat=True).distinct()
-        )
+        assembly_level_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaAssemblyLevel').value
 
         return Response({
             'assembly_level': assembly_level_values

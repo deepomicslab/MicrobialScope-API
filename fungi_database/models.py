@@ -8,20 +8,28 @@ from django.contrib.postgres.indexes import GinIndex
 # ----------------
 class MAGFungi(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
-    fungi_id = models.TextField(blank=True)
-    organism_name = models.CharField(max_length=255, blank=True)
-    taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
-    species = models.CharField(max_length=255, blank=True)
+    fungi_id = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
+    organism_name = models.CharField(max_length=255, blank=True, db_index=True)
+    taxonomic_id = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True, db_index=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
-    total_chromosomes = models.PositiveIntegerField(null=True, blank=True)
-    contig_n50 = models.BigIntegerField(null=True, blank=True)
-    scaffold_n50 = models.BigIntegerField(null=True, blank=True)
+    total_chromosomes = models.CharField(max_length=255, blank=True)
+    contig_n50 = models.CharField(max_length=255, blank=True)
+    scaffold_n50 = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "MAG Fungi Genome"
         verbose_name_plural = "MAG Fungi Genomes"
+        indexes = [
+            GinIndex(fields=['fungi_id'], name='mf_fungi_id_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.organism_name} ({self.unique_id})"
@@ -64,7 +72,12 @@ class MAGFungiProtein(models.Model):
 
     product = models.TextField(blank=True)
     function_prediction_source = models.CharField(max_length=255, blank=True)
-    cog_category = models.CharField(max_length=255, blank=True)
+    cog_category = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     description = models.TextField(blank=True)
     preferred_name = models.CharField(max_length=255, blank=True)
 
@@ -86,6 +99,9 @@ class MAGFungiProtein(models.Model):
     class Meta:
         verbose_name = "MAG Fungi Protein Annotation"
         verbose_name_plural = "MAG Fungi Protein Annotations"
+        indexes = [
+            GinIndex(fields=['cog_category'], name='mf_cog_category_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} ({self.fungi_id})"
@@ -276,20 +292,28 @@ class MAGFungiHelices(models.Model):
 # -------------------
 class UnMAGFungi(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
-    fungi_id = models.TextField(blank=True)
-    organism_name = models.CharField(max_length=255, blank=True)
-    taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
-    species = models.CharField(max_length=255, blank=True)
+    fungi_id = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
+    organism_name = models.CharField(max_length=255, blank=True, db_index=True)
+    taxonomic_id = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True, db_index=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
-    total_chromosomes = models.PositiveIntegerField(null=True, blank=True)
-    contig_n50 = models.BigIntegerField(null=True, blank=True)
-    scaffold_n50 = models.BigIntegerField(null=True, blank=True)
+    total_chromosomes = models.CharField(max_length=255, blank=True)
+    contig_n50 = models.CharField(max_length=255, blank=True)
+    scaffold_n50 = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Fungi Genome"
         verbose_name_plural = "UnMAG Fungi Genomes"
+        indexes = [
+            GinIndex(fields=['fungi_id'], name='umf_fungi_id_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.organism_name} ({self.unique_id})"
@@ -332,7 +356,12 @@ class UnMAGFungiProtein(models.Model):
 
     product = models.TextField(blank=True)
     function_prediction_source = models.CharField(max_length=255, blank=True)
-    cog_category = models.CharField(max_length=255, blank=True)
+    cog_category = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     description = models.TextField(blank=True)
     preferred_name = models.CharField(max_length=255, blank=True)
 
@@ -354,6 +383,9 @@ class UnMAGFungiProtein(models.Model):
     class Meta:
         verbose_name = "UnMAG Fungi Protein Annotation"
         verbose_name_plural = "UnMAG Fungi Protein Annotations"
+        indexes = [
+            GinIndex(fields=['cog_category'], name='umf_cog_category_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} ({self.fungi_id})"

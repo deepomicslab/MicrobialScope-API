@@ -15,6 +15,9 @@ from archaea_database.models import MAGArchaeaAntibioticResistance, UnMAGArchaea
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.antibiotic_resistance_serializers import MAGArchaeaAntibioticResistanceSerializer, \
     UnMAGArchaeaAntibioticResistanceSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -78,18 +81,8 @@ class ArchaeaAntibioticResistancesView(GenericTableQueryView):
 
 class ArchaeaAntibioticResistancesFilterOptionsView(APIView):
     def get(self, request):
-        cutoff_values = sorted(list(
-            MAGArchaeaAntibioticResistance.objects.order_by().values_list('cutoff', flat=True).distinct()
-        ))
-
-        drug_class_values = list(
-            MAGArchaeaAntibioticResistance.objects.order_by().values_list('drug_class', flat=True).distinct()
-        )
-        drug_class_values = sorted({
-            drug_class
-            for drug_class_list in drug_class_values if drug_class_list
-            for drug_class in drug_class_list
-        })
+        cutoff_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaAntibioticResistanceCutoff').value
+        drug_class_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaAntibioticResistanceDrugClass').value
 
         return Response({
             'cutoff': cutoff_values,
@@ -162,18 +155,8 @@ class UnMAGArchaeaAntibioticResistancesView(GenericTableQueryView):
 
 class UnMAGArchaeaAntibioticResistancesFilterOptionsView(APIView):
     def get(self, request):
-        cutoff_values = sorted(list(
-            UnMAGArchaeaAntibioticResistance.objects.order_by().values_list('cutoff', flat=True).distinct()
-        ))
-
-        drug_class_values = list(
-            UnMAGArchaeaAntibioticResistance.objects.order_by().values_list('drug_class', flat=True).distinct()
-        )
-        drug_class_values = sorted({
-            drug_class
-            for drug_class_list in drug_class_values if drug_class_list
-            for drug_class in drug_class_list
-        })
+        cutoff_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaAntibioticResistanceCutoff').value
+        drug_class_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaAntibioticResistanceDrugClass').value
 
         return Response({
             'cutoff': cutoff_values,

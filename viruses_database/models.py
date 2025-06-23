@@ -8,20 +8,28 @@ from django.contrib.postgres.indexes import GinIndex
 # ------------------
 class MAGViruses(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
-    viruses_id = models.TextField(blank=True)
-    organism_name = models.CharField(max_length=255, blank=True)
-    taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
-    species = models.CharField(max_length=255, blank=True)
+    viruses_id = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
+    organism_name = models.CharField(max_length=255, blank=True, db_index=True)
+    taxonomic_id = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True, db_index=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
-    total_chromosomes = models.PositiveIntegerField(null=True, blank=True)
-    contig_n50 = models.BigIntegerField(null=True, blank=True)
-    scaffold_n50 = models.BigIntegerField(null=True, blank=True)
+    total_chromosomes = models.CharField(max_length=255, blank=True)
+    contig_n50 = models.CharField(max_length=255, blank=True)
+    scaffold_n50 = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "MAG Viruses Genome"
         verbose_name_plural = "MAG Viruses Genomes"
+        indexes = [
+            GinIndex(fields=['viruses_id'], name='mv_viruses_id_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.organism_name} ({self.unique_id})"
@@ -65,7 +73,12 @@ class MAGVirusesProtein(models.Model):
 
     product = models.TextField(blank=True)
     function_prediction_source = models.CharField(max_length=255, blank=True)
-    cog_category = models.CharField(max_length=255, blank=True)
+    cog_category = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     description = models.TextField(blank=True)
     preferred_name = models.CharField(max_length=255, blank=True)
 
@@ -87,6 +100,9 @@ class MAGVirusesProtein(models.Model):
     class Meta:
         verbose_name = "MAG Viruses Protein Annotation"
         verbose_name_plural = "MAG Viruses Protein Annotations"
+        indexes = [
+            GinIndex(fields=['cog_category'], name='mv_cog_category_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} ({self.viruses_id})"
@@ -129,7 +145,6 @@ class MAGVirusesCRISPRCas(models.Model):
         blank=True,
         null=True,
     )
-    consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
@@ -150,6 +165,7 @@ class MAGVirusesCRISPR(models.Model):
     crispr_end = models.BigIntegerField(null=True, blank=True)
     crispr_subtype = models.CharField(max_length=255, blank=True)
     repeat_sequence = models.TextField(blank=True)
+    consensus_prediction = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "MAG Viruses CRISPR Annotation"
@@ -306,20 +322,28 @@ class MAGVirusesHelices(models.Model):
 # ---------------------
 class UnMAGViruses(models.Model):
     unique_id = models.CharField(max_length=100, db_index=True, blank=True)
-    viruses_id = models.TextField(blank=True)
+    viruses_id = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     organism_name = models.CharField(max_length=255, blank=True)
-    taxonomic_id = models.PositiveIntegerField(null=True, blank=True)
+    taxonomic_id = models.CharField(max_length=255, blank=True)
     species = models.CharField(max_length=255, blank=True)
     total_sequence_length = models.BigIntegerField(null=True, blank=True)
     gc_content = models.FloatField(null=True, blank=True)
     assembly_level = models.CharField(max_length=100, blank=True)
-    total_chromosomes = models.PositiveIntegerField(null=True, blank=True)
-    contig_n50 = models.BigIntegerField(null=True, blank=True)
-    scaffold_n50 = models.BigIntegerField(null=True, blank=True)
+    total_chromosomes = models.CharField(max_length=255, blank=True)
+    contig_n50 = models.CharField(max_length=255, blank=True)
+    scaffold_n50 = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Viruses Genome"
         verbose_name_plural = "UnMAG Viruses Genomes"
+        indexes = [
+            GinIndex(fields=['viruses_id'], name='umv_viruses_id_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.organism_name} ({self.unique_id})"
@@ -363,7 +387,12 @@ class UnMAGVirusesProtein(models.Model):
 
     product = models.TextField(blank=True)
     function_prediction_source = models.CharField(max_length=255, blank=True)
-    cog_category = models.CharField(max_length=255, blank=True)
+    cog_category = ArrayField(
+        base_field=models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        null=True,
+    )
     description = models.TextField(blank=True)
     preferred_name = models.CharField(max_length=255, blank=True)
 
@@ -385,6 +414,9 @@ class UnMAGVirusesProtein(models.Model):
     class Meta:
         verbose_name = "UnMAG Viruses Protein Annotation"
         verbose_name_plural = "UnMAG Viruses Protein Annotations"
+        indexes = [
+            GinIndex(fields=['cog_category'], name='umv_cog_category_gin_idx'),
+        ]
 
     def __str__(self):
         return f"{self.protein_id} ({self.viruses_id})"
@@ -427,7 +459,6 @@ class UnMAGVirusesCRISPRCas(models.Model):
         blank=True,
         null=True,
     )
-    consensus_prediction = models.CharField(max_length=255, blank=True)
     cas_genes = models.JSONField(default=list, null=True, blank=True)
 
     class Meta:
@@ -448,6 +479,7 @@ class UnMAGVirusesCRISPR(models.Model):
     crispr_end = models.BigIntegerField(null=True, blank=True)
     crispr_subtype = models.CharField(max_length=255, blank=True)
     repeat_sequence = models.TextField(blank=True)
+    consensus_prediction = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Viruses CRISPR Annotation"

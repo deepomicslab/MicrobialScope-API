@@ -4,7 +4,7 @@ from rest_framework import serializers
 class CommonTableRequestParamsSerializer(serializers.Serializer):
     pagination = serializers.DictField(required=True)
     filterOptions = serializers.DictField(required=True)
-    searchContent = serializers.CharField(required=True, allow_blank=True)
+    searchContent = serializers.DictField(required=True)
     sortOrder = serializers.CharField(required=False)
     sortField = serializers.CharField(required=False)
 

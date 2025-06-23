@@ -17,7 +17,7 @@ from bacteria_database.models import MAGBacteria, MAGBacteriaTaxonomy, MAGBacter
 from microbe_database.models import MicrobeStatistic
 
 BACTERIA_DATA_DIR = 'E:\\WebProject\\MicrobialScope\\Data\\Demo\\Bacteria'
-BATCH_SIZE = 1000
+BATCH_SIZE = 3000
 
 
 def bacteria_data_import():
@@ -25,72 +25,72 @@ def bacteria_data_import():
     print('Importing MAG Bacteria data...')
     mag_bacteria_import()
     print('MAG Bacteria data import is complete.')
-    print('Importing MAG Bacteria Taxonomy data...')
-    mag_bacteria_taxonomy_import()
-    print('MAG Bacteria Taxonomy data is complete.')
+    # print('Importing MAG Bacteria Taxonomy data...')
+    # mag_bacteria_taxonomy_import()
+    # print('MAG Bacteria Taxonomy data is complete.')
     print('Importing MAG Bacteria Protein data...')
     mag_bacteria_protein_import()
     print('MAG Bacteria Protein data is complete.')
-    print('Importing MAG Bacteria TRNA data...')
-    mag_bacteria_trna_import()
-    print('MAG Bacteria TRNA data is complete.')
+    # print('Importing MAG Bacteria TRNA data...')
+    # mag_bacteria_trna_import()
+    # print('MAG Bacteria TRNA data is complete.')
     print('Importing MAG Bacteria CRISPR Cas data...')
     mag_bacteria_crispr_cas_import()
     print('MAG Bacteria CRISPR Cas data is complete.')
-    print('Importing MAG Bacteria Anti CRISPR Annotation data..')
-    mag_bacteria_anti_crispr_annotation_import()
-    print('MAG Bacteria Anti CRISPR Annotation data is complete.')
-    print('Importing MAG Bacteria Secondary Metabolite Region data...')
-    mag_bacteria_secondary_metabolite_region_import()
-    print('MAG Bacteria Secondary Metabolite Region data is complete.')
-    print('Importing MAG Bacteria Signal Peptide Prediction data...')
-    mag_bacteria_signal_peptide_prediction_import()
-    print('MAG Bacteria Signal Peptide Prediction data is complete.')
-    print('Importing MAG Bacteria Virulence Factor data...')
-    mag_bacteria_virulence_factor_import()
-    print('MAG Bacteria Virulence Factor data is complete.')
-    print('Importing MAG Bacteria Antibiotic Resistance data...')
-    mag_bacteria_antibiotic_resistance_import()
-    print('MAG Bacteria Antibiotic Resistance data is complete.')
-    print('Importing MAG Bacteria Transmembrane Helices data...')
-    mag_bacteria_transmembrane_helices_import()
-    print('MAG Bacteria Transmembrane Helices data is complete.')
+    # print('Importing MAG Bacteria Anti CRISPR Annotation data..')
+    # mag_bacteria_anti_crispr_annotation_import()
+    # print('MAG Bacteria Anti CRISPR Annotation data is complete.')
+    # print('Importing MAG Bacteria Secondary Metabolite Region data...')
+    # mag_bacteria_secondary_metabolite_region_import()
+    # print('MAG Bacteria Secondary Metabolite Region data is complete.')
+    # print('Importing MAG Bacteria Signal Peptide Prediction data...')
+    # mag_bacteria_signal_peptide_prediction_import()
+    # print('MAG Bacteria Signal Peptide Prediction data is complete.')
+    # print('Importing MAG Bacteria Virulence Factor data...')
+    # mag_bacteria_virulence_factor_import()
+    # print('MAG Bacteria Virulence Factor data is complete.')
+    # print('Importing MAG Bacteria Antibiotic Resistance data...')
+    # mag_bacteria_antibiotic_resistance_import()
+    # print('MAG Bacteria Antibiotic Resistance data is complete.')
+    # print('Importing MAG Bacteria Transmembrane Helices data...')
+    # mag_bacteria_transmembrane_helices_import()
+    # print('MAG Bacteria Transmembrane Helices data is complete.')
     print('===============Import Bacteria MAG Data Done===============')
     print()
     print('===============Import Bacteria unMAG Data===============')
     print('Importing unMAG Bacteria data...')
     unmag_bacteria_import()
     print('unMAG Bacteria data import is complete.')
-    print('Importing unMAG Bacteria Taxonomy data...')
-    unmag_bacteria_taxonomy_import()
-    print('unMAG Bacteria Taxonomy data is complete.')
+    # print('Importing unMAG Bacteria Taxonomy data...')
+    # unmag_bacteria_taxonomy_import()
+    # print('unMAG Bacteria Taxonomy data is complete.')
     print('Importing unMAG Bacteria Protein data...')
     unmag_bacteria_protein_import()
     print('unMAG Bacteria Protein data is complete.')
-    print('Importing unMAG Bacteria TRNA data...')
-    unmag_bacteria_trna_import()
-    print('unMAG Bacteria TRNA data is complete.')
+    # print('Importing unMAG Bacteria TRNA data...')
+    # unmag_bacteria_trna_import()
+    # print('unMAG Bacteria TRNA data is complete.')
     print('Importing unMAG Bacteria CRISPR Cas data...')
     unmag_bacteria_crispr_cas_import()
     print('unMAG Bacteria CRISPR Cas data is complete.')
-    print('Importing unMAG Bacteria Anti CRISPR Annotation data..')
-    unmag_bacteria_anti_crispr_annotation_import()
-    print('unMAG Bacteria Anti CRISPR Annotation data is complete.')
-    print('Importing unMAG Bacteria Secondary Metabolite Region data...')
-    unmag_bacteria_secondary_metabolite_region_import()
-    print('unMAG Bacteria Secondary Metabolite Region data is complete.')
-    print('Importing unMAG Bacteria Signal Peptide Prediction data...')
-    unmag_bacteria_signal_peptide_prediction_import()
-    print('unMAG Bacteria Signal Peptide Prediction data is complete.')
-    print('Importing unMAG Bacteria Virulence Factor data...')
-    unmag_bacteria_virulence_factor_import()
-    print('unMAG Bacteria Virulence Factor data is complete.')
-    print('Importing unMAG Bacteria Antibiotic Resistance data...')
-    unmag_bacteria_antibiotic_resistance_import()
-    print('unMAG Bacteria Antibiotic Resistance data is complete.')
-    print('Importing unMAG Bacteria Transmembrane Helices data...')
-    unmag_bacteria_transmembrane_helices_import()
-    print('unMAG Bacteria Transmembrane Helices data is complete.')
+    # print('Importing unMAG Bacteria Anti CRISPR Annotation data..')
+    # unmag_bacteria_anti_crispr_annotation_import()
+    # print('unMAG Bacteria Anti CRISPR Annotation data is complete.')
+    # print('Importing unMAG Bacteria Secondary Metabolite Region data...')
+    # unmag_bacteria_secondary_metabolite_region_import()
+    # print('unMAG Bacteria Secondary Metabolite Region data is complete.')
+    # print('Importing unMAG Bacteria Signal Peptide Prediction data...')
+    # unmag_bacteria_signal_peptide_prediction_import()
+    # print('unMAG Bacteria Signal Peptide Prediction data is complete.')
+    # print('Importing unMAG Bacteria Virulence Factor data...')
+    # unmag_bacteria_virulence_factor_import()
+    # print('unMAG Bacteria Virulence Factor data is complete.')
+    # print('Importing unMAG Bacteria Antibiotic Resistance data...')
+    # unmag_bacteria_antibiotic_resistance_import()
+    # print('unMAG Bacteria Antibiotic Resistance data is complete.')
+    # print('Importing unMAG Bacteria Transmembrane Helices data...')
+    # unmag_bacteria_transmembrane_helices_import()
+    # print('unMAG Bacteria Transmembrane Helices data is complete.')
     print('===============Import Bacteria unMAG Data Done===============')
 
 
@@ -108,7 +108,7 @@ def mag_bacteria_import():
         for _, row in chunk.iterrows():
             obj = MAGBacteria(
                 unique_id=row['Unique_ID'],
-                bacteria_id=row['Bacteria_ID'],
+                bacteria_id=[x.strip() for x in row['Bacteria_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -145,7 +145,7 @@ def unmag_bacteria_import():
         for _, row in chunk.iterrows():
             obj = UnMAGBacteria(
                 unique_id=row['Unique_ID'],
-                bacteria_id=row['Bacteria_ID'],
+                bacteria_id=[x.strip() for x in row['Bacteria_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -266,7 +266,7 @@ def mag_bacteria_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -319,7 +319,7 @@ def unmag_bacteria_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -429,7 +429,7 @@ def mag_bacteria_crispr_cas_import():
     )
     bacteria_crispr_cas_created_num = 0
     bacteria_crispr_created_num = 0
-    cas_cache = []
+    cas_cache = set()
 
     for chunk in pd.read_csv(bacteria_crispr_cas_file_path, sep='\t', chunksize=BATCH_SIZE):
         cas_objs = []
@@ -444,10 +444,9 @@ def mag_bacteria_crispr_cas_import():
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
                     cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
-                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
-                cas_cache.append(cas_key)
+                cas_cache.add(cas_key)
                 cas_objs.append(cas_obj)
 
         MAGBacteriaCRISPRCas.objects.bulk_create(cas_objs, batch_size=BATCH_SIZE)
@@ -478,6 +477,7 @@ def mag_bacteria_crispr_cas_import():
                     crispr_end=row['CRISPR_end'],
                     crispr_subtype=row['CRISPR Subtype'],
                     repeat_sequence=row['Consensus Repeat Sequence'],
+                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                 )
                 crispr_objs.append(crispr_obj)
 
@@ -500,7 +500,7 @@ def unmag_bacteria_crispr_cas_import():
     )
     bacteria_crispr_cas_created_num = 0
     bacteria_crispr_created_num = 0
-    cas_cache = []
+    cas_cache = set()
 
     for chunk in pd.read_csv(bacteria_crispr_cas_file_path, sep='\t', chunksize=BATCH_SIZE):
         cas_objs = []
@@ -515,10 +515,9 @@ def unmag_bacteria_crispr_cas_import():
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
                     cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
-                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
-                cas_cache.append(cas_key)
+                cas_cache.add(cas_key)
                 cas_objs.append(cas_obj)
 
         UnMAGBacteriaCRISPRCas.objects.bulk_create(cas_objs, batch_size=BATCH_SIZE)
@@ -549,6 +548,7 @@ def unmag_bacteria_crispr_cas_import():
                     crispr_end=row['CRISPR_end'],
                     crispr_subtype=row['CRISPR Subtype'],
                     repeat_sequence=row['Consensus Repeat Sequence'],
+                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                 )
                 crispr_objs.append(crispr_obj)
 
@@ -987,7 +987,7 @@ def mag_bacteria_transmembrane_helices_import():
     )
     bacteria_transmembrane_helices_created_num = 0
     bacteria_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(bacteria_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -1006,7 +1006,7 @@ def mag_bacteria_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         MAGBacteriaTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)
@@ -1058,7 +1058,7 @@ def unmag_bacteria_transmembrane_helices_import():
     )
     bacteria_transmembrane_helices_created_num = 0
     bacteria_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(bacteria_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -1077,7 +1077,7 @@ def unmag_bacteria_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         UnMAGBacteriaTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)

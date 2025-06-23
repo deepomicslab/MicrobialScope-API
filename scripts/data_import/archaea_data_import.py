@@ -16,27 +16,28 @@ from archaea_database.models import MAGArchaea, MAGArchaeaTaxonomy, MAGArchaeaPr
     UnMAGArchaeaAntibioticResistance, UnMAGArchaeaTransmembraneHelices, UnMAGArchaeaHelices
 from microbe_database.models import MicrobeStatistic
 
-ARCHAEA_DATA_DIR = 'E:\\WebProject\\MicrobialScope\\Data\\unMAG_Archaea'
-BATCH_SIZE = 1000
+# ARCHAEA_DATA_DIR = 'E:\\WebProject\\MicrobialScope\\Data\\unMAG_Archaea'
+ARCHAEA_DATA_DIR = 'E:\\WebProject\\MicrobialScope\\Data\\Demo\\Archaea'
+BATCH_SIZE = 3000
 
 
 def archaea_data_import():
-    # print('===============Import Archaea MAG Data===============')
-    # print('Importing MAG Archaea data...')
-    # mag_archaea_import()
-    # print('MAG Archaea data import is complete.')
+    print('===============Import Archaea MAG Data===============')
+    print('Importing MAG Archaea data...')
+    mag_archaea_import()
+    print('MAG Archaea data import is complete.')
     # print('Importing MAG Archaea Taxonomy data...')
     # mag_archaea_taxonomy_import()
     # print('MAG Archaea Taxonomy data is complete.')
-    # print('Importing MAG Archaea Protein data...')
-    # mag_archaea_protein_import()
-    # print('MAG Archaea Protein data is complete.')
+    print('Importing MAG Archaea Protein data...')
+    mag_archaea_protein_import()
+    print('MAG Archaea Protein data is complete.')
     # print('Importing MAG Archaea TRNA data...')
     # mag_archaea_trna_import()
     # print('MAG Archaea TRNA data is complete.')
-    # print('Importing MAG Archaea CRISPR Cas data...')
-    # mag_archaea_crispr_cas_import()
-    # print('MAG Archaea CRISPR Cas data is complete.')
+    print('Importing MAG Archaea CRISPR Cas data...')
+    mag_archaea_crispr_cas_import()
+    print('MAG Archaea CRISPR Cas data is complete.')
     # print('Importing MAG Archaea Anti CRISPR Annotation data..')
     # mag_archaea_anti_crispr_annotation_import()
     # print('MAG Archaea Anti CRISPR Annotation data is complete.')
@@ -88,10 +89,10 @@ def archaea_data_import():
     # print('Importing unMAG Archaea Antibiotic Resistance data...')
     # unmag_archaea_antibiotic_resistance_import()
     # print('unMAG Archaea Antibiotic Resistance data is complete.')
-    print('Importing unMAG Archaea Transmembrane Helices data...')
-    unmag_archaea_transmembrane_helices_import()
-    print('unMAG Archaea Transmembrane Helices data is complete.')
-    print('===============Import Archaea unMAG Data Done===============')
+    # print('Importing unMAG Archaea Transmembrane Helices data...')
+    # unmag_archaea_transmembrane_helices_import()
+    # print('unMAG Archaea Transmembrane Helices data is complete.')
+    # print('===============Import Archaea unMAG Data Done===============')
 
 
 def mag_archaea_import():
@@ -108,7 +109,7 @@ def mag_archaea_import():
         for _, row in chunk.iterrows():
             obj = MAGArchaea(
                 unique_id=row['Unique_ID'],
-                archaea_id=row['Archaea_ID'],
+                archaea_id=[x.strip() for x in row['Archaea_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -145,7 +146,7 @@ def unmag_archaea_import():
         for _, row in chunk.iterrows():
             obj = UnMAGArchaea(
                 unique_id=row['Unique_ID'],
-                archaea_id=row['Archaea_ID'],
+                archaea_id=[x.strip() for x in row['Archaea_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -266,7 +267,7 @@ def mag_archaea_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -319,7 +320,7 @@ def unmag_archaea_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -429,7 +430,7 @@ def mag_archaea_crispr_cas_import():
     )
     archaea_crispr_cas_created_num = 0
     archaea_crispr_created_num = 0
-    cas_cache = []
+    cas_cache = set()
 
     for chunk in pd.read_csv(archaea_crispr_cas_file_path, sep='\t', chunksize=BATCH_SIZE):
         cas_objs = []
@@ -444,10 +445,9 @@ def mag_archaea_crispr_cas_import():
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
                     cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
-                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
-                cas_cache.append(cas_key)
+                cas_cache.add(cas_key)
                 cas_objs.append(cas_obj)
 
         MAGArchaeaCRISPRCas.objects.bulk_create(cas_objs, batch_size=BATCH_SIZE)
@@ -478,6 +478,7 @@ def mag_archaea_crispr_cas_import():
                     crispr_end=row['CRISPR_end'],
                     crispr_subtype=row['CRISPR Subtype'],
                     repeat_sequence=row['Consensus Repeat Sequence'],
+                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                 )
                 crispr_objs.append(crispr_obj)
 
@@ -500,7 +501,7 @@ def unmag_archaea_crispr_cas_import():
     )
     archaea_crispr_cas_created_num = 0
     archaea_crispr_created_num = 0
-    cas_cache = []
+    cas_cache = set()
 
     for chunk in pd.read_csv(archaea_crispr_cas_file_path, sep='\t', chunksize=BATCH_SIZE):
         cas_objs = []
@@ -515,10 +516,9 @@ def unmag_archaea_crispr_cas_import():
                     cas_start=row['Cas_start'],
                     cas_end=row['Cas_end'],
                     cas_subtype=[s.strip() for s in row['Cas Subtype'].split('or') if s.strip()],
-                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                     cas_genes=ast.literal_eval(row['Cas Genes']),
                 )
-                cas_cache.append(cas_key)
+                cas_cache.add(cas_key)
                 cas_objs.append(cas_obj)
 
         UnMAGArchaeaCRISPRCas.objects.bulk_create(cas_objs, batch_size=BATCH_SIZE)
@@ -549,6 +549,7 @@ def unmag_archaea_crispr_cas_import():
                     crispr_end=row['CRISPR_end'],
                     crispr_subtype=row['CRISPR Subtype'],
                     repeat_sequence=row['Consensus Repeat Sequence'],
+                    consensus_prediction=row['CRISPR-Cas Consenus Prediction'],
                 )
                 crispr_objs.append(crispr_obj)
 
@@ -987,7 +988,7 @@ def mag_archaea_transmembrane_helices_import():
     )
     archaea_transmembrane_helices_created_num = 0
     archaea_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(archaea_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -1006,7 +1007,7 @@ def mag_archaea_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         MAGArchaeaTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)
@@ -1058,7 +1059,7 @@ def unmag_archaea_transmembrane_helices_import():
     )
     archaea_transmembrane_helices_created_num = 0
     archaea_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(archaea_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -1077,7 +1078,7 @@ def unmag_archaea_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         UnMAGArchaeaTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)

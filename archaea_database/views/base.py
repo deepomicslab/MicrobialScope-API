@@ -40,14 +40,11 @@ class GenericTableQueryView(APIView):
 
         return q_obj
 
-    def get_search_q(self, search_text):
-        if not search_text or not self.search_fields:
+    def get_search_q(self, search_content):
+        if not search_content['value']:
             return Q()
 
-        queries = Q()
-        for field in self.search_fields:
-            queries |= Q(**{f"{field}__icontains": search_text})
-        return queries
+        return Q(**{f"{search_content['field']}__startswith": search_content['value']})
 
     def post(self, request):
         if self.request_serializer_class is None:
@@ -64,8 +61,8 @@ class GenericTableQueryView(APIView):
             if sort_field and sort_order:
                 sort_item = sort_field if sort_order == 'ascend' else f'-{sort_field}'
 
-            search_text = validated_data.get('searchContent', '')
-            search_params = self.get_search_q(search_text)
+            search_content = validated_data.get('searchContent', '')
+            search_params = self.get_search_q(search_content)
 
             filters = validated_data.get('filterOptions', {})
             filter_params = self.get_filter_params(filters)

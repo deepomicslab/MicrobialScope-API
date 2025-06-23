@@ -14,7 +14,7 @@ from fungi_database.models import MAGFungi, MAGFungiTaxonomy, MAGFungiProtein, M
 from microbe_database.models import MicrobeStatistic
 
 FUNGI_DATA_DIR = 'E:\\WebProject\\MicrobialScope\\Data\\Demo\\Fungi'
-BATCH_SIZE = 1000
+BATCH_SIZE = 3000
 
 
 def fungi_data_import():
@@ -22,60 +22,60 @@ def fungi_data_import():
     print('Importing MAG Fungi data...')
     mag_fungi_import()
     print('MAG Fungi data import is complete.')
-    print('Importing MAG Fungi Taxonomy data...')
-    mag_fungi_taxonomy_import()
-    print('MAG Fungi Taxonomy data is complete.')
+    # print('Importing MAG Fungi Taxonomy data...')
+    # mag_fungi_taxonomy_import()
+    # print('MAG Fungi Taxonomy data is complete.')
     print('Importing MAG Fungi Protein data...')
     mag_fungi_protein_import()
     print('MAG Fungi Protein data is complete.')
-    print('Importing MAG Fungi TRNA data...')
-    mag_fungi_trna_import()
-    print('MAG Fungi TRNA data is complete.')
-    print('Importing MAG Fungi Secondary Metabolite Region data...')
-    mag_fungi_secondary_metabolite_region_import()
-    print('MAG Fungi Secondary Metabolite Region data is complete.')
-    print('Importing MAG Fungi Signal Peptide Prediction data...')
-    mag_fungi_signal_peptide_prediction_import()
-    print('MAG Fungi Signal Peptide Prediction data is complete.')
-    print('Importing MAG Fungi Virulence Factor data...')
-    mag_fungi_virulence_factor_import()
-    print('MAG Fungi Virulence Factor data is complete.')
-    print('Importing MAG Fungi Antibiotic Resistance data...')
-    mag_fungi_antibiotic_resistance_import()
-    print('MAG Fungi Antibiotic Resistance data is complete.')
-    print('Importing MAG Fungi Transmembrane Helices data...')
-    mag_fungi_transmembrane_helices_import()
-    print('MAG Fungi Transmembrane Helices data is complete.')
+    # print('Importing MAG Fungi TRNA data...')
+    # mag_fungi_trna_import()
+    # print('MAG Fungi TRNA data is complete.')
+    # print('Importing MAG Fungi Secondary Metabolite Region data...')
+    # mag_fungi_secondary_metabolite_region_import()
+    # print('MAG Fungi Secondary Metabolite Region data is complete.')
+    # print('Importing MAG Fungi Signal Peptide Prediction data...')
+    # mag_fungi_signal_peptide_prediction_import()
+    # print('MAG Fungi Signal Peptide Prediction data is complete.')
+    # print('Importing MAG Fungi Virulence Factor data...')
+    # mag_fungi_virulence_factor_import()
+    # print('MAG Fungi Virulence Factor data is complete.')
+    # print('Importing MAG Fungi Antibiotic Resistance data...')
+    # mag_fungi_antibiotic_resistance_import()
+    # print('MAG Fungi Antibiotic Resistance data is complete.')
+    # print('Importing MAG Fungi Transmembrane Helices data...')
+    # mag_fungi_transmembrane_helices_import()
+    # print('MAG Fungi Transmembrane Helices data is complete.')
     print('===============Import Fungi MAG Data Done===============')
     print()
     print('===============Import Fungi unMAG Data===============')
     print('Importing unMAG Fungi data...')
     unmag_fungi_import()
     print('unMAG Fungi data import is complete.')
-    print('Importing unMAG Fungi Taxonomy data...')
-    unmag_fungi_taxonomy_import()
-    print('unMAG Fungi Taxonomy data is complete.')
+    # print('Importing unMAG Fungi Taxonomy data...')
+    # unmag_fungi_taxonomy_import()
+    # print('unMAG Fungi Taxonomy data is complete.')
     print('Importing unMAG Fungi Protein data...')
     unmag_fungi_protein_import()
     print('unMAG Fungi Protein data is complete.')
-    print('Importing unMAG Fungi TRNA data...')
-    unmag_fungi_trna_import()
-    print('unMAG Fungi TRNA data is complete.')
-    print('Importing unMAG Fungi Secondary Metabolite Region data...')
-    unmag_fungi_secondary_metabolite_region_import()
-    print('unMAG Fungi Secondary Metabolite Region data is complete.')
-    print('Importing unMAG Fungi Signal Peptide Prediction data...')
-    unmag_fungi_signal_peptide_prediction_import()
-    print('unMAG Fungi Signal Peptide Prediction data is complete.')
-    print('Importing unMAG Fungi Virulence Factor data...')
-    unmag_fungi_virulence_factor_import()
-    print('unMAG Fungi Virulence Factor data is complete.')
-    print('Importing unMAG Fungi Antibiotic Resistance data...')
-    unmag_fungi_antibiotic_resistance_import()
-    print('unMAG Fungi Antibiotic Resistance data is complete.')
-    print('Importing unMAG Fungi Transmembrane Helices data...')
-    unmag_fungi_transmembrane_helices_import()
-    print('unMAG Fungi Transmembrane Helices data is complete.')
+    # print('Importing unMAG Fungi TRNA data...')
+    # unmag_fungi_trna_import()
+    # print('unMAG Fungi TRNA data is complete.')
+    # print('Importing unMAG Fungi Secondary Metabolite Region data...')
+    # unmag_fungi_secondary_metabolite_region_import()
+    # print('unMAG Fungi Secondary Metabolite Region data is complete.')
+    # print('Importing unMAG Fungi Signal Peptide Prediction data...')
+    # unmag_fungi_signal_peptide_prediction_import()
+    # print('unMAG Fungi Signal Peptide Prediction data is complete.')
+    # print('Importing unMAG Fungi Virulence Factor data...')
+    # unmag_fungi_virulence_factor_import()
+    # print('unMAG Fungi Virulence Factor data is complete.')
+    # print('Importing unMAG Fungi Antibiotic Resistance data...')
+    # unmag_fungi_antibiotic_resistance_import()
+    # print('unMAG Fungi Antibiotic Resistance data is complete.')
+    # print('Importing unMAG Fungi Transmembrane Helices data...')
+    # unmag_fungi_transmembrane_helices_import()
+    # print('unMAG Fungi Transmembrane Helices data is complete.')
     print('===============Import Fungi unMAG Data Done===============')
 
 
@@ -93,7 +93,7 @@ def mag_fungi_import():
         for _, row in chunk.iterrows():
             obj = MAGFungi(
                 unique_id=row['Unique_ID'],
-                fungi_id=row['Fungi_ID'],
+                fungi_id=[x.strip() for x in row['Fungi_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -130,7 +130,7 @@ def unmag_fungi_import():
         for _, row in chunk.iterrows():
             obj = UnMAGFungi(
                 unique_id=row['Unique_ID'],
-                fungi_id=row['Fungi_ID'],
+                fungi_id=[x.strip() for x in row['Fungi_ID'].split(',') if x.strip()],
                 organism_name=row['Organism Name'],
                 taxonomic_id=row['Taxonomic ID'],
                 species=row['Species'],
@@ -251,7 +251,7 @@ def mag_fungi_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -304,7 +304,7 @@ def unmag_fungi_protein_import():
                 phase=row['Phase'],
                 product=row['Product'],
                 function_prediction_source=row['Function Prediction Source'],
-                cog_category=row['COG_category'],
+                cog_category=list(row['COG_category'].strip()) if row['COG_category'] else [],
                 description=row['Description'],
                 preferred_name=row['Preferred_name'],
                 gos=row['GOs'],
@@ -730,7 +730,7 @@ def mag_fungi_transmembrane_helices_import():
     )
     fungi_transmembrane_helices_created_num = 0
     fungi_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(fungi_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -749,7 +749,7 @@ def mag_fungi_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         MAGFungiTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)
@@ -801,7 +801,7 @@ def unmag_fungi_transmembrane_helices_import():
     )
     fungi_transmembrane_helices_created_num = 0
     fungi_helices_created_num = 0
-    transmembrane_helices_cache = []
+    transmembrane_helices_cache = set()
 
     for chunk in pd.read_csv(fungi_transmembrane_helices_file_path, sep='\t', chunksize=BATCH_SIZE):
         transmembrane_helices_objs = []
@@ -820,7 +820,7 @@ def unmag_fungi_transmembrane_helices_import():
                     expected_first_60_aas=row['Exp number, first 60 AAs'],
                     total_prob_n_in=row['Total prob of N-in']
                 )
-                transmembrane_helices_cache.append(transmembrane_helices_key)
+                transmembrane_helices_cache.add(transmembrane_helices_key)
                 transmembrane_helices_objs.append(transmembrane_helices_obj)
 
         UnMAGFungiTransmembraneHelices.objects.bulk_create(transmembrane_helices_objs, batch_size=BATCH_SIZE)

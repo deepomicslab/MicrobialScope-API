@@ -15,6 +15,9 @@ from archaea_database.models import MAGArchaeaVirulenceFactor, UnMAGArchaeaVirul
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.virulence_factor_serializers import MAGArchaeaVirulenceFactorSerializer, \
     UnMAGArchaeaVirulenceFactorSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -62,9 +65,7 @@ class ArchaeaVirulenceFactorsView(GenericTableQueryView):
 
 class ArchaeaVirulenceFactorsFilterOptionsView(APIView):
     def get(self, request):
-        vf_category_values = sorted(list(
-            MAGArchaeaVirulenceFactor.objects.order_by().values_list('vf_category', flat=True).distinct()
-        ))
+        vf_category_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaVirulenceFactorVFCategory').value
 
         return Response({
             'vf_category': vf_category_values,
@@ -130,9 +131,7 @@ class UnMAGArchaeaVirulenceFactorsView(GenericTableQueryView):
 
 class UnMAGArchaeaVirulenceFactorsFilterOptionsView(APIView):
     def get(self, request):
-        vf_category_values = sorted(list(
-            UnMAGArchaeaVirulenceFactor.objects.order_by().values_list('vf_category', flat=True).distinct()
-        ))
+        vf_category_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaVirulenceFactorVFCategory').value
 
         return Response({
             'vf_category': vf_category_values,

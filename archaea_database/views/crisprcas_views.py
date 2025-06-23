@@ -14,6 +14,9 @@ from archaea_database.views.base import GenericTableQueryView, GenericSingleDown
 from archaea_database.models import MAGArchaeaCRISPRCas, MAGArchaeaCRISPR, UnMAGArchaeaCRISPRCas, UnMAGArchaeaCRISPR
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer
 from archaea_database.serializers.crisprcas_serializers import MAGArchaeaCRISPRSerializer, UnMAGArchaeaCRISPRSerializer
+
+from microbe_database.models import MicrobeFilterOptionsNew
+
 from utils.pagination import CustomPostPagination
 
 
@@ -36,6 +39,16 @@ def get_csv_header():
     return ['Archaea_ID', 'Contig_ID', 'Cas_ID', 'Cas_start', 'Cas_end', 'Cas Subtype', 'CRISPR_ID', 'CRISPR_start',
             'CRISPR_end', 'CRISPR Subtype', 'CRISPR-Cas Consenus Prediction', 'Consensus Repeat Sequence',
             'Cas Genes']
+
+
+def get_CRISPR_Cas_systems_search_q(search_content):
+    if not search_content['value']:
+        return Q()
+
+    if search_content['field'] == 'archaea_id':
+        return Q(**{f"cas__{search_content['field']}__startswith": search_content['value']})
+
+    return Q(**{f"{search_content['field']}__startswith": search_content['value']})
 
 
 def to_csv_row(crispr, cas):
@@ -74,37 +87,15 @@ class ArchaeaCRISPRCasSystemsView(GenericTableQueryView):
     def get_filter_params(self, filters):
         return get_CRISPR_Cas_systems_filter_q(filters)
 
+    def get_search_q(self, search_content):
+        return get_CRISPR_Cas_systems_search_q(search_content)
+
 
 class ArchaeaCRISPRCasSystemsFilterOptionsView(APIView):
-    def sort_key(self, value):
-        if value == "Unknown":
-            return float('inf'), ''
-        parts = value.split('-')
-        try:
-            roman_part = parts[0].strip()
-            letter_part = parts[1] if len(parts) > 1 else ''
-            roman_to_int = {
-                'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
-                'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10
-            }
-            num = roman_to_int.get(roman_part, 99)
-            return num, letter_part
-        except Exception:
-            return 99, value
-
     def get(self, request):
-        cas_subtype_values = list(
-            MAGArchaeaCRISPRCas.objects.order_by().values_list('cas_subtype', flat=True).distinct()
-        )
-        cas_subtype_values = sorted({
-            subtype.strip()
-            for sublist in cas_subtype_values if sublist
-            for subtype in sublist
-        }, key=self.sort_key)
+        cas_subtype_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaCRISPRCasTypes').value
 
-        crispr_subtype_values = sorted(list(
-            MAGArchaeaCRISPR.objects.order_by().values_list('crispr_subtype', flat=True).distinct()
-        ), key=self.sort_key)
+        crispr_subtype_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaCRISPRTypes').value
 
         return Response({
             'crispr_subtype': crispr_subtype_values,
@@ -188,37 +179,15 @@ class UnMAGArchaeaCRISPRCasSystemsView(GenericTableQueryView):
     def get_filter_params(self, filters):
         return get_CRISPR_Cas_systems_filter_q(filters)
 
+    def get_search_q(self, search_content):
+        return get_CRISPR_Cas_systems_search_q(search_content)
+
 
 class UnMAGArchaeaCRISPRCasSystemsFilterOptionsView(APIView):
-    def sort_key(self, value):
-        if value == "Unknown":
-            return float('inf'), ''
-        parts = value.split('-')
-        try:
-            roman_part = parts[0].strip()
-            letter_part = parts[1] if len(parts) > 1 else ''
-            roman_to_int = {
-                'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
-                'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10
-            }
-            num = roman_to_int.get(roman_part, 99)
-            return num, letter_part
-        except Exception:
-            return 99, value
-
     def get(self, request):
-        cas_subtype_values = list(
-            UnMAGArchaeaCRISPRCas.objects.order_by().values_list('cas_subtype', flat=True).distinct()
-        )
-        cas_subtype_values = sorted({
-            subtype.strip()
-            for sublist in cas_subtype_values if sublist
-            for subtype in sublist
-        }, key=self.sort_key)
+        cas_subtype_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaCRISPRCasTypes').value
 
-        crispr_subtype_values = sorted(list(
-            UnMAGArchaeaCRISPR.objects.order_by().values_list('crispr_subtype', flat=True).distinct()
-        ), key=self.sort_key)
+        crispr_subtype_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaCRISPRTypes').value
 
         return Response({
             'crispr_subtype': crispr_subtype_values,
