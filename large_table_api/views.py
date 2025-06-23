@@ -477,7 +477,7 @@ def archaea_unmag_protein_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"archaea_protein_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"archaea_unmag_protein_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -625,7 +625,7 @@ def archaea_unmag_arg_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"archaea_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"archaea_unmag_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -773,7 +773,7 @@ def archaea_unmag_tmh_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"archaea_tmh_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"archaea_unmag_tmh_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -1365,7 +1365,7 @@ def fungi_unmag_protein_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"fungi_protein_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"fungi_unmag_protein_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -1513,7 +1513,7 @@ def fungi_unmag_arg_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"fungi_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"fungi_unmag_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -1661,7 +1661,7 @@ def fungi_unmag_tmh_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"fungi_tmh_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"fungi_unmag_tmh_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -2253,7 +2253,7 @@ def viruses_unmag_protein_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"viruses_protein_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"viruses_unmag_protein_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -2401,7 +2401,7 @@ def viruses_unmag_arg_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"fungi_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"fungi_unmag_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -2549,7 +2549,7 @@ def viruses_unmag_tmh_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"viruses_tmh_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"viruses_unmag_tmh_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
