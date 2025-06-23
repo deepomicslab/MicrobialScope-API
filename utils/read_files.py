@@ -38,7 +38,7 @@ def read_protein_file(tsv_file_path):
                     "orf_prediction_source": row[3],
                     "start": int(row[4]),
                     "end": int(row[5]),
-                    "strand": row[6],
+                    "strand": '+' if row[6] == '0' else '-',
                     "phase": int(row[7]),
                     "product": row[8],
                     "function_prediction_source": row[9],
