@@ -145,7 +145,7 @@ def read_tmh_file(tsv_file_path):
             
             # Skip the header rows (there are two header rows in this format)
             next(reader)
-            next(reader)
+            # next(reader)
             
             # Group rows by protein_id
             protein_data = defaultdict(list)
