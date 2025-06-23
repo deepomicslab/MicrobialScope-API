@@ -42,7 +42,7 @@ def read_protein_file(tsv_file_path):
                     "phase": int(row[7]),
                     "product": row[8],
                     "function_prediction_source": row[9],
-                    "cog_category": [row[10]] if row[10] != "-" else [],
+                    "cog_category": list(row[10]) if row[10] != "-" else [],
                     "description": row[11],
                     "preferred_name": row[12],
                     "gos": row[13],
