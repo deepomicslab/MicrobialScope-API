@@ -2685,7 +2685,7 @@ def download_large_table_meta_data(request):
         microbe = request.POST.get('microbe', 'fungi')
         magStatus = request.POST.get('magStatus', 'MAG')
         dataType = request.POST.get('dataType', 'proteins')
-        filter_list = request.POST.getlist('payload') or []
+        filter_list = json.loads(request.POST.get('payload'))
 
         return download_meta_data(filter_list, microbe, magStatus, dataType)
     
