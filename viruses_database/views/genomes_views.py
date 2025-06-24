@@ -105,31 +105,31 @@ class VirusesGenomeDetailView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class VirusesGenomeProteinsView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            proteins = MAGVirusesProtein.objects.filter(viruses_id=genome_id)
-
-            proteins_serializer = MAGVirusesProteinSerializer(proteins, many=True)
-            return Response(proteins_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
 # class VirusesGenomeProteinsView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             protein_file = f'/delta_microbia/data/Viruses/MAG/meta/proteins/{genome_id}.tsv'
-#             proteins = read_protein_file(protein_file)
-#             return Response(proteins, status=status.HTTP_200_OK)
+#             proteins = MAGVirusesProtein.objects.filter(viruses_id=genome_id)
+#
+#             proteins_serializer = MAGVirusesProteinSerializer(proteins, many=True)
+#             return Response(proteins_serializer.data, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
+
+
+class VirusesGenomeProteinsView(APIView):
+    def get(self, request):
+        serializer = GenomeDetailSerializer(data=request.query_params)
+
+        if serializer.is_valid():
+            genome_id = serializer.validated_data['genomeId']
+            protein_file = f'/delta_microbia/data/Viruses/MAG/meta/proteins/{genome_id}.tsv'
+            proteins = read_protein_file(protein_file)
+            return Response(proteins, status=status.HTTP_200_OK)
+
+        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
 class VirusesGenomeTRNAsView(APIView):
@@ -174,34 +174,6 @@ class VirusesGenomeAntiCRISPRView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class VirusesGenomeSecondaryMetabolitesView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            secondary_metabolites = MAGVirusesSecondaryMetaboliteRegion.objects.filter(viruses_id=genome_id)
-
-            secondary_metabolites_serializer = MAGVirusesSecondaryMetaboliteSerializer(secondary_metabolites, many=True)
-            return Response(secondary_metabolites_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
-class VirusesGenomeSignalPeptidesView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            signal_peptides = MAGVirusesSignalPeptidePrediction.objects.filter(viruses_id=genome_id)
-
-            signal_peptides_serializer = MAGSignalPeptideSerializer(signal_peptides, many=True)
-            return Response(signal_peptides_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
 class VirusesGenomeVirulenceFactorsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
@@ -216,50 +188,32 @@ class VirusesGenomeVirulenceFactorsView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class VirusesGenomeAntibioticResistanceGenesView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            antibiotic_resistances = MAGVirusesAntibioticResistance.objects.filter(viruses_id=genome_id)
-
-            antibiotic_resistances_serializer = MAGVirusesAntibioticResistanceSerializer(
-                antibiotic_resistances,
-                many=True
-            )
-            return Response(antibiotic_resistances_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
 # class VirusesGenomeAntibioticResistanceGenesView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             arg_file = f'/delta_microbia/data/Viruses/MAG/meta/args/{genome_id}.tsv'
-#             args = read_arg_file(arg_file)
-#             return Response(args, status=status.HTTP_200_OK)
+#             antibiotic_resistances = MAGVirusesAntibioticResistance.objects.filter(viruses_id=genome_id)
+#
+#             antibiotic_resistances_serializer = MAGVirusesAntibioticResistanceSerializer(
+#                 antibiotic_resistances,
+#                 many=True
+#             )
+#             return Response(antibiotic_resistances_serializer.data, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class VirusesGenomeTransmembraneHelicesView(APIView):
+class VirusesGenomeAntibioticResistanceGenesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            transmembrane_helices = MAGVirusesTransmembraneHelices.objects.filter(
-                viruses_id=genome_id).prefetch_related('helices')
-
-            transmembrane_helices_serializer = MAGVirusesTransmembraneHelicesSerializer(
-                transmembrane_helices,
-                many=True
-            )
-            return Response(transmembrane_helices_serializer.data, status=status.HTTP_200_OK)
+            arg_file = f'/delta_microbia/data/Viruses/MAG/meta/args/{genome_id}.tsv'
+            args = read_arg_file(arg_file)
+            return Response(args, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
@@ -270,11 +224,29 @@ class VirusesGenomeTransmembraneHelicesView(APIView):
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             tmh_file = f'/delta_microbia/data/Viruses/MAG/meta/tmhs/{genome_id}.tsv'
-#             tmhs = read_tmh_file(tmh_file)
-#             return Response(tmhs, status=status.HTTP_200_OK)
+#             transmembrane_helices = MAGVirusesTransmembraneHelices.objects.filter(
+#                 viruses_id=genome_id).prefetch_related('helices')
+#
+#             transmembrane_helices_serializer = MAGVirusesTransmembraneHelicesSerializer(
+#                 transmembrane_helices,
+#                 many=True
+#             )
+#             return Response(transmembrane_helices_serializer.data, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
+
+
+class VirusesGenomeTransmembraneHelicesView(APIView):
+    def get(self, request):
+        serializer = GenomeDetailSerializer(data=request.query_params)
+
+        if serializer.is_valid():
+            genome_id = serializer.validated_data['genomeId']
+            tmh_file = f'/delta_microbia/data/Viruses/MAG/meta/tmhs/{genome_id}.tsv'
+            tmhs = read_tmh_file(tmh_file)
+            return Response(tmhs, status=status.HTTP_200_OK)
+
+        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
 class VirusesGenomeFASTAView(APIView):
@@ -391,31 +363,31 @@ class UnVirusesGenomeDetailView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnVirusesGenomeProteinsView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            proteins = UnMAGVirusesProtein.objects.filter(viruses_id=genome_id)
-
-            proteins_serializer = UnMAGVirusesProteinSerializer(proteins, many=True)
-            return Response(proteins_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
 # class UnVirusesGenomeProteinsView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             protein_file = f'/delta_microbia/data/Viruses/unMAG/meta/proteins/{genome_id}.tsv'
-#             proteins = read_protein_file(protein_file)
-#             return Response(proteins, status=status.HTTP_200_OK)
+#             proteins = UnMAGVirusesProtein.objects.filter(viruses_id=genome_id)
+#
+#             proteins_serializer = UnMAGVirusesProteinSerializer(proteins, many=True)
+#             return Response(proteins_serializer.data, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
+
+
+class UnVirusesGenomeProteinsView(APIView):
+    def get(self, request):
+        serializer = GenomeDetailSerializer(data=request.query_params)
+
+        if serializer.is_valid():
+            genome_id = serializer.validated_data['genomeId']
+            protein_file = f'/delta_microbia/data/Viruses/unMAG/meta/proteins/{genome_id}.tsv'
+            proteins = read_protein_file(protein_file)
+            return Response(proteins, status=status.HTTP_200_OK)
+
+        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
 class UnMAGVirusesGenomeTRNAsView(APIView):
@@ -460,35 +432,6 @@ class UnMAGVirusesGenomeAntiCRISPRView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGVirusesGenomeSecondaryMetabolitesView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            secondary_metabolites = UnMAGVirusesSecondaryMetaboliteRegion.objects.filter(viruses_id=genome_id)
-
-            secondary_metabolites_serializer = UnMAGVirusesSecondaryMetaboliteSerializer(secondary_metabolites,
-                                                                                         many=True)
-            return Response(secondary_metabolites_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
-class UnMAGVirusesGenomeSignalPeptidesView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            signal_peptides = UnMAGVirusesSignalPeptidePrediction.objects.filter(viruses_id=genome_id)
-
-            signal_peptides_serializer = UnMAGSignalPeptideSerializer(signal_peptides, many=True)
-            return Response(signal_peptides_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
 class UnMAGVirusesGenomeVirulenceFactorsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
@@ -503,50 +446,32 @@ class UnMAGVirusesGenomeVirulenceFactorsView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGVirusesGenomeAntibioticResistanceGenesView(APIView):
-    def get(self, request):
-        serializer = GenomeDetailSerializer(data=request.query_params)
-
-        if serializer.is_valid():
-            genome_id = serializer.validated_data['genomeId']
-            antibiotic_resistances = UnMAGVirusesAntibioticResistance.objects.filter(viruses_id=genome_id)
-
-            antibiotic_resistances_serializer = UnMAGVirusesAntibioticResistanceSerializer(
-                antibiotic_resistances,
-                many=True
-            )
-            return Response(antibiotic_resistances_serializer.data, status=status.HTTP_200_OK)
-
-        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
-
-
 # class UnMAGVirusesGenomeAntibioticResistanceGenesView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             arg_file = f'/delta_microbia/data/Viruses/unMAG/meta/args/{genome_id}.tsv'
-#             args = read_arg_file(arg_file)
-#             return Response(args, status=status.HTTP_200_OK)
+#             antibiotic_resistances = UnMAGVirusesAntibioticResistance.objects.filter(viruses_id=genome_id)
+#
+#             antibiotic_resistances_serializer = UnMAGVirusesAntibioticResistanceSerializer(
+#                 antibiotic_resistances,
+#                 many=True
+#             )
+#             return Response(antibiotic_resistances_serializer.data, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGVirusesGenomeTransmembraneHelicesView(APIView):
+class UnMAGVirusesGenomeAntibioticResistanceGenesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            transmembrane_helices = UnMAGVirusesTransmembraneHelices.objects.filter(
-                viruses_id=genome_id).prefetch_related('helices')
-
-            transmembrane_helices_serializer = UnMAGVirusesTransmembraneHelicesSerializer(
-                transmembrane_helices,
-                many=True
-            )
-            return Response(transmembrane_helices_serializer.data, status=status.HTTP_200_OK)
+            arg_file = f'/delta_microbia/data/Viruses/unMAG/meta/args/{genome_id}.tsv'
+            args = read_arg_file(arg_file)
+            return Response(args, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
@@ -557,11 +482,29 @@ class UnMAGVirusesGenomeTransmembraneHelicesView(APIView):
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             tmh_file = f'/delta_microbia/data/Viruses/unMAG/meta/tmhs/{genome_id}.tsv'
-#             tmhs = read_tmh_file(tmh_file)
-#             return Response(tmhs, status=status.HTTP_200_OK)
+#             transmembrane_helices = UnMAGVirusesTransmembraneHelices.objects.filter(
+#                 viruses_id=genome_id).prefetch_related('helices')
+#
+#             transmembrane_helices_serializer = UnMAGVirusesTransmembraneHelicesSerializer(
+#                 transmembrane_helices,
+#                 many=True
+#             )
+#             return Response(transmembrane_helices_serializer.data, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
+
+
+class UnMAGVirusesGenomeTransmembraneHelicesView(APIView):
+    def get(self, request):
+        serializer = GenomeDetailSerializer(data=request.query_params)
+
+        if serializer.is_valid():
+            genome_id = serializer.validated_data['genomeId']
+            tmh_file = f'/delta_microbia/data/Viruses/unMAG/meta/tmhs/{genome_id}.tsv'
+            tmhs = read_tmh_file(tmh_file)
+            return Response(tmhs, status=status.HTTP_200_OK)
+
+        return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
 class UnMAGVirusesGenomeFASTAView(APIView):

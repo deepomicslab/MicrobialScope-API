@@ -29,10 +29,10 @@ class MAGFungiDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_protein_count(self, obj):
-        # profile_file = f'/delta_microbia/data/Fungi/MAG/meta/proteins/{obj.unique_id}.tsv'
-        # df = pd.read_csv(profile_file, sep='\t')
-        # return len(df)
-        return MAGFungiProtein.objects.filter(fungi_id=obj.unique_id).count()
+        profile_file = f'/delta_microbia/data/Fungi/MAG/meta/proteins/{obj.unique_id}.tsv'
+        df = pd.read_csv(profile_file, sep='\t')
+        return len(df)
+        # return MAGFungiProtein.objects.filter(fungi_id=obj.unique_id).count()
 
     def get_trna_count(self, obj):
         return MAGFungiTRNA.objects.filter(fungi_id=obj.unique_id).count()
@@ -47,17 +47,17 @@ class MAGFungiDetailSerializer(serializers.ModelSerializer):
         return MAGFungiVirulenceFactor.objects.filter(fungi_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        # arg_file = f'/delta_microbia/data/Fungi/MAG/meta/args/{obj.unique_id}.tsv'
-        # df = pd.read_csv(arg_file, sep='\t')
-        # return len(df)
-        return MAGFungiAntibioticResistance.objects.filter(fungi_id=obj.unique_id).count()
+        arg_file = f'/delta_microbia/data/Fungi/MAG/meta/args/{obj.unique_id}.tsv'
+        df = pd.read_csv(arg_file, sep='\t')
+        return len(df)
+        # return MAGFungiAntibioticResistance.objects.filter(fungi_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
-        # tmh_file = f'/delta_microbia/data/Fungi/MAG/meta/tmhs/{obj.unique_id}.tsv'
-        # df = pd.read_csv(tmh_file, sep='\t')
-        # unique_protein_ids = df['Protein_ID'].unique()
-        # return len(unique_protein_ids)
-        return MAGFungiTransmembraneHelices.objects.filter(fungi_id=obj.unique_id).count()
+        tmh_file = f'/delta_microbia/data/Fungi/MAG/meta/tmhs/{obj.unique_id}.tsv'
+        df = pd.read_csv(tmh_file, sep='\t')
+        unique_protein_ids = df['Protein_ID'].unique()
+        return len(unique_protein_ids)
+        # return MAGFungiTransmembraneHelices.objects.filter(fungi_id=obj.unique_id).count()
 
 
 class UnMAGFungiSerializer(serializers.ModelSerializer):
@@ -82,10 +82,10 @@ class UnMAGFungiDetailSerializer(serializers.ModelSerializer):
     # def get_protein_count(self, obj):
     #     return UnMAGFungiProtein.objects.filter(fungi_id=obj.unique_id).count()
     def get_protein_count(self, obj):
-        # profile_file = f'/delta_microbia/data/Fungi/unMAG/meta/proteins/{obj.unique_id}.tsv'
-        # df = pd.read_csv(profile_file, sep='\t')
-        # return len(df)
-        return MAGFungiProtein.objects.filter(fungi_id=obj.unique_id).count()
+        profile_file = f'/delta_microbia/data/Fungi/unMAG/meta/proteins/{obj.unique_id}.tsv'
+        df = pd.read_csv(profile_file, sep='\t')
+        return len(df)
+        # return MAGFungiProtein.objects.filter(fungi_id=obj.unique_id).count()
 
     def get_trna_count(self, obj):
         return UnMAGFungiTRNA.objects.filter(fungi_id=obj.unique_id).count()
@@ -99,20 +99,20 @@ class UnMAGFungiDetailSerializer(serializers.ModelSerializer):
     def get_virulence_factor_count(self, obj):
         return UnMAGFungiVirulenceFactor.objects.filter(fungi_id=obj.unique_id).count()
 
-    def get_arg_count(self, obj):
-        return UnMAGFungiAntibioticResistance.objects.filter(fungi_id=obj.unique_id).count()
-
-    def get_tmh_count(self, obj):
-        return UnMAGFungiTransmembraneHelices.objects.filter(fungi_id=obj.unique_id).count()
-
     # def get_arg_count(self, obj):
-    #     arg_file = f'/delta_microbia/data/Fungi/unMAG/meta/args/{obj.unique_id}.tsv'
-    #     df = pd.read_csv(arg_file, sep='\t')
-    #     return len(df)
-    #     # return MAGFungiAntibioticResistance.objects.filter(fungi_id=obj.unique_id).count()
+    #     return UnMAGFungiAntibioticResistance.objects.filter(fungi_id=obj.unique_id).count()
     #
     # def get_tmh_count(self, obj):
-    #     tmh_file = f'/delta_microbia/data/Fungi/unMAG/meta/tmhs/{obj.unique_id}.tsv'
-    #     df = pd.read_csv(tmh_file, sep='\t')
-    #     unique_protein_ids = df['Protein_ID'].unique()
-    #     return len(unique_protein_ids)
+    #     return UnMAGFungiTransmembraneHelices.objects.filter(fungi_id=obj.unique_id).count()
+
+    def get_arg_count(self, obj):
+        arg_file = f'/delta_microbia/data/Fungi/unMAG/meta/args/{obj.unique_id}.tsv'
+        df = pd.read_csv(arg_file, sep='\t')
+        return len(df)
+        # return MAGFungiAntibioticResistance.objects.filter(fungi_id=obj.unique_id).count()
+
+    def get_tmh_count(self, obj):
+        tmh_file = f'/delta_microbia/data/Fungi/unMAG/meta/tmhs/{obj.unique_id}.tsv'
+        df = pd.read_csv(tmh_file, sep='\t')
+        unique_protein_ids = df['Protein_ID'].unique()
+        return len(unique_protein_ids)
