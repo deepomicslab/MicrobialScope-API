@@ -73,30 +73,30 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
         # 查询数据库，获取对应的文件路径
         if microbe == 'archaea':
             if magStatus == 'MAG':
-                if dataType == 'ARG':
+                if dataType == 'antibioticResistanceGenes':
                     archaea_files = ArchaeaMAGARGIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'TMH':
+                elif dataType == 'transmembraneHelices':
                     archaea_files = ArchaeaMAGTMHIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'Protein':
+                elif dataType == 'proteins':
                     archaea_files = ArchaeaMAGProteinIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
                 else:
                     return HttpResponse("无效的数据类型", status=400)
-            elif magStatus == 'UnMAG':
-                if dataType == 'Protein':
+            elif magStatus == 'unMAG':
+                if dataType == 'proteins':
                     archaea_files = ArchaeaUnMAGProteinIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'ARG':
+                elif dataType == 'antibioticResistanceGenes':
                     archaea_files = ArchaeaUnMAGARGIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'TMH':
+                elif dataType == 'transmembraneHelices':
                     archaea_files = ArchaeaUnMAGTMHIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
@@ -106,30 +106,30 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
                 return HttpResponse("无效的MAG状态", status=400)
         elif microbe == 'fungi':
             if magStatus == 'MAG':
-                if dataType == 'ARG':
+                if dataType == 'antibioticResistanceGenes':
                     archaea_files = FungiMAGARGIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'TMH':
+                elif dataType == 'transmembraneHelices':
                     archaea_files = FungiMAGTMHIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'Protein':
+                elif dataType == 'proteins':
                     archaea_files = FungiMAGProteinIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
                 else:
                     return HttpResponse("无效的数据类型", status=400)
-            elif magStatus == 'UnMAG':
-                if dataType == 'Protein':
+            elif magStatus == 'unMAG':
+                if dataType == 'proteins':
                     archaea_files = FungiUnMAGProteinIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'ARG':
+                elif dataType == 'antibioticResistanceGenes':
                     archaea_files = FungiUnMAGARGIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'TMH':
+                elif dataType == 'transmembraneHelices':
                     archaea_files = FungiUnMAGTMHIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
@@ -139,30 +139,30 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
                 return HttpResponse("无效的MAG状态", status=400)
         elif microbe == 'viruses':
             if magStatus == 'MAG':
-                if dataType == 'Protein':
+                if dataType == 'proteins':
                     archaea_files = VirusesMAGProteinIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'ARG':
+                elif dataType == 'antibioticResistanceGenes':
                     archaea_files = VirusesMAGARGIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'TMH':
+                elif dataType == 'transmembraneHelices':
                     archaea_files = VirusesMAGTMHIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
                 else:
                     return HttpResponse("无效的数据类型", status=400)
-            elif magStatus == 'UnMAG':
-                if dataType == 'Protein':
+            elif magStatus == 'unMAG':
+                if dataType == 'proteins':
                     archaea_files = VirusesUnMAGProteinIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'ARG':
+                elif dataType == 'antibioticResistanceGenes':
                     archaea_files = VirusesUnMAGARGIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')
-                elif dataType == 'TMH':
+                elif dataType == 'transmembraneHelices':
                     archaea_files = VirusesUnMAGTMHIndex.objects.filter(
                         archaea_id__in=archaea_ids
                     ).values('archaea_id', 'file_path')

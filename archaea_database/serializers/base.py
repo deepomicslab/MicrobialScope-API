@@ -20,6 +20,7 @@ class CommonBatchDownloadRequestParamsSerializer(serializers.Serializer):
     payload = serializers.JSONField(required=True)
     microbe = serializers.CharField(required=True)
     magStatus = serializers.CharField(required=True)
+    dataType = serializers.CharField(required=True)
 
 
 class GenomeDetailSerializer(serializers.Serializer):
