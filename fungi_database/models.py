@@ -168,15 +168,15 @@ class MAGFungiSignalPeptidePrediction(models.Model):
     source = models.CharField(max_length=255, blank=True)
     prediction = models.CharField(max_length=255, blank=True)
 
-    other = models.FloatField(null=True, blank=True)
-    sp_sec_spi = models.FloatField(null=True, blank=True)
-    lipo_sec_spii = models.FloatField(null=True, blank=True)
-    tat_tat_spi = models.FloatField(null=True, blank=True)
-    tatlipo_tat_spii = models.FloatField(null=True, blank=True)
-    pilin_sec_spiii = models.FloatField(null=True, blank=True)
+    other = models.TextField(null=True, blank=True)
+    sp_sec_spi = models.TextField(null=True, blank=True)
+    lipo_sec_spii = models.TextField(null=True, blank=True)
+    tat_tat_spi = models.TextField(null=True, blank=True)
+    tatlipo_tat_spii = models.TextField(null=True, blank=True)
+    pilin_sec_spiii = models.TextField(null=True, blank=True)
 
     cs_position = models.CharField(max_length=255, blank=True)
-    cs_probability = models.FloatField(null=True, blank=True)
+    cs_probability = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "MAG Fungi Signal Peptide Prediction"
@@ -452,15 +452,15 @@ class UnMAGFungiSignalPeptidePrediction(models.Model):
     source = models.CharField(max_length=255, blank=True)
     prediction = models.CharField(max_length=255, blank=True)
 
-    other = models.FloatField(null=True, blank=True)
-    sp_sec_spi = models.FloatField(null=True, blank=True)
-    lipo_sec_spii = models.FloatField(null=True, blank=True)
-    tat_tat_spi = models.FloatField(null=True, blank=True)
-    tatlipo_tat_spii = models.FloatField(null=True, blank=True)
-    pilin_sec_spiii = models.FloatField(null=True, blank=True)
+    other = models.TextField(null=True, blank=True)
+    sp_sec_spi = models.TextField(null=True, blank=True)
+    lipo_sec_spii = models.TextField(null=True, blank=True)
+    tat_tat_spi = models.TextField(null=True, blank=True)
+    tatlipo_tat_spii = models.TextField(null=True, blank=True)
+    pilin_sec_spiii = models.TextField(null=True, blank=True)
 
     cs_position = models.CharField(max_length=255, blank=True)
-    cs_probability = models.FloatField(null=True, blank=True)
+    cs_probability = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Fungi Signal Peptide Prediction"
