@@ -9,6 +9,7 @@ import hashlib
 
 from large_table_api.models import *
 from utils.read_files import *
+from utils.download_files import download_meta_data
 
 from django.views.decorators.cache import cache_page
 
@@ -2675,3 +2676,28 @@ def viruses_unmag_tmh_list(request):
             'page_size': 10,
             'results': []
         }, status=500) 
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def download_large_table_meta_data(request):
+    try:
+        # 解析请求数据
+        data = json.loads(request.body)
+        microbe = data.get('microbe', 'fungi')
+        magStatus = data.get('magStatus', 'MAG')
+        dataType = data.get('dataType', 'Protein')
+        filter_list = data.get('payload', [])
+        
+        return download_meta_data(filter_list, microbe, magStatus, dataType)
+    
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({
+            'error': str(e),
+            'count': 0,
+            'page': 1,
+            'page_size': 10,
+            'results': []
+        }, status=500) 
+

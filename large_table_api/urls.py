@@ -21,4 +21,5 @@ urlpatterns = [
     path('viruses_unmag_protein_list/', views.viruses_unmag_protein_list, name='viruses_unmag_protein_list'),
     path('viruses_unmag_arg_list/', views.viruses_unmag_arg_list, name='viruses_unmag_arg_list'),
     path('viruses_unmag_tmh_list/', views.viruses_unmag_tmh_list, name='viruses_unmag_tmh_list'),
+    path('download_large_table_meta_data/', views.download_large_table_meta_data, name='download_large_table_meta_data'),
 ]

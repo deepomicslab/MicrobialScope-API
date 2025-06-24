@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 
 from datetime import datetime
+from utils.download_files import compress_and_download_files
+import os
 
 from archaea_database.serializers.base import CommonSingleDownloadRequestParamsSerializer, \
     CommonBatchDownloadRequestParamsSerializer
@@ -138,7 +140,8 @@ class GenericBatchDownloadView(APIView):
 
         return q_obj
 
-    def get_file_response(self, queryset, download_type, file_type, payload):
+    def get_file_response(self, queryset, download_type, file_type, payload, microbe, magStatus):
+        base_dir = f'/delta_microbia/data/{microbe}/{magStatus}'
         if download_type == 'selected':
             queryset = queryset.filter(id__in=payload).order_by('id')
             if file_type == 'meta':
@@ -152,7 +155,22 @@ class GenericBatchDownloadView(APIView):
                         'Content-Disposition': f'attachment; filename="{filename}"'
                     }
                 )
-
+            elif file_type == 'fasta':
+                download_files = []
+                for obj in queryset:
+                    download_files.append(os.path.join(base_dir, 'fna', f"{obj.unique_id}.fna.gz"))
+                return compress_and_download_files(download_files, f"fasta_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}")
+            elif file_type == 'gbk':
+                download_files = []
+                for obj in queryset:
+                    download_files.append(os.path.join(base_dir, 'gbk', f"{obj.unique_id}.gbk.gz"))
+                return compress_and_download_files(download_files, f"gbk_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}")
+            elif file_type == 'gff3':
+                download_files = []
+                for obj in queryset:
+                    download_files.append(os.path.join(base_dir, 'gff', f"{obj.unique_id}.gff.gz"))
+                return compress_and_download_files(download_files, f"gff_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}")
+            
         elif download_type == 'filtered':
             filter_q = self.get_filter_q(payload)
             queryset = queryset.filter(filter_q).order_by('id')
