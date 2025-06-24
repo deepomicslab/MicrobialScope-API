@@ -69,7 +69,7 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
         
         if not archaea_ids:
             return HttpResponse("无效的过滤参数", status=400)
-        
+        print(f"提取的archaea_ids: {archaea_ids}")
         # 查询数据库，获取对应的文件路径
         if microbe == 'Archaea':
             if magStatus == 'MAG':
@@ -172,7 +172,7 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
                 return HttpResponse("无效的MAG状态", status=400)
         else:
             return HttpResponse("无效的微生物类型", status=400)
-        
+        print(f"查询到的文件: {list(archaea_files)}")
         # 创建文件路径字典
         file_paths = {file['archaea_id']: file['file_path'] for file in archaea_files}
         
