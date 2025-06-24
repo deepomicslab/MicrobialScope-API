@@ -71,7 +71,7 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
             return HttpResponse("无效的过滤参数", status=400)
         
         # 查询数据库，获取对应的文件路径
-        if microbe == 'archaea':
+        if microbe == 'Archaea':
             if magStatus == 'MAG':
                 if dataType == 'antibioticResistanceGenes':
                     archaea_files = ArchaeaMAGARGIndex.objects.filter(
@@ -104,7 +104,7 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
                     return HttpResponse("无效的数据类型", status=400)
             else:
                 return HttpResponse("无效的MAG状态", status=400)
-        elif microbe == 'fungi':
+        elif microbe == 'Fungi':
             if magStatus == 'MAG':
                 if dataType == 'antibioticResistanceGenes':
                     archaea_files = FungiMAGARGIndex.objects.filter(
@@ -137,7 +137,7 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
                     return HttpResponse("无效的数据类型", status=400)
             else:
                 return HttpResponse("无效的MAG状态", status=400)
-        elif microbe == 'viruses':
+        elif microbe == 'Viruses':
             if magStatus == 'MAG':
                 if dataType == 'proteins':
                     archaea_files = VirusesMAGProteinIndex.objects.filter(
