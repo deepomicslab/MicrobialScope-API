@@ -30,31 +30,31 @@ class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_protein_count(self, obj):
-        return MAGBacteriaProtein.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaProtein.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_trna_count(self, obj):
-        return MAGBacteriaTRNA.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaTRNA.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_crispr_count(self, obj):
-        return MAGBacteriaCRISPR.objects.filter(cas__archaea_id=obj.unique_id).count()
+        return MAGBacteriaCRISPR.objects.filter(cas__bacteria_id=obj.unique_id).count()
 
     def get_anti_crispr_count(self, obj):
-        return MAGBacteriaAntiCRISPRAnnotation.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaAntiCRISPRAnnotation.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_secondary_metabolite_count(self, obj):
-        return MAGBacteriaSecondaryMetaboliteRegion.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaSecondaryMetaboliteRegion.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_signal_peptide_count(self, obj):
-        return MAGBacteriaSignalPeptidePrediction.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaSignalPeptidePrediction.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_virulence_factor_count(self, obj):
-        return MAGBacteriaVirulenceFactor.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaVirulenceFactor.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        return MAGBacteriaAntibioticResistance.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaAntibioticResistance.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
-        return MAGBacteriaTransmembraneHelices.objects.filter(archaea_id=obj.unique_id).count()
+        return MAGBacteriaTransmembraneHelices.objects.filter(bacteria_id=obj.unique_id).count()
 
 
 class UnMAGBacteriaSerializer(serializers.ModelSerializer):
@@ -79,28 +79,28 @@ class UnMAGBacteriaDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_protein_count(self, obj):
-        return UnMAGBacteriaProtein.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaProtein.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_trna_count(self, obj):
-        return UnMAGBacteriaTRNA.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaTRNA.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_crispr_count(self, obj):
-        return UnMAGBacteriaCRISPR.objects.filter(cas__archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaCRISPR.objects.filter(cas__bacteria_id=obj.unique_id).count()
 
     def get_anti_crispr_count(self, obj):
-        return UnMAGBacteriaAntiCRISPRAnnotation.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaAntiCRISPRAnnotation.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_secondary_metabolite_count(self, obj):
-        return UnMAGBacteriaSecondaryMetaboliteRegion.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaSecondaryMetaboliteRegion.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_signal_peptide_count(self, obj):
-        return UnMAGBacteriaSignalPeptidePrediction.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaSignalPeptidePrediction.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_virulence_factor_count(self, obj):
-        return UnMAGBacteriaVirulenceFactor.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaVirulenceFactor.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        return UnMAGBacteriaAntibioticResistance.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaAntibioticResistance.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
-        return UnMAGBacteriaTransmembraneHelices.objects.filter(archaea_id=obj.unique_id).count()
+        return UnMAGBacteriaTransmembraneHelices.objects.filter(bacteria_id=obj.unique_id).count()

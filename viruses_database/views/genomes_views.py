@@ -14,29 +14,25 @@ from Bio import SeqIO
 from datetime import datetime
 
 from archaea_database.views.base import GenericTableQueryView, GenericSingleDownloadView, GenericBatchDownloadView
-from archaea_database.models import MAGArchaea, UnMAGArchaea, MAGArchaeaProtein, UnMAGArchaeaProtein, \
-    MAGArchaeaTRNA, UnMAGArchaeaTRNA, MAGArchaeaCRISPR, UnMAGArchaeaCRISPR, MAGArchaeaSecondaryMetaboliteRegion, \
-    UnMAGArchaeaSecondaryMetaboliteRegion, MAGArchaeaAntiCRISPRAnnotation, UnMAGArchaeaAntiCRISPRAnnotation, \
-    MAGArchaeaSignalPeptidePrediction, UnMAGArchaeaSignalPeptidePrediction, MAGArchaeaVirulenceFactor, \
-    UnMAGArchaeaVirulenceFactor, MAGArchaeaTransmembraneHelices, UnMAGArchaeaTransmembraneHelices, \
-    MAGArchaeaAntibioticResistance, UnMAGArchaeaAntibioticResistance
-from archaea_database.serializers.genomes_serializers import MAGArchaeaSerializer, UnMAGArchaeaSerializer, \
-    MAGArchaeaDetailSerializer, UnMAGArchaeaDetailSerializer
-from archaea_database.serializers.proteins_serializers import MAGArchaeaProteinSerializer, UnMAGArchaeaProteinSerializer
-from archaea_database.serializers.tRNAs_serializers import MAGArchaeaTRNASerializer, UnMAGArchaeaTRNASerializer
-from archaea_database.serializers.crisprcas_serializers import MAGArchaeaCRISPRSerializer, UnMAGArchaeaCRISPRSerializer
-from archaea_database.serializers.anti_crispr_serializers import MAGArchaeaAntiCRISPRAnnotationSerializer, \
-    UnMAGArchaeaAntiCRISPRAnnotationSerializer
-from archaea_database.serializers.secondary_metabolites_serializers import MAGArchaeaSecondaryMetaboliteSerializer, \
-    UnMAGArchaeaSecondaryMetaboliteSerializer
-from archaea_database.serializers.signal_peptide_serializers import MAGSignalPeptideSerializer, \
-    UnMAGSignalPeptideSerializer
-from archaea_database.serializers.virulence_factor_serializers import MAGArchaeaVirulenceFactorSerializer, \
-    UnMAGArchaeaVirulenceFactorSerializer
-from archaea_database.serializers.antibiotic_resistance_serializers import MAGArchaeaAntibioticResistanceSerializer, \
-    UnMAGArchaeaAntibioticResistanceSerializer
-from archaea_database.serializers.transmembrane_helices_serializers import MAGArchaeaTransmembraneHelicesSerializer, \
-    UnMAGArchaeaTransmembraneHelicesSerializer
+from viruses_database.models import MAGViruses, UnMAGViruses, MAGVirusesProtein, UnMAGVirusesProtein, \
+    MAGVirusesTRNA, UnMAGVirusesTRNA, MAGVirusesCRISPR, UnMAGVirusesCRISPR, \
+    MAGVirusesAntiCRISPRAnnotation, UnMAGVirusesAntiCRISPRAnnotation, \
+    MAGVirusesVirulenceFactor, \
+    UnMAGVirusesVirulenceFactor, MAGVirusesTransmembraneHelices, UnMAGVirusesTransmembraneHelices, \
+    MAGVirusesAntibioticResistance, UnMAGVirusesAntibioticResistance
+from viruses_database.serializers.genomes_serializers import MAGVirusesSerializer, UnMAGVirusesSerializer, \
+    MAGVirusesDetailSerializer, UnMAGVirusesDetailSerializer
+from viruses_database.serializers.proteins_serializers import MAGVirusesProteinSerializer, UnMAGVirusesProteinSerializer
+from viruses_database.serializers.tRNAs_serializers import MAGVirusesTRNASerializer, UnMAGVirusesTRNASerializer
+from viruses_database.serializers.crisprcas_serializers import MAGVirusesCRISPRSerializer, UnMAGVirusesCRISPRSerializer
+from viruses_database.serializers.anti_crispr_serializers import MAGVirusesAntiCRISPRAnnotationSerializer, \
+    UnMAGVirusesAntiCRISPRAnnotationSerializer
+from viruses_database.serializers.virulence_factor_serializers import MAGVirusesVirulenceFactorSerializer, \
+    UnMAGVirusesVirulenceFactorSerializer
+from viruses_database.serializers.antibiotic_resistance_serializers import MAGVirusesAntibioticResistanceSerializer, \
+    UnMAGVirusesAntibioticResistanceSerializer
+from viruses_database.serializers.transmembrane_helices_serializers import MAGVirusesTransmembraneHelicesSerializer, \
+    UnMAGVirusesTransmembraneHelicesSerializer
 from archaea_database.serializers.base import CommonTableRequestParamsSerializer, GenomeDetailSerializer
 
 from microbe_database.models import MicrobeFilterOptionsNew
@@ -48,14 +44,14 @@ from MicrobialScope_api.constant import MEDIA_DATA_DIR
 
 
 def get_csv_header():
-    return ['Unique_ID', 'Archaea_ID', 'Organism Name', 'Taxonomic ID', 'Species', 'Total Sequence Length',
+    return ['Unique_ID', 'Viruses_ID', 'Organism Name', 'Taxonomic ID', 'Species', 'Total Sequence Length',
             'GC Content', 'Assembly Level', 'Total Number of Chromosomes', 'Contig N50', 'Scaffold N50']
 
 
 def to_csv_row(genome):
     return [
         genome.unique_id,
-        genome.archaea_id,
+        genome.viruses_id,
         genome.organism_name,
         genome.taxonomic_id,
         genome.species,
@@ -72,7 +68,7 @@ def get_genome_search_q(search_content):
     if not search_content['value']:
         return Q()
 
-    if search_content['field'] == 'archaea_id':
+    if search_content['field'] == 'viruses_id':
         return Q(**{f"{search_content['field']}__contains": [search_content['value']]})
 
     return Q(**{f"{search_content['field']}__startswith": search_content['value']})
@@ -80,13 +76,13 @@ def get_genome_search_q(search_content):
 
 # MAG Genome Views
 # -----------------
-class ArchaeaGenomesView(GenericTableQueryView):
+class VirusesGenomesView(GenericTableQueryView):
     pagination_class = CustomPostPagination
-    queryset = MAGArchaea.objects.all()
-    serializer_class = MAGArchaeaSerializer
+    queryset = MAGViruses.objects.all()
+    serializer_class = MAGVirusesSerializer
     request_serializer_class = CommonTableRequestParamsSerializer
     search_fields = [
-        'unique_id', 'archaea_id', 'organism_name', 'taxonomic_id', 'species', 'total_sequence_length', 'gc_content',
+        'unique_id', 'viruses_id', 'organism_name', 'taxonomic_id', 'species', 'total_sequence_length', 'gc_content',
         'assembly_level', 'total_chromosomes', 'contig_n50', 'scaffold_n50'
     ]
 
@@ -94,110 +90,111 @@ class ArchaeaGenomesView(GenericTableQueryView):
         return get_genome_search_q(search_content)
 
 
-class ArchaeaGenomeDetailView(APIView):
+class VirusesGenomeDetailView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            genome = get_object_or_404(MAGArchaea, unique_id=genome_id)
+            genome = get_object_or_404(MAGViruses, unique_id=genome_id)
 
-            genome_serializer = MAGArchaeaDetailSerializer(genome)
+            genome_serializer = MAGVirusesDetailSerializer(genome)
 
             return Response(genome_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeProteinsView(APIView):
+class VirusesGenomeProteinsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            proteins = MAGArchaeaProtein.objects.filter(archaea_id=genome_id)
+            proteins = MAGVirusesProtein.objects.filter(viruses_id=genome_id)
 
-            proteins_serializer = MAGArchaeaProteinSerializer(proteins, many=True)
+            proteins_serializer = MAGVirusesProteinSerializer(proteins, many=True)
             return Response(proteins_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
-# class ArchaeaGenomeProteinsView(APIView):
+
+# class VirusesGenomeProteinsView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             protein_file = f'/delta_microbia/data/Archaea/MAG/meta/proteins/{genome_id}.tsv'
+#             protein_file = f'/delta_microbia/data/Viruses/MAG/meta/proteins/{genome_id}.tsv'
 #             proteins = read_protein_file(protein_file)
 #             return Response(proteins, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeTRNAsView(APIView):
+class VirusesGenomeTRNAsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            tRNAs = MAGArchaeaTRNA.objects.filter(archaea_id=genome_id)
+            tRNAs = MAGVirusesTRNA.objects.filter(viruses_id=genome_id)
 
-            tRNA_serializer = MAGArchaeaTRNASerializer(tRNAs, many=True)
+            tRNA_serializer = MAGVirusesTRNASerializer(tRNAs, many=True)
             return Response(tRNA_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeCRISPRCasView(APIView):
+class VirusesGenomeCRISPRCasView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            crisprs = MAGArchaeaCRISPR.objects.filter(cas__archaea_id=genome_id).select_related('cas')
+            crisprs = MAGVirusesCRISPR.objects.filter(cas__viruses_id=genome_id).select_related('cas')
 
-            crispr_serializer = MAGArchaeaCRISPRSerializer(crisprs, many=True)
+            crispr_serializer = MAGVirusesCRISPRSerializer(crisprs, many=True)
             return Response(crispr_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeAntiCRISPRView(APIView):
+class VirusesGenomeAntiCRISPRView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            anti_crispr = MAGArchaeaAntiCRISPRAnnotation.objects.filter(archaea_id=genome_id)
+            anti_crispr = MAGVirusesAntiCRISPRAnnotation.objects.filter(viruses_id=genome_id)
 
-            anti_crispr_serializer = MAGArchaeaAntiCRISPRAnnotationSerializer(anti_crispr, many=True)
+            anti_crispr_serializer = MAGVirusesAntiCRISPRAnnotationSerializer(anti_crispr, many=True)
             return Response(anti_crispr_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeSecondaryMetabolitesView(APIView):
+class VirusesGenomeSecondaryMetabolitesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            secondary_metabolites = MAGArchaeaSecondaryMetaboliteRegion.objects.filter(archaea_id=genome_id)
+            secondary_metabolites = MAGVirusesSecondaryMetaboliteRegion.objects.filter(viruses_id=genome_id)
 
-            secondary_metabolites_serializer = MAGArchaeaSecondaryMetaboliteSerializer(secondary_metabolites, many=True)
+            secondary_metabolites_serializer = MAGVirusesSecondaryMetaboliteSerializer(secondary_metabolites, many=True)
             return Response(secondary_metabolites_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeSignalPeptidesView(APIView):
+class VirusesGenomeSignalPeptidesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            signal_peptides = MAGArchaeaSignalPeptidePrediction.objects.filter(archaea_id=genome_id)
+            signal_peptides = MAGVirusesSignalPeptidePrediction.objects.filter(viruses_id=genome_id)
 
             signal_peptides_serializer = MAGSignalPeptideSerializer(signal_peptides, many=True)
             return Response(signal_peptides_serializer.data, status=status.HTTP_200_OK)
@@ -205,29 +202,29 @@ class ArchaeaGenomeSignalPeptidesView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeVirulenceFactorsView(APIView):
+class VirusesGenomeVirulenceFactorsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            virulence_factors = MAGArchaeaVirulenceFactor.objects.filter(archaea_id=genome_id)
+            virulence_factors = MAGVirusesVirulenceFactor.objects.filter(viruses_id=genome_id)
 
-            virulence_factors_serializer = MAGArchaeaVirulenceFactorSerializer(virulence_factors, many=True)
+            virulence_factors_serializer = MAGVirusesVirulenceFactorSerializer(virulence_factors, many=True)
             return Response(virulence_factors_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeAntibioticResistanceGenesView(APIView):
+class VirusesGenomeAntibioticResistanceGenesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            antibiotic_resistances = MAGArchaeaAntibioticResistance.objects.filter(archaea_id=genome_id)
+            antibiotic_resistances = MAGVirusesAntibioticResistance.objects.filter(viruses_id=genome_id)
 
-            antibiotic_resistances_serializer = MAGArchaeaAntibioticResistanceSerializer(
+            antibiotic_resistances_serializer = MAGVirusesAntibioticResistanceSerializer(
                 antibiotic_resistances,
                 many=True
             )
@@ -235,29 +232,30 @@ class ArchaeaGenomeAntibioticResistanceGenesView(APIView):
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
-# class ArchaeaGenomeAntibioticResistanceGenesView(APIView):
+
+# class VirusesGenomeAntibioticResistanceGenesView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             arg_file = f'/delta_microbia/data/Archaea/MAG/meta/args/{genome_id}.tsv'
+#             arg_file = f'/delta_microbia/data/Viruses/MAG/meta/args/{genome_id}.tsv'
 #             args = read_arg_file(arg_file)
 #             return Response(args, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeTransmembraneHelicesView(APIView):
+class VirusesGenomeTransmembraneHelicesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            transmembrane_helices = MAGArchaeaTransmembraneHelices.objects.filter(
-                archaea_id=genome_id).prefetch_related('helices')
+            transmembrane_helices = MAGVirusesTransmembraneHelices.objects.filter(
+                viruses_id=genome_id).prefetch_related('helices')
 
-            transmembrane_helices_serializer = MAGArchaeaTransmembraneHelicesSerializer(
+            transmembrane_helices_serializer = MAGVirusesTransmembraneHelicesSerializer(
                 transmembrane_helices,
                 many=True
             )
@@ -265,20 +263,21 @@ class ArchaeaGenomeTransmembraneHelicesView(APIView):
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
-# class ArchaeaGenomeTransmembraneHelicesView(APIView):
+
+# class VirusesGenomeTransmembraneHelicesView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             tmh_file = f'/delta_microbia/data/Archaea/MAG/meta/tmhs/{genome_id}.tsv'
+#             tmh_file = f'/delta_microbia/data/Viruses/MAG/meta/tmhs/{genome_id}.tsv'
 #             tmhs = read_tmh_file(tmh_file)
 #             return Response(tmhs, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomeFASTAView(APIView):
+class VirusesGenomeFASTAView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
@@ -286,7 +285,7 @@ class ArchaeaGenomeFASTAView(APIView):
             genome_id = serializer.validated_data['genomeId']
             fasta_path = os.path.join(
                 MEDIA_DATA_DIR,
-                'Archaea',
+                'Viruses',
                 'MAG',
                 'fna',
                 f'{genome_id}.fna.gz'
@@ -309,17 +308,17 @@ class ArchaeaGenomeFASTAView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomesFilterOptionsView(APIView):
+class VirusesGenomesFilterOptionsView(APIView):
     def get(self, request):
-        assembly_level_values = MicrobeFilterOptionsNew.objects.get(key='MAGArchaeaAssemblyLevel').value
+        assembly_level_values = MicrobeFilterOptionsNew.objects.get(key='MAGVirusesAssemblyLevel').value
 
         return Response({
             'assembly_level': assembly_level_values
         })
 
 
-class ArchaeaGenomesSingleDownloadView(GenericSingleDownloadView):
-    model = MAGArchaea
+class VirusesGenomesSingleDownloadView(GenericSingleDownloadView):
+    model = MAGViruses
 
     def get_file_response(self, genome, file_type):
         if file_type == 'meta':
@@ -344,8 +343,8 @@ class ArchaeaGenomesSingleDownloadView(GenericSingleDownloadView):
         return Response('Invalid Data Type', status=status.HTTP_400_BAD_REQUEST)
 
 
-class ArchaeaGenomesBatchDownloadView(GenericBatchDownloadView):
-    model = MAGArchaea
+class VirusesGenomesBatchDownloadView(GenericBatchDownloadView):
+    model = MAGViruses
     entity_name = 'genome'
 
     def build_csv(self, queryset):
@@ -364,13 +363,13 @@ class ArchaeaGenomesBatchDownloadView(GenericBatchDownloadView):
 
 # unMAG Genome Views
 # -------------------
-class UnMAGArchaeaGenomesView(GenericTableQueryView):
+class UnMAGVirusesGenomesView(GenericTableQueryView):
     pagination_class = CustomPostPagination
-    queryset = UnMAGArchaea.objects.all()
-    serializer_class = UnMAGArchaeaSerializer
+    queryset = UnMAGViruses.objects.all()
+    serializer_class = UnMAGVirusesSerializer
     request_serializer_class = CommonTableRequestParamsSerializer
     search_fields = [
-        'unique_id', 'archaea_id', 'organism_name', 'taxonomic_id', 'species', 'total_sequence_length', 'gc_content',
+        'unique_id', 'viruses_id', 'organism_name', 'taxonomic_id', 'species', 'total_sequence_length', 'gc_content',
         'assembly_level', 'total_chromosomes', 'contig_n50', 'scaffold_n50'
     ]
 
@@ -378,110 +377,111 @@ class UnMAGArchaeaGenomesView(GenericTableQueryView):
         return get_genome_search_q(search_content)
 
 
-class UnArchaeaGenomeDetailView(APIView):
+class UnVirusesGenomeDetailView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            genome = get_object_or_404(UnMAGArchaea, unique_id=genome_id)
+            genome = get_object_or_404(UnMAGViruses, unique_id=genome_id)
 
-            genome_serializer = UnMAGArchaeaDetailSerializer(genome)
+            genome_serializer = UnMAGVirusesDetailSerializer(genome)
             return Response(genome_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnArchaeaGenomeProteinsView(APIView):
+class UnVirusesGenomeProteinsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            proteins = UnMAGArchaeaProtein.objects.filter(archaea_id=genome_id)
+            proteins = UnMAGVirusesProtein.objects.filter(viruses_id=genome_id)
 
-            proteins_serializer = UnMAGArchaeaProteinSerializer(proteins, many=True)
+            proteins_serializer = UnMAGVirusesProteinSerializer(proteins, many=True)
             return Response(proteins_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
-# class UnArchaeaGenomeProteinsView(APIView):
+
+# class UnVirusesGenomeProteinsView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             protein_file = f'/delta_microbia/data/Archaea/unMAG/meta/proteins/{genome_id}.tsv'
+#             protein_file = f'/delta_microbia/data/Viruses/unMAG/meta/proteins/{genome_id}.tsv'
 #             proteins = read_protein_file(protein_file)
 #             return Response(proteins, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeTRNAsView(APIView):
+class UnMAGVirusesGenomeTRNAsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            tRNAs = UnMAGArchaeaTRNA.objects.filter(archaea_id=genome_id)
+            tRNAs = UnMAGVirusesTRNA.objects.filter(viruses_id=genome_id)
 
-            tRNA_serializer = UnMAGArchaeaTRNASerializer(tRNAs, many=True)
+            tRNA_serializer = UnMAGVirusesTRNASerializer(tRNAs, many=True)
             return Response(tRNA_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeCRISPRCasView(APIView):
+class UnMAGVirusesGenomeCRISPRCasView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            crisprs = UnMAGArchaeaCRISPR.objects.filter(cas__archaea_id=genome_id).select_related('cas')
+            crisprs = UnMAGVirusesCRISPR.objects.filter(cas__viruses_id=genome_id).select_related('cas')
 
-            crispr_serializer = UnMAGArchaeaCRISPRSerializer(crisprs, many=True)
+            crispr_serializer = UnMAGVirusesCRISPRSerializer(crisprs, many=True)
             return Response(crispr_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeAntiCRISPRView(APIView):
+class UnMAGVirusesGenomeAntiCRISPRView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            anti_crispr = UnMAGArchaeaAntiCRISPRAnnotation.objects.filter(archaea_id=genome_id)
+            anti_crispr = UnMAGVirusesAntiCRISPRAnnotation.objects.filter(viruses_id=genome_id)
 
-            anti_crispr_serializer = UnMAGArchaeaAntiCRISPRAnnotationSerializer(anti_crispr, many=True)
+            anti_crispr_serializer = UnMAGVirusesAntiCRISPRAnnotationSerializer(anti_crispr, many=True)
             return Response(anti_crispr_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeSecondaryMetabolitesView(APIView):
+class UnMAGVirusesGenomeSecondaryMetabolitesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            secondary_metabolites = UnMAGArchaeaSecondaryMetaboliteRegion.objects.filter(archaea_id=genome_id)
+            secondary_metabolites = UnMAGVirusesSecondaryMetaboliteRegion.objects.filter(viruses_id=genome_id)
 
-            secondary_metabolites_serializer = UnMAGArchaeaSecondaryMetaboliteSerializer(secondary_metabolites,
+            secondary_metabolites_serializer = UnMAGVirusesSecondaryMetaboliteSerializer(secondary_metabolites,
                                                                                          many=True)
             return Response(secondary_metabolites_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeSignalPeptidesView(APIView):
+class UnMAGVirusesGenomeSignalPeptidesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            signal_peptides = UnMAGArchaeaSignalPeptidePrediction.objects.filter(archaea_id=genome_id)
+            signal_peptides = UnMAGVirusesSignalPeptidePrediction.objects.filter(viruses_id=genome_id)
 
             signal_peptides_serializer = UnMAGSignalPeptideSerializer(signal_peptides, many=True)
             return Response(signal_peptides_serializer.data, status=status.HTTP_200_OK)
@@ -489,29 +489,29 @@ class UnMAGArchaeaGenomeSignalPeptidesView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeVirulenceFactorsView(APIView):
+class UnMAGVirusesGenomeVirulenceFactorsView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            virulence_factors = UnMAGArchaeaVirulenceFactor.objects.filter(archaea_id=genome_id)
+            virulence_factors = UnMAGVirusesVirulenceFactor.objects.filter(viruses_id=genome_id)
 
-            virulence_factors_serializer = UnMAGArchaeaVirulenceFactorSerializer(virulence_factors, many=True)
+            virulence_factors_serializer = UnMAGVirusesVirulenceFactorSerializer(virulence_factors, many=True)
             return Response(virulence_factors_serializer.data, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeAntibioticResistanceGenesView(APIView):
+class UnMAGVirusesGenomeAntibioticResistanceGenesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            antibiotic_resistances = UnMAGArchaeaAntibioticResistance.objects.filter(archaea_id=genome_id)
+            antibiotic_resistances = UnMAGVirusesAntibioticResistance.objects.filter(viruses_id=genome_id)
 
-            antibiotic_resistances_serializer = UnMAGArchaeaAntibioticResistanceSerializer(
+            antibiotic_resistances_serializer = UnMAGVirusesAntibioticResistanceSerializer(
                 antibiotic_resistances,
                 many=True
             )
@@ -519,29 +519,30 @@ class UnMAGArchaeaGenomeAntibioticResistanceGenesView(APIView):
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
-# class UnMAGArchaeaGenomeAntibioticResistanceGenesView(APIView):
+
+# class UnMAGVirusesGenomeAntibioticResistanceGenesView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             arg_file = f'/delta_microbia/data/Archaea/unMAG/meta/args/{genome_id}.tsv'
+#             arg_file = f'/delta_microbia/data/Viruses/unMAG/meta/args/{genome_id}.tsv'
 #             args = read_arg_file(arg_file)
 #             return Response(args, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeTransmembraneHelicesView(APIView):
+class UnMAGVirusesGenomeTransmembraneHelicesView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
-            transmembrane_helices = UnMAGArchaeaTransmembraneHelices.objects.filter(
-                archaea_id=genome_id).prefetch_related('helices')
+            transmembrane_helices = UnMAGVirusesTransmembraneHelices.objects.filter(
+                viruses_id=genome_id).prefetch_related('helices')
 
-            transmembrane_helices_serializer = UnMAGArchaeaTransmembraneHelicesSerializer(
+            transmembrane_helices_serializer = UnMAGVirusesTransmembraneHelicesSerializer(
                 transmembrane_helices,
                 many=True
             )
@@ -550,20 +551,20 @@ class UnMAGArchaeaGenomeTransmembraneHelicesView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-# class UnMAGArchaeaGenomeTransmembraneHelicesView(APIView):
+# class UnMAGVirusesGenomeTransmembraneHelicesView(APIView):
 #     def get(self, request):
 #         serializer = GenomeDetailSerializer(data=request.query_params)
 #
 #         if serializer.is_valid():
 #             genome_id = serializer.validated_data['genomeId']
-#             tmh_file = f'/delta_microbia/data/Archaea/unMAG/meta/tmhs/{genome_id}.tsv'
+#             tmh_file = f'/delta_microbia/data/Viruses/unMAG/meta/tmhs/{genome_id}.tsv'
 #             tmhs = read_tmh_file(tmh_file)
 #             return Response(tmhs, status=status.HTTP_200_OK)
 #
 #         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomeFASTAView(APIView):
+class UnMAGVirusesGenomeFASTAView(APIView):
     def get(self, request):
         serializer = GenomeDetailSerializer(data=request.query_params)
 
@@ -571,7 +572,7 @@ class UnMAGArchaeaGenomeFASTAView(APIView):
             genome_id = serializer.validated_data['genomeId']
             fasta_path = os.path.join(
                 MEDIA_DATA_DIR,
-                'Archaea',
+                'Viruses',
                 'unMAG',
                 'fna',
                 f'{genome_id}.fna.gz'
@@ -594,17 +595,17 @@ class UnMAGArchaeaGenomeFASTAView(APIView):
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomesFilterOptionsView(APIView):
+class UnMAGVirusesGenomesFilterOptionsView(APIView):
     def get(self, request):
-        assembly_level_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGArchaeaAssemblyLevel').value
+        assembly_level_values = MicrobeFilterOptionsNew.objects.get(key='UnMAGVirusesAssemblyLevel').value
 
         return Response({
             'assembly_level': assembly_level_values
         })
 
 
-class UnMAGArchaeaGenomesSingleDownloadView(GenericSingleDownloadView):
-    model = UnMAGArchaea
+class UnMAGVirusesGenomesSingleDownloadView(GenericSingleDownloadView):
+    model = UnMAGViruses
 
     def get_file_response(self, genome, file_type):
         if file_type == 'meta':
@@ -629,8 +630,8 @@ class UnMAGArchaeaGenomesSingleDownloadView(GenericSingleDownloadView):
         return Response('Invalid Data Type', status=status.HTTP_400_BAD_REQUEST)
 
 
-class UnMAGArchaeaGenomesBatchDownloadView(GenericBatchDownloadView):
-    model = UnMAGArchaea
+class UnMAGVirusesGenomesBatchDownloadView(GenericBatchDownloadView):
+    model = UnMAGViruses
     entity_name = 'genome'
 
     def build_csv(self, queryset):

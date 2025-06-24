@@ -140,8 +140,9 @@ class GenericBatchDownloadView(APIView):
 
         return q_obj
 
-    def get_file_response(self, queryset, download_type, file_type, payload, microbe, magStatus):
-        base_dir = f'/delta_microbia/data/{microbe}/{magStatus}'
+    def get_file_response(self, queryset, download_type, file_type, payload, microbe, mag_status):
+        # base_dir = f'/delta_microbia/data/{microbe}/{mag_status}'
+        base_dir = f'E:\\WebProject\\MicrobialScope\\Data\\media\\data\\{microbe}\\{mag_status}'
         if download_type == 'selected':
             queryset = queryset.filter(id__in=payload).order_by('id')
             if file_type == 'meta':
@@ -200,10 +201,12 @@ class GenericBatchDownloadView(APIView):
         download_type = validated_data.get('downloadType')
         file_type = validated_data.get('fileType')
         payload = validated_data.get('payload')
+        microbe = validated_data.get('microbe')
+        mag_status = validated_data.get('magStatus')
         queryset = self.get_queryset()
 
         try:
-            return self.get_file_response(queryset, download_type, file_type, payload)
+            return self.get_file_response(queryset, download_type, file_type, payload, microbe, mag_status)
         except NotImplementedError:
             return Response('Not Implemented', status=status.HTTP_501_NOT_IMPLEMENTED)
         except ValueError as e:

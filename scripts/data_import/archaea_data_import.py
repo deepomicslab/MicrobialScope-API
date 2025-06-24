@@ -100,6 +100,7 @@ def mag_archaea_import():
     archaea_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.genome_list.xls'
     )
     archaea_created_num = 0
@@ -137,6 +138,7 @@ def unmag_archaea_import():
     archaea_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.genome_list.xls'
     )
     archaea_created_num = 0
@@ -174,6 +176,7 @@ def mag_archaea_taxonomy_import():
     archaea_taxonomy_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.taxonomy_list.xls'
     )
     archaea_taxonomy_created_num = 0
@@ -211,6 +214,7 @@ def unmag_archaea_taxonomy_import():
     archaea_taxonomy_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.taxonomy_list.xls'
     )
     archaea_taxonomy_created_num = 0
@@ -248,6 +252,7 @@ def mag_archaea_protein_import():
     archaea_protein_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.protein_list.xls'
     )
     strand_map = {'+': 0, '-': 1}
@@ -301,6 +306,7 @@ def unmag_archaea_protein_import():
     archaea_protein_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.protein_list.xls'
     )
     strand_map = {'+': 0, '-': 1}
@@ -354,6 +360,7 @@ def mag_archaea_trna_import():
     archaea_trna_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.tRNA_list.xls'
     )
     strand_map = {'forward': 0, 'reverse': 1}
@@ -390,6 +397,7 @@ def unmag_archaea_trna_import():
     archaea_trna_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.tRNA_list.xls'
     )
     strand_map = {'forward': 0, 'reverse': 1}
@@ -426,6 +434,7 @@ def mag_archaea_crispr_cas_import():
     archaea_crispr_cas_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.CRISPRCas_list.xls'
     )
     archaea_crispr_cas_created_num = 0
@@ -497,6 +506,7 @@ def unmag_archaea_crispr_cas_import():
     archaea_crispr_cas_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.CRISPRCas_list.xls'
     )
     archaea_crispr_cas_created_num = 0
@@ -568,6 +578,7 @@ def mag_archaea_anti_crispr_annotation_import():
     archaea_anti_crispr_annotation_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.antiCRISPR_list.xls'
     )
     strand_map = {'+': 0, '-': 1}
@@ -613,6 +624,7 @@ def unmag_archaea_anti_crispr_annotation_import():
     archaea_anti_crispr_annotation_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.antiCRISPR_list.xls'
     )
     strand_map = {'+': 0, '-': 1}
@@ -658,6 +670,7 @@ def mag_archaea_secondary_metabolite_region_import():
     file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.SMs_list.xls'
     )
     created_count = 0
@@ -693,6 +706,7 @@ def unmag_archaea_secondary_metabolite_region_import():
     file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.SMs_list.xls'
     )
     created_count = 0
@@ -728,6 +742,7 @@ def mag_archaea_signal_peptide_prediction_import():
     signal_peptide_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.SP_list.xls'
     )
     created_num = 0
@@ -767,6 +782,7 @@ def unmag_archaea_signal_peptide_prediction_import():
     signal_peptide_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.SP_list.xls'
     )
     created_num = 0
@@ -806,6 +822,7 @@ def mag_archaea_virulence_factor_import():
     vf_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.VF_list.xls'
     )
     created_num = 0
@@ -851,6 +868,7 @@ def unmag_archaea_virulence_factor_import():
     vf_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.VF_list.xls'
     )
     created_num = 0
@@ -896,6 +914,7 @@ def mag_archaea_antibiotic_resistance_import():
     file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.ARG_list.xls'
     )
     created_num = 0
@@ -940,6 +959,7 @@ def unmag_archaea_antibiotic_resistance_import():
     file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.ARG_list.xls'
     )
     created_num = 0
@@ -984,6 +1004,7 @@ def mag_archaea_transmembrane_helices_import():
     archaea_transmembrane_helices_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'MAG',
+        'meta',
         'MAG_Archaea.TMHs_list.xls'
     )
     archaea_transmembrane_helices_created_num = 0
@@ -1055,6 +1076,7 @@ def unmag_archaea_transmembrane_helices_import():
     archaea_transmembrane_helices_file_path = os.path.join(
         ARCHAEA_DATA_DIR,
         'unMAG',
+        'meta',
         'unMAG_Archaea.TMHs_list.xls'
     )
     archaea_transmembrane_helices_created_num = 0

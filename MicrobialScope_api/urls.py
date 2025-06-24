@@ -22,5 +22,7 @@ urlpatterns = [
     path('api/microbe/', include('microbe_database.urls')),
     path('api/archaea/', include('archaea_database.urls')),
     path('api/bacteria/', include('bacteria_database.urls')),
+    path('api/fungi/', include('fungi_database.urls')),
+    path('api/viruses/', include('viruses_database.urls')),
     path('api/largetable/', include('large_table_api.urls')),
 ]
