@@ -113,7 +113,7 @@ def archaea_protein_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_protein_file(file_info['file_path'])
+                all_rows = read_archaea_protein_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -261,7 +261,7 @@ def archaea_arg_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_arg_file(file_info['file_path'])
+                all_rows = read_archaea_arg_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -409,7 +409,7 @@ def archaea_tmh_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_tmh_file(file_info['file_path'])
+                all_rows = read_archaea_tmh_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -557,7 +557,7 @@ def archaea_unmag_protein_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_protein_file(file_info['file_path'])
+                all_rows = read_archaea_protein_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -705,7 +705,7 @@ def archaea_unmag_arg_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_arg_file(file_info['file_path'])
+                all_rows = read_archaea_arg_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -853,7 +853,7 @@ def archaea_unmag_tmh_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_tmh_file(file_info['file_path'])
+                all_rows = read_archaea_tmh_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -932,7 +932,7 @@ def fungi_protein_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'fungi_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1001,7 +1001,7 @@ def fungi_protein_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_protein_file(file_info['file_path'])
+                all_rows = read_fungi_protein_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1080,7 +1080,7 @@ def fungi_arg_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'fungi_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1149,7 +1149,7 @@ def fungi_arg_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_arg_file(file_info['file_path'])
+                all_rows = read_fungi_arg_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1228,7 +1228,7 @@ def fungi_tmh_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'fungi_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1297,7 +1297,7 @@ def fungi_tmh_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_tmh_file(file_info['file_path'])
+                all_rows = read_fungi_tmh_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1376,7 +1376,7 @@ def fungi_unmag_protein_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'fungi_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1445,7 +1445,7 @@ def fungi_unmag_protein_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_protein_file(file_info['file_path'])
+                all_rows = read_fungi_protein_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1524,7 +1524,7 @@ def fungi_unmag_arg_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'fungi_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1593,7 +1593,7 @@ def fungi_unmag_arg_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_arg_file(file_info['file_path'])
+                all_rows = read_fungi_arg_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1672,7 +1672,7 @@ def fungi_unmag_tmh_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'fungi_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1741,7 +1741,7 @@ def fungi_unmag_tmh_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_tmh_file(file_info['file_path'])
+                all_rows = read_fungi_tmh_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1820,7 +1820,7 @@ def viruses_protein_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'viruses_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -1889,7 +1889,7 @@ def viruses_protein_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_protein_file(file_info['file_path'])
+                all_rows = read_viruses_protein_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -1968,7 +1968,7 @@ def viruses_arg_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'viruses_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -2037,7 +2037,7 @@ def viruses_arg_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_arg_file(file_info['file_path'])
+                all_rows = read_viruses_arg_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -2116,7 +2116,7 @@ def viruses_tmh_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'viruses_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -2185,7 +2185,7 @@ def viruses_tmh_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_tmh_file(file_info['file_path'])
+                all_rows = read_viruses_tmh_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -2264,7 +2264,7 @@ def viruses_unmag_protein_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'viruses_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -2333,7 +2333,7 @@ def viruses_unmag_protein_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_protein_file(file_info['file_path'])
+                all_rows = read_viruses_protein_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -2402,7 +2402,7 @@ def viruses_unmag_arg_list(request):
         search_value = search_content.get('value', '')
         
         # 生成缓存键
-        cache_key = f"fungi_unmag_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
+        cache_key = f"viruses_unmag_arg_data_{current_page}_{page_size}_{search_field}_{search_value}"
         cache_key = hashlib.md5(cache_key.encode()).hexdigest()
         
         # 尝试从缓存获取结果
@@ -2412,7 +2412,7 @@ def viruses_unmag_arg_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'viruses_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -2481,7 +2481,7 @@ def viruses_unmag_arg_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_arg_file(file_info['file_path'])
+                all_rows = read_viruses_arg_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -2560,7 +2560,7 @@ def viruses_unmag_tmh_list(request):
         
         # 构建查询
         query = Q()
-        if search_field == 'archaea_id' and search_value:
+        if search_field == 'viruses_id' and search_value:
             query &= Q(archaea_id__icontains=search_value)
         
         # 获取匹配的文件列表及其行数信息
@@ -2629,7 +2629,7 @@ def viruses_unmag_tmh_list(request):
             
             try:
                 # 读取整个文件
-                all_rows = read_tmh_file(file_info['file_path'])
+                all_rows = read_viruses_tmh_file(file_info['file_path'])
                 
                 # 只取需要的行
                 needed_rows = all_rows[start_in_file:end_in_file+1]
@@ -2682,12 +2682,11 @@ def viruses_unmag_tmh_list(request):
 def download_large_table_meta_data(request):
     try:
         # 解析请求数据
-        data = json.loads(request.body)
-        microbe = data.get('microbe', 'fungi')
-        magStatus = data.get('magStatus', 'MAG')
-        dataType = data.get('dataType', 'Protein')
-        filter_list = data.get('payload', [])
-        
+        microbe = request.POST.get('microbe', 'fungi')
+        magStatus = request.POST.get('magStatus', 'MAG')
+        dataType = request.POST.get('dataType', 'proteins')
+        filter_list = request.POST.getlist('payload') or []
+
         return download_meta_data(filter_list, microbe, magStatus, dataType)
     
     except Exception as e:
