@@ -129,7 +129,7 @@ class ArchaeaGenomeProteinsView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             protein_file = f'/delta_microbia/data/Archaea/MAG/meta/proteins/{genome_id}.tsv'
-            proteins = read_protein_file(protein_file)
+            proteins = read_archaea_protein_file(protein_file)
             return Response(proteins, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -242,7 +242,7 @@ class ArchaeaGenomeAntibioticResistanceGenesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             arg_file = f'/delta_microbia/data/Archaea/MAG/meta/args/{genome_id}.tsv'
-            args = read_arg_file(arg_file)
+            args = read_archaea_arg_file(arg_file)
             return Response(args, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -272,7 +272,7 @@ class ArchaeaGenomeTransmembraneHelicesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             tmh_file = f'/delta_microbia/data/Archaea/MAG/meta/tmhs/{genome_id}.tsv'
-            tmhs = read_tmh_file(tmh_file)
+            tmhs = read_archaea_tmh_file(tmh_file)
             return Response(tmhs, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -412,7 +412,7 @@ class UnArchaeaGenomeProteinsView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             protein_file = f'/delta_microbia/data/Archaea/unMAG/meta/proteins/{genome_id}.tsv'
-            proteins = read_protein_file(protein_file)
+            proteins = read_archaea_protein_file(protein_file)
             return Response(proteins, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -526,7 +526,7 @@ class UnMAGArchaeaGenomeAntibioticResistanceGenesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             arg_file = f'/delta_microbia/data/Archaea/unMAG/meta/args/{genome_id}.tsv'
-            args = read_arg_file(arg_file)
+            args = read_archaea_arg_file(arg_file)
             return Response(args, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -557,7 +557,7 @@ class UnMAGArchaeaGenomeTransmembraneHelicesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             tmh_file = f'/delta_microbia/data/Archaea/unMAG/meta/tmhs/{genome_id}.tsv'
-            tmhs = read_tmh_file(tmh_file)
+            tmhs = read_archaea_tmh_file(tmh_file)
             return Response(tmhs, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
