@@ -1,5 +1,6 @@
 from rest_framework import serializers
 import pandas as pd
+import os
 
 from viruses_database.models import MAGViruses, UnMAGViruses, UnMAGVirusesProtein, UnMAGVirusesAntibioticResistance, \
     UnMAGVirusesTRNA, UnMAGVirusesCRISPR, UnMAGVirusesAntiCRISPRAnnotation, \
@@ -30,6 +31,8 @@ class MAGVirusesDetailSerializer(serializers.ModelSerializer):
 
     def get_protein_count(self, obj):
         profile_file = f'/delta_microbia/data/Viruses/MAG/meta/proteins/{obj.unique_id}.tsv'
+        if not os.path.exists(profile_file):
+            return 0
         df = pd.read_csv(profile_file, sep='\t')
         return len(df)
         # return MAGVirusesProtein.objects.filter(viruses_id=obj.unique_id).count()
@@ -48,12 +51,16 @@ class MAGVirusesDetailSerializer(serializers.ModelSerializer):
 
     def get_arg_count(self, obj):
         arg_file = f'/delta_microbia/data/Viruses/MAG/meta/args/{obj.unique_id}.tsv'
+        if not os.path.exists(arg_file):
+            return 0
         df = pd.read_csv(arg_file, sep='\t')
         return len(df)
         # return MAGVirusesAntibioticResistance.objects.filter(viruses_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
         tmh_file = f'/delta_microbia/data/Viruses/MAG/meta/tmhs/{obj.unique_id}.tsv'
+        if not os.path.exists(tmh_file):
+            return 0
         df = pd.read_csv(tmh_file, sep='\t')
         unique_protein_ids = df['Protein_ID'].unique()
         return len(unique_protein_ids)
@@ -83,6 +90,8 @@ class UnMAGVirusesDetailSerializer(serializers.ModelSerializer):
     #     return UnMAGVirusesProtein.objects.filter(viruses_id=obj.unique_id).count()
     def get_protein_count(self, obj):
         profile_file = f'/delta_microbia/data/Viruses/unMAG/meta/proteins/{obj.unique_id}.tsv'
+        if not os.path.exists(profile_file):
+            return 0
         df = pd.read_csv(profile_file, sep='\t')
         return len(df)
         # return MAGVirusesProtein.objects.filter(viruses_id=obj.unique_id).count()
@@ -107,12 +116,16 @@ class UnMAGVirusesDetailSerializer(serializers.ModelSerializer):
 
     def get_arg_count(self, obj):
         arg_file = f'/delta_microbia/data/Viruses/unMAG/meta/args/{obj.unique_id}.tsv'
+        if not os.path.exists(arg_file):
+            return 0
         df = pd.read_csv(arg_file, sep='\t')
         return len(df)
         # return MAGVirusesAntibioticResistance.objects.filter(viruses_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
         tmh_file = f'/delta_microbia/data/Viruses/unMAG/meta/tmhs/{obj.unique_id}.tsv'
+        if not os.path.exists(tmh_file):
+            return 0
         df = pd.read_csv(tmh_file, sep='\t')
         unique_protein_ids = df['Protein_ID'].unique()
         return len(unique_protein_ids)

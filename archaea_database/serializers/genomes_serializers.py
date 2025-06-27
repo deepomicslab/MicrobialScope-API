@@ -1,5 +1,6 @@
 from rest_framework import serializers
 import pandas as pd
+import os
 
 from archaea_database.models import MAGArchaea, UnMAGArchaea, UnMAGArchaeaProtein, UnMAGArchaeaAntibioticResistance, \
     UnMAGArchaeaTRNA, UnMAGArchaeaCRISPR, UnMAGArchaeaAntiCRISPRAnnotation, UnMAGArchaeaSecondaryMetaboliteRegion, \
@@ -32,6 +33,8 @@ class MAGArchaeaDetailSerializer(serializers.ModelSerializer):
 
     def get_protein_count(self, obj):
         profile_file = f'/delta_microbia/data/Archaea/MAG/meta/proteins/{obj.unique_id}.tsv'
+        if not os.path.exists(profile_file):
+            return 0
         df = pd.read_csv(profile_file, sep='\t')
         return len(df)
         # return MAGArchaeaProtein.objects.filter(archaea_id=obj.unique_id).count()
@@ -56,12 +59,16 @@ class MAGArchaeaDetailSerializer(serializers.ModelSerializer):
 
     def get_arg_count(self, obj):
         arg_file = f'/delta_microbia/data/Archaea/MAG/meta/args/{obj.unique_id}.tsv'
+        if not os.path.exists(arg_file):
+            return 0
         df = pd.read_csv(arg_file, sep='\t')
         return len(df)
         # return MAGArchaeaAntibioticResistance.objects.filter(archaea_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
         tmh_file = f'/delta_microbia/data/Archaea/MAG/meta/tmhs/{obj.unique_id}.tsv'
+        if not os.path.exists(tmh_file):
+            return 0
         df = pd.read_csv(tmh_file, sep='\t')
         unique_protein_ids = df['Protein_ID'].unique()
         return len(unique_protein_ids)
@@ -93,6 +100,8 @@ class UnMAGArchaeaDetailSerializer(serializers.ModelSerializer):
     #     return UnMAGArchaeaProtein.objects.filter(archaea_id=obj.unique_id).count()
     def get_protein_count(self, obj):
         profile_file = f'/delta_microbia/data/Archaea/unMAG/meta/proteins/{obj.unique_id}.tsv'
+        if not os.path.exists(profile_file):
+            return 0
         df = pd.read_csv(profile_file, sep='\t')
         return len(df)
         # return UnMAGArchaeaProtein.objects.filter(archaea_id=obj.unique_id).count()
@@ -123,12 +132,16 @@ class UnMAGArchaeaDetailSerializer(serializers.ModelSerializer):
 
     def get_arg_count(self, obj):
         arg_file = f'/delta_microbia/data/Archaea/unMAG/meta/args/{obj.unique_id}.tsv'
+        if not os.path.exists(arg_file):
+            return 0
         df = pd.read_csv(arg_file, sep='\t')
         return len(df)
         # return UnMAGArchaeaAntibioticResistance.objects.filter(archaea_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
         tmh_file = f'/delta_microbia/data/Archaea/unMAG/meta/tmhs/{obj.unique_id}.tsv'
+        if not os.path.exists(tmh_file):
+            return 0
         df = pd.read_csv(tmh_file, sep='\t')
         unique_protein_ids = df['Protein_ID'].unique()
         return len(unique_protein_ids)

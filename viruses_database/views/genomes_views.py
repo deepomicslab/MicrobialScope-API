@@ -126,7 +126,10 @@ class VirusesGenomeProteinsView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             protein_file = f'/delta_microbia/data/Viruses/MAG/meta/proteins/{genome_id}.tsv'
-            proteins = read_viruses_protein_file(protein_file)
+            if not os.path.exists(protein_file):
+                proteins = []
+            else:
+                proteins = read_viruses_protein_file(protein_file)
             return Response(proteins, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -212,7 +215,10 @@ class VirusesGenomeAntibioticResistanceGenesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             arg_file = f'/delta_microbia/data/Viruses/MAG/meta/args/{genome_id}.tsv'
-            args = read_viruses_arg_file(arg_file)
+            if not os.path.exists(arg_file):
+                args = []
+            else:
+                args = read_viruses_arg_file(arg_file)
             return Response(args, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -243,7 +249,10 @@ class VirusesGenomeTransmembraneHelicesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             tmh_file = f'/delta_microbia/data/Viruses/MAG/meta/tmhs/{genome_id}.tsv'
-            tmhs = read_viruses_tmh_file(tmh_file)
+            if not os.path.exists(tmh_file):
+                tmhs = []
+            else:
+                tmhs = read_viruses_tmh_file(tmh_file)
             return Response(tmhs, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -417,7 +426,10 @@ class UnVirusesGenomeProteinsView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             protein_file = f'/delta_microbia/data/Viruses/unMAG/meta/proteins/{genome_id}.tsv'
-            proteins = read_viruses_protein_file(protein_file)
+            if not os.path.exists(protein_file):
+                proteins = []
+            else:
+                proteins = read_viruses_protein_file(protein_file)
             return Response(proteins, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -503,7 +515,10 @@ class UnMAGVirusesGenomeAntibioticResistanceGenesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             arg_file = f'/delta_microbia/data/Viruses/unMAG/meta/args/{genome_id}.tsv'
-            args = read_viruses_arg_file(arg_file)
+            if not os.path.exists(arg_file):
+                args = []
+            else:
+                args = read_viruses_arg_file(arg_file)
             return Response(args, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
@@ -534,7 +549,10 @@ class UnMAGVirusesGenomeTransmembraneHelicesView(APIView):
         if serializer.is_valid():
             genome_id = serializer.validated_data['genomeId']
             tmh_file = f'/delta_microbia/data/Viruses/unMAG/meta/tmhs/{genome_id}.tsv'
-            tmhs = read_viruses_tmh_file(tmh_file)
+            if not os.path.exists(tmh_file):
+                tmhs = []
+            else:
+                tmhs = read_viruses_tmh_file(tmh_file)
             return Response(tmhs, status=status.HTTP_200_OK)
 
         return Response('Bad Request!', status=status.HTTP_400_BAD_REQUEST)
