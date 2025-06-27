@@ -95,7 +95,7 @@ class UnMAGArchaeaDetailSerializer(serializers.ModelSerializer):
         profile_file = f'/delta_microbia/data/Archaea/unMAG/meta/proteins/{obj.unique_id}.tsv'
         df = pd.read_csv(profile_file, sep='\t')
         return len(df)
-        # return MAGArchaeaProtein.objects.filter(archaea_id=obj.unique_id).count()
+        # return UnMAGArchaeaProtein.objects.filter(archaea_id=obj.unique_id).count()
 
     def get_trna_count(self, obj):
         return UnMAGArchaeaTRNA.objects.filter(archaea_id=obj.unique_id).count()
@@ -125,7 +125,7 @@ class UnMAGArchaeaDetailSerializer(serializers.ModelSerializer):
         arg_file = f'/delta_microbia/data/Archaea/unMAG/meta/args/{obj.unique_id}.tsv'
         df = pd.read_csv(arg_file, sep='\t')
         return len(df)
-        # return MAGArchaeaAntibioticResistance.objects.filter(archaea_id=obj.unique_id).count()
+        # return UnMAGArchaeaAntibioticResistance.objects.filter(archaea_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
         tmh_file = f'/delta_microbia/data/Archaea/unMAG/meta/tmhs/{obj.unique_id}.tsv'

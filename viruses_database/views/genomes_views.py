@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.db.models import Q
 
 from io import StringIO
@@ -312,6 +312,39 @@ class VirusesGenomesSingleDownloadView(GenericSingleDownloadView):
                 }
             )
 
+        elif file_type == 'fasta':
+            file_name = f'{genome.unique_id}.fna.gz'
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Viruses', 'MAG', 'fna', file_name)
+
+            if not os.path.exists(file_path):
+                return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True,
+                                    filename=file_name)
+            return response
+
+        elif file_type == 'gbk':
+            file_name = f'{genome.unique_id}.gbk.gz'
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Viruses', 'MAG', 'gbk', file_name)
+
+            if not os.path.exists(file_path):
+                return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True,
+                                    filename=file_name)
+            return response
+
+        elif file_type == 'gff3':
+            file_name = f'{genome.unique_id}.gff.gz'
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Viruses', 'MAG', 'gff', file_name)
+
+            if not os.path.exists(file_path):
+                return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True,
+                                    filename=file_name)
+            return response
+
         return Response('Invalid Data Type', status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -569,6 +602,39 @@ class UnMAGVirusesGenomesSingleDownloadView(GenericSingleDownloadView):
                     'Content-Disposition': f'attachment; filename="{filename}"'
                 }
             )
+
+        elif file_type == 'fasta':
+            file_name = f'{genome.unique_id}.fna.gz'
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Fungi', 'unMAG', 'fna', file_name)
+
+            if not os.path.exists(file_path):
+                return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True,
+                                    filename=file_name)
+            return response
+
+        elif file_type == 'gbk':
+            file_name = f'{genome.unique_id}.gbk.gz'
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Fungi', 'unMAG', 'gbk', file_name)
+
+            if not os.path.exists(file_path):
+                return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True,
+                                    filename=file_name)
+            return response
+
+        elif file_type == 'gff3':
+            file_name = f'{genome.unique_id}.gff.gz'
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Fungi', 'unMAG', 'gff', file_name)
+
+            if not os.path.exists(file_path):
+                return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            response = FileResponse(open(file_path, 'rb'), as_attachment=True,
+                                    filename=file_name)
+            return response
 
         return Response('Invalid Data Type', status=status.HTTP_400_BAD_REQUEST)
 
