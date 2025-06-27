@@ -78,6 +78,22 @@ def get_genome_search_q(search_content):
     return Q(**{f"{search_content['field']}__startswith": search_content['value']})
 
 
+def get_unmag_archaea_filter_q(filters):
+    q_obj = Q()
+    if filters:
+        for key, value in filters.items():
+            if not value:
+                continue
+
+            if key == 'assembly_level':
+                for item in value:
+                    q_obj |= Q(**{f"{key}__icontains": item})
+            else:
+                q_obj &= Q(**{f'{key}__in': value})
+
+    return q_obj
+
+
 # MAG Genome Views
 # -----------------
 class ArchaeaGenomesView(GenericTableQueryView):
@@ -409,6 +425,9 @@ class UnMAGArchaeaGenomesView(GenericTableQueryView):
 
     def get_search_q(self, search_content):
         return get_genome_search_q(search_content)
+
+    def get_filter_params(self, filters):
+        return get_unmag_archaea_filter_q(filters)
 
 
 class UnArchaeaGenomeDetailView(APIView):
