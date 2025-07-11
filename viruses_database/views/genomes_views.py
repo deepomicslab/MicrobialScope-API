@@ -68,6 +68,9 @@ def get_genome_search_q(search_content):
     if not search_content['value']:
         return Q()
 
+    if search_content['field'] == 'viruses_id':
+        return Q(**{f"{search_content['field']}__contains": [search_content['value']]})
+
     return Q(**{f"{search_content['field']}__contains": search_content['value']})
 
 
