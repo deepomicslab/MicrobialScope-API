@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "viruses_database",
     "microbe_database",
     "large_table_api",
+    "analysis",
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,18 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+CRONJOBS = [
+    ('*/1 * * * *', 'analysis.cron.task_status_update')
+]
+
+# analysis module path 
+USERTASKPATH = 'workspace/user_task'
+ABSUSERTASKPATH = '/home/platform/project/microbial_platform/MicrobialScope-API/workspace/user_task'
+
+
+ANALYSIS = '/home/platform/phage_db/phage_api/workspace/analysis_script/'
+# TASKLOG = '/home/platform/project/microbial_platform/MicrobialScope-API/workspace/task_log/'
+TASKLOG = '/home/platform/phage_db/phage_api/workspace/task_log/'
+
+DEMOFILE = '/home/platform/project/microbial_platform/MicrobialScope-API/demo_file/'
