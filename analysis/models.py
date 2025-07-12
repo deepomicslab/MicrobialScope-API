@@ -4,6 +4,7 @@ from django.db import models
 class Task(models.Model):
     name = models.CharField(max_length=300, blank=True, null=True)
     user = models.CharField(max_length=300, blank=True, null=True)
+    microbial_type = models.CharField(max_length=60, blank=True, null=True)
     uploadpath = models.CharField(max_length=200, blank=True, null=True)
     analysis_type = models.CharField(max_length=60, blank=True, null=True)
     modulelist = models.CharField(max_length=400, blank=True, null=True)

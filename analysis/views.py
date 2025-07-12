@@ -85,7 +85,7 @@ def submit_task(request):
                 tools.fixIdLong(path)
             # create task object
             newtask = Task.objects.create(
-                name=name, user=request.data['userid'], uploadpath=usertask,
+                name=name, user=request.data['userid'], uploadpath=usertask, microbial_type=request.data['microbialtype'],
                 analysis_type=request.data['analysistype'], modulelist=modulelist, status='Created')
             userpath = settings.ABSUSERTASKPATH+'/' + usertask
             infodict = {'taskid': newtask.id, 'userpath': userpath, 'modulelist': modulelist,
@@ -188,7 +188,7 @@ def submit_cluster_task(request):
                         modulelist.append(key)
                 # create task object
                 newtask = Task.objects.create(
-                    name=name, user=request.data['userid'], uploadpath=usertask,
+                    name=name, user=request.data['userid'], uploadpath=usertask, microbial_type=request.data['microbialtype'],
                     analysis_type=request.data['analysistype'], modulelist=modulelist, status='Created')
                 userpath = settings.ABSUSERTASKPATH+'/' + usertask
                 infodict = {'taskid': newtask.id, 'userpath': userpath, 'modulelist': modulelist,
