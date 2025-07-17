@@ -1,6 +1,6 @@
 from Bio import SeqIO
-from database.models import Plasmid
-from database.serializers import PlasmidSerializer
+# from database.models import Plasmid
+# from database.serializers import PlasmidSerializer
 
 def is_fasta(fatsapath):
     try:

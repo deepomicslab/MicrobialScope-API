@@ -1,6 +1,6 @@
 import time
 import subprocess
-from slurmpy import Slurm
+# from slurmpy import Slurm
 from django.conf import settings
 import re
 import sys
