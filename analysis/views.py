@@ -306,7 +306,7 @@ def view_task_result_proteins(request):
                 "strand": item['Strand'],
                 "sequence": item['sequence'],
             }
-            newdict.append(item | new_item)
+            newdict.append({**item, **new_item})
         return Response({'results': newdict})
     else:
         proteins = pd.read_csv(path, sep='\t', index_col=False)
@@ -329,7 +329,7 @@ def view_task_result_proteins(request):
                 "plasmid_id": item["phageid"],
                 "cog_category": cog_category,
             }
-            newdict.append(item | new_item)
+            newdict.append({**item, **new_item})
         return Response({'results': newdict})
 
 
