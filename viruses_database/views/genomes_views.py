@@ -623,7 +623,7 @@ class UnMAGVirusesGenomesSingleDownloadView(GenericSingleDownloadView):
 
         elif file_type == 'fasta':
             file_name = f'{genome.unique_id}.fna.gz'
-            file_path = os.path.join(MEDIA_DATA_DIR, 'Fungi', 'unMAG', 'fna', file_name)
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Viruses', 'unMAG', 'fna', file_name)
 
             if not os.path.exists(file_path):
                 return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -634,7 +634,7 @@ class UnMAGVirusesGenomesSingleDownloadView(GenericSingleDownloadView):
 
         elif file_type == 'gbk':
             file_name = f'{genome.unique_id}.gbk.gz'
-            file_path = os.path.join(MEDIA_DATA_DIR, 'Fungi', 'unMAG', 'gbk', file_name)
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Viruses', 'unMAG', 'gbk', file_name)
 
             if not os.path.exists(file_path):
                 return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -645,7 +645,7 @@ class UnMAGVirusesGenomesSingleDownloadView(GenericSingleDownloadView):
 
         elif file_type == 'gff3':
             file_name = f'{genome.unique_id}.gff.gz'
-            file_path = os.path.join(MEDIA_DATA_DIR, 'Fungi', 'unMAG', 'gff', file_name)
+            file_path = os.path.join(MEDIA_DATA_DIR, 'Viruses', 'unMAG', 'gff', file_name)
 
             if not os.path.exists(file_path):
                 return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
