@@ -204,7 +204,7 @@ def alignmentdetail(taskpath,cid=None,pids=None):
             "strand": item['Strand'],
             "sequence": item['sequence'],
         }
-        newdict.append(item|new_item)
+        newdict.append({**item, **new_item})
     result ={
             'sortedlist':sortedlist,
             'circlealignment':circlealignments.to_dict(orient='records'),
