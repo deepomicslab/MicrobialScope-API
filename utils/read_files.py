@@ -1,6 +1,7 @@
 import json
 import csv
 from collections import defaultdict
+import re
 
 def read_archaea_protein_file(tsv_file_path):
     """
@@ -861,3 +862,96 @@ def read_bacteria_tmh_file(tsv_file_path):
     except Exception as e:
         print(f"Error during conversion: {e}")
         return []
+    
+def parse_tmhmm_to_json(tmhmm_file):
+    with open(tmhmm_file, 'r') as file:
+        content = file.read()
+    
+    # 将文件按蛋白质分组
+    protein_blocks = []
+    current_block = []
+    
+    for line in content.strip().split('\n'):
+        # 检查是否是蛋白质头部行（包含Length字段的注释行）
+        if line.startswith('# ') and 'Length:' in line:
+            if current_block:
+                protein_blocks.append(current_block)
+            current_block = [line]
+        else:
+            current_block.append(line)
+    
+    if current_block:
+        protein_blocks.append(current_block)
+    
+    results = []
+    
+    for block in protein_blocks:
+        protein_data = {}
+        helices = []
+        helix_id = 1
+        
+        for line in block:
+            if line.startswith('# '):
+                line = line[2:]  # 移除开头的"# "
+                
+                # 提取蛋白质ID
+                if 'Length:' in line:
+                    match = re.match(r'([^\s]+)', line)
+                    if match:
+                        protein_id = match.group(1)
+                        protein_data['Protein_id'] = protein_id
+                        
+                        # 提取Phage_Acession_ID (提取_前面的部分或最后一个下划线前的部分)
+                        # 例如从 COMPASS_AF065404.1_94 提取 COMPASS_AF065404.1
+                        # 或从 RefSeq_NC_001850.1_9 提取 RefSeq_NC_001850.1
+                        accession_match = re.match(r'(.+)_\d+$', protein_id)
+                        if accession_match:
+                            protein_data['Phage_Acession_ID'] = accession_match.group(1)
+                
+                # 提取Length
+                if 'Length:' in line:
+                    match = re.search(r'Length:\s+(\d+)', line)
+                    if match:
+                        protein_data['Length'] = match.group(1)
+                
+                # 提取Number of predicted TMHs
+                elif 'Number of predicted TMHs:' in line:
+                    match = re.search(r'Number of predicted TMHs:\s+(\d+)', line)
+                    if match:
+                        protein_data['predictedTMHsNumber'] = match.group(1)
+                
+                # 提取Exp number of AAs in TMHs
+                elif 'Exp number of AAs in TMHs:' in line:
+                    match = re.search(r'Exp number of AAs in TMHs:\s+([0-9.]+)', line)
+                    if match:
+                        protein_data['ExpnumberofAAsinTMHs'] = match.group(1)
+                
+                # 提取Exp number, first 60 AAs
+                elif 'Exp number, first 60 AAs:' in line:
+                    match = re.search(r'Exp number, first 60 AAs:\s+([0-9.]+)', line)
+                    if match:
+                        protein_data['Expnumberfirst60AAs'] = match.group(1)
+                
+                # 提取Total prob of N-in
+                elif 'Total prob of N-in:' in line:
+                    match = re.search(r'Total prob of N-in:\s+([0-9.]+)', line)
+                    if match:
+                        protein_data['TotalprobofNin'] = match.group(1)
+            
+            # 提取螺旋信息
+            elif not line.startswith('#'):
+                parts = line.split()
+                if len(parts) >= 6:
+                    helix = {
+                        'id': helix_id,
+                        'position': parts[2],
+                        'start': int(parts[3]),
+                        'end': int(parts[4])
+                    }
+                    helices.append(helix)
+                    helix_id += 1
+        
+        protein_data['helices'] = helices
+        results.append(protein_data)
+    
+    return results

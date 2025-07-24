@@ -7,7 +7,7 @@ import time
 import os
 import shutil
 import json
-from utils import tools, task, slurm_api
+from utils import tools, task, slurm_api, read_files
 import traceback
 import csv
 import pandas as pd
@@ -471,14 +471,16 @@ def view_task_result_transmembranes(request):
     taskid = request.query_params.dict()['taskid']
     phageid = request.query_params.dict()['phageid']
     task = Task.objects.get(id=taskid)
-    transmembranepath = settings.USERTASKPATH + '/' + task.uploadpath + '/output/result/transmembrane.tsv'
-    transmembranes = pd.read_csv(transmembranepath, sep='\t', index_col=False).astype(
-        str)
-    transmembranes = transmembranes[transmembranes['Phage_Acession_ID']
-                                    == phageid]
-    transmembranes = transmembranes.reset_index().rename(columns={'index': 'id'})
-    result = transmembranes.to_dict(orient='records')
-    return Response({'results': result})
+    # transmembranepath = settings.USERTASKPATH + '/' + task.uploadpath + '/output/result/transmembrane.tsv'
+    # transmembranes = pd.read_csv(transmembranepath, sep='\t', index_col=False).astype(
+    #     str)
+    # transmembranes = transmembranes[transmembranes['Phage_Acession_ID']
+    #                                 == phageid]
+    # transmembranes = transmembranes.reset_index().rename(columns={'index': 'id'})
+    # result = transmembranes.to_dict(orient='records')
+    transmembranepath = settings.USERTASKPATH + '/' + task.uploadpath + '/output/rawdata/transmembrane/result.txt'
+    results = read_files.parse_tmhmm_to_json(transmembranepath)
+    return Response({'results': results})
 
 
 @api_view(['GET'])
