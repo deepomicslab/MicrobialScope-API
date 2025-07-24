@@ -2,6 +2,7 @@ from Bio import SeqIO
 import os
 import pandas as pd
 import random
+from utils import read_files
 
 # raw output Data processing
 
@@ -84,11 +85,13 @@ def host(taskpath):
 
 def transmembrane(taskpath):
     # /home/platform/phage_db/phage_api/workspace/user_task/1688724018_2984/output/result/transmembrane.tsv
-    transmembranepath = taskpath+'/output/result/transmembrane.tsv'
-    transmembranes = pd.read_csv(transmembranepath, sep='\t', index_col=False).astype(
-        str)
-    result = transmembranes.to_dict(orient='records')
-    return result
+    # transmembranepath = taskpath+'/output/result/transmembrane.tsv'
+    # transmembranes = pd.read_csv(transmembranepath, sep='\t', index_col=False).astype(
+    #     str)
+    # result = transmembranes.to_dict(orient='records')
+    transmembranepath = taskpath + '/output/rawdata/transmembrane/result.txt'
+    results = read_files.parse_tmhmm_to_json(transmembranepath)
+    return results
 
 
 def cluster(taskpath):
