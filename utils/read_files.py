@@ -946,6 +946,7 @@ def parse_tmhmm_to_json(tmhmm_file):
                 helix_id += 1
         
         protein_data['helices'] = helices
+        protein_data['source'] = 'TMHMM2.0'
         results.append(protein_data)
     
     return results
