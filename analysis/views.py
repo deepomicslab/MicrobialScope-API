@@ -37,8 +37,15 @@ def submit_task(request):
             shutil.copy(
                 settings.DEMOFILE + request.data['demopath'], uploadfilepath + 'sequence.fasta')
         else:
-            shutil.copy(
-                settings.DEMOFILE + "plasmid.fasta", uploadfilepath + 'sequence.fasta')
+            if request.data['microbialtype'] == 'Fungi':
+                shutil.copy(
+                    settings.DEMOFILE + "GCA_000146045.2.fna", uploadfilepath + 'sequence.fasta')
+            elif request.data['microbialtype'] == 'Bacteria':
+                shutil.copy(
+                    settings.DEMOFILE + "GCA_000005845.2.fna", uploadfilepath + 'sequence.fasta')
+            else:
+                shutil.copy(
+                    settings.DEMOFILE + "plasmid.fasta", uploadfilepath + 'sequence.fasta')
         path = uploadfilepath + 'sequence.fasta'
     else:
         if request.data['inputtype'] == 'upload':
@@ -123,7 +130,7 @@ def submit_cluster_task(request):
     if request.data['rundemo'] == 'true':
         ##!!!need to use settings_local config
         shutil.copy(
-            settings.DEMOFILE + "alignment.fasta", uploadfilepath + 'sequence.fasta')
+            settings.DEMOFILE + "alignments.fna", uploadfilepath + 'sequence.fasta')
         path = uploadfilepath + 'sequence.fasta'
     else:
         if request.data['inputtype'] == 'upload':
