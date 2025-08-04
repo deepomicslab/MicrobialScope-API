@@ -24,5 +24,8 @@ urlpatterns = [
     path('bacteria_protein_list/', views.bacteria_protein_list, name='bacteria_protein_list'),
     path('bacteria_arg_list/', views.bacteria_arg_list, name='bacteria_arg_list'),
     path('bacteria_tmh_list/', views.bacteria_tmh_list, name='bacteria_tmh_list'),
+    path('bacteria_unmag_protein_list/', views.bacteria_unmag_protein_list, name='bacteria_unmag_protein_list'),
+    path('bacteria_unmag_arg_list/', views.bacteria_unmag_arg_list, name='bacteria_unmag_arg_list'),
+    path('bacteria_unmag_tmh_list/', views.bacteria_unmag_tmh_list, name='bacteria_unmag_tmh_list'),
     path('download_large_table_meta_data/', views.download_large_table_meta_data, name='download_large_table_meta_data'),
 ]
