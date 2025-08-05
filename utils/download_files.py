@@ -153,21 +153,21 @@ def download_meta_data(filter_list, microbe, magStatus, dataType):
                     ).values('archaea_id', 'file_path')
                 else:
                     return HttpResponse("无效的数据类型", status=400)
-            # elif magStatus == 'unMAG':
-            #     if dataType == 'proteins':
-            #         archaea_files = BacteriaUnMAGProteinIndex.objects.filter(
-            #             archaea_id__in=archaea_ids
-            #         ).values('archaea_id', 'file_path')
-            #     elif dataType == 'antibioticResistanceGenes':
-            #         archaea_files = BacteriaUnMAGARGIndex.objects.filter(
-            #             archaea_id__in=archaea_ids
-            #         ).values('archaea_id', 'file_path')
-            #     elif dataType == 'transmembraneHelices':
-            #         archaea_files = BacteriaUnMAGTMHIndex.objects.filter(
-            #             archaea_id__in=archaea_ids
-            #         ).values('archaea_id', 'file_path')
-            #     else:
-            #         return HttpResponse("无效的数据类型", status=400)
+            elif magStatus == 'unMAG':
+                if dataType == 'proteins':
+                    archaea_files = BacteriaUnMAGProteinIndex.objects.filter(
+                        archaea_id__in=archaea_ids
+                    ).values('archaea_id', 'file_path')
+                elif dataType == 'antibioticResistanceGenes':
+                    archaea_files = BacteriaUnMAGARGIndex.objects.filter(
+                        archaea_id__in=archaea_ids
+                    ).values('archaea_id', 'file_path')
+                elif dataType == 'transmembraneHelices':
+                    archaea_files = BacteriaUnMAGTMHIndex.objects.filter(
+                        archaea_id__in=archaea_ids
+                    ).values('archaea_id', 'file_path')
+                else:
+                    return HttpResponse("无效的数据类型", status=400)
             else:
                 return HttpResponse("无效的MAG状态", status=400)
         elif microbe == 'Viruses':
