@@ -232,35 +232,35 @@ class BacteriaMAGTMHIndex(models.Model):
             models.Index(fields=['archaea_id']),
         ]
 
-# class BacteriaUnMAGProteinIndex(models.Model):
-#     """用于索引所有Archaea文件的模型"""
-#     archaea_id = models.CharField(max_length=255, unique=True)
-#     file_path = models.TextField()
-#     row_count = models.IntegerField(default=0)
+class BacteriaUnMAGProteinIndex(models.Model):
+    """用于索引所有Archaea文件的模型"""
+    archaea_id = models.CharField(max_length=255, unique=True)
+    file_path = models.TextField()
+    row_count = models.IntegerField(default=0)
     
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=['archaea_id']),
-#         ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['archaea_id']),
+        ]
 
-# class BacteriaUnMAGARGIndex(models.Model):
-#     """用于索引所有Archaea文件的模型"""
-#     archaea_id = models.CharField(max_length=255, unique=True)
-#     file_path = models.TextField()
-#     row_count = models.IntegerField(default=0)
+class BacteriaUnMAGARGIndex(models.Model):
+    """用于索引所有Archaea文件的模型"""
+    archaea_id = models.CharField(max_length=255, unique=True)
+    file_path = models.TextField()
+    row_count = models.IntegerField(default=0)
     
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=['archaea_id']),
-#         ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['archaea_id']),
+        ]
 
-# class BacteriaUnMAGTMHIndex(models.Model):
-#     """用于索引所有Archaea文件的模型"""
-#     archaea_id = models.CharField(max_length=255, unique=True)
-#     file_path = models.TextField()
-#     row_count = models.IntegerField(default=0)
+class BacteriaUnMAGTMHIndex(models.Model):
+    """用于索引所有Archaea文件的模型"""
+    archaea_id = models.CharField(max_length=255, unique=True)
+    file_path = models.TextField()
+    row_count = models.IntegerField(default=0)
     
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=['archaea_id']),
-#         ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['archaea_id']),
+        ]
