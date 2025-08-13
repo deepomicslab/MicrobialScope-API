@@ -42,7 +42,7 @@ def submit_task(request):
                     settings.DEMOFILE + "GCA_000146045.2.fna", uploadfilepath + 'sequence.fasta')
             elif request.data['microbialtype'] == 'Bacteria':
                 shutil.copy(
-                    settings.DEMOFILE + "GCA_000005845.2.fna", uploadfilepath + 'sequence.fasta')
+                    settings.DEMOFILE + "GCA_000010385.1.fna", uploadfilepath + 'sequence.fasta')
             else:
                 shutil.copy(
                     settings.DEMOFILE + "plasmid.fasta", uploadfilepath + 'sequence.fasta')
