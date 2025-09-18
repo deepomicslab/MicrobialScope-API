@@ -73,9 +73,9 @@ def get_genome_search_q(search_content):
         return Q()
 
     if search_content['field'] == 'archaea_id':
-        return Q(**{f"{search_content['field']}__contains": [search_content['value']]})
+        return Q(**{f"{search_content['field']}__contains": [search_content['value'].strip()]})
 
-    return Q(**{f"{search_content['field']}__contains": search_content['value']})
+    return Q(**{f"{search_content['field']}__icontains": search_content['value']})
 
 
 def get_unmag_archaea_filter_q(filters):

@@ -75,9 +75,9 @@ def get_genome_search_q(search_content):
         return Q()
 
     if search_content['field'] == 'bacteria_id':
-        return Q(**{f"{search_content['field']}__contains": [search_content['value']]})
+        return Q(**{f"{search_content['field']}__contains": [search_content['value'].strip()]})
 
-    return Q(**{f"{search_content['field']}__contains": search_content['value']})
+    return Q(**{f"{search_content['field']}__icontains": search_content['value']})
 
 
 # MAG Genome Views

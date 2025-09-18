@@ -46,7 +46,7 @@ class GenericTableQueryView(APIView):
         if not search_content['value']:
             return Q()
 
-        return Q(**{f"{search_content['field']}__startswith": search_content['value']})
+        return Q(**{f"{search_content['field']}__startswith": search_content['value'].strip()})
 
     def post(self, request):
         if self.request_serializer_class is None:

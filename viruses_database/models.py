@@ -23,6 +23,8 @@ class MAGViruses(models.Model):
     total_chromosomes = models.CharField(max_length=255, blank=True)
     contig_n50 = models.CharField(max_length=255, blank=True)
     scaffold_n50 = models.CharField(max_length=255, blank=True)
+    checkM_completeness = models.FloatField(null=True, blank=True)
+    checkM_contamination = models.FloatField(null=True, blank=True)
 
     class Meta:
         verbose_name = "MAG Viruses Genome"
@@ -337,6 +339,8 @@ class UnMAGViruses(models.Model):
     total_chromosomes = models.CharField(max_length=255, blank=True)
     contig_n50 = models.CharField(max_length=255, blank=True)
     scaffold_n50 = models.CharField(max_length=255, blank=True)
+    checkM_completeness = models.FloatField(null=True, blank=True)
+    checkM_contamination = models.FloatField(null=True, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Viruses Genome"
