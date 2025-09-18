@@ -13,6 +13,8 @@ for base_dir in "${BASE_DIRS[@]}"; do
     
     # 提取 category 和 sub_category
     IFS='/' read -r category sub_category <<< "$base_dir"
+    # 确保 sub_category 首字母大写
+    sub_category=$(echo "${sub_category:0:1}" | tr '[:lower:]' '[:upper:]')${sub_category:1}
     command_base="build_${category}${sub_category}"
     
     # 定义命令列表
@@ -26,12 +28,28 @@ for base_dir in "${BASE_DIRS[@]}"; do
             continue
         fi
         
-        # 检查对应的文件夹是否存在
-        folder_name=$(echo "${cmd##*Index}" | tr '[:upper:]' '[:lower:]')
-        if [[ "$folder_name" == "argindex" ]]; then folder_name="args"
-        elif [[ "$folder_name" == "proteinindex" ]]; then folder_name="proteins"
-        elif [[ "$folder_name" == "tmhindex" ]]; then folder_name="tmhs"
-        fi
+        # 提取命令后缀
+        suffix="${cmd#${command_base}}"
+        echo "Debug: cmd=${cmd}, suffix=${suffix}"
+        
+        # 映射命令到对应的文件夹
+        case "$suffix" in
+            "ARGIndex")
+                folder_name="args"
+                ;;
+            "ProteinIndex")
+                folder_name="proteins"
+                ;;
+            "TMHIndex")
+                folder_name="tmhs"
+                ;;
+            *)
+                echo "Unknown command suffix: ${suffix}, skipping ${cmd}"
+                continue
+                ;;
+        esac
+        
+        # 构建完整文件夹路径
         full_folder="${full_path}/${folder_name}"
         
         if [[ -d "$full_folder" ]]; then
