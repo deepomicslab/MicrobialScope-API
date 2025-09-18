@@ -23,8 +23,8 @@ class MAGBacteria(models.Model):
     total_chromosomes = models.CharField(max_length=255, blank=True)
     contig_n50 = models.CharField(max_length=255, blank=True)
     scaffold_n50 = models.CharField(max_length=255, blank=True)
-    checkM_completeness = models.FloatField(null=True, blank=True)
-    checkM_contamination = models.FloatField(null=True, blank=True)
+    checkM_completeness = models.CharField(max_length=255, blank=True)
+    checkM_contamination = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "MAG Bacteria Genome"
@@ -392,8 +392,8 @@ class UnMAGBacteria(models.Model):
     total_chromosomes = models.CharField(max_length=255, blank=True)
     contig_n50 = models.CharField(max_length=255, blank=True)
     scaffold_n50 = models.CharField(max_length=255, blank=True)
-    checkM_completeness = models.FloatField(null=True, blank=True)
-    checkM_contamination = models.FloatField(null=True, blank=True)
+    checkM_completeness = models.CharField(max_length=255, blank=True)
+    checkM_contamination = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name = "UnMAG Bacteria Genome"
