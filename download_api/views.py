@@ -225,8 +225,8 @@ def download_fasta_data(request):
     if archaea_type == 'monoisolate':
         file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'fna', file_name)
     else:
-        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'fna', file_name)
-
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'MAG', 'fna', file_name)
+    print(file_path)
     # Check if file exists
     if not os.path.exists(file_path):
         return JsonResponse({
@@ -292,7 +292,7 @@ def download_gbk_data(request):
     if archaea_type == 'monoisolate':
         file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'gbk', file_name)
     else:
-        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gbk', file_name)
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'MAG', 'gbk', file_name)
 
     # Check if file exists
     if not os.path.exists(file_path):
@@ -359,7 +359,7 @@ def download_gff_data(request):
     if archaea_type == 'monoisolate':
         file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'gff', file_name)
     else:
-        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gff', file_name)
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'MAG', 'gff', file_name)
 
     # Check if file exists
     if not os.path.exists(file_path):
