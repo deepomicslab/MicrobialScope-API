@@ -222,7 +222,10 @@ def download_fasta_data(request):
 
     # Construct file path
     file_name = f"{genome.unique_id}.fna.gz"
-    file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'fna', file_name)
+    if archaea_type == 'monoisolate':
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'fna', file_name)
+    else:
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'fna', file_name)
 
     # Check if file exists
     if not os.path.exists(file_path):
@@ -286,7 +289,10 @@ def download_gbk_data(request):
 
     # Construct file path
     file_name = f"{genome.unique_id}.gbk.gz"
-    file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gbk', file_name)
+    if archaea_type == 'monoisolate':
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'gbk', file_name)
+    else:
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gbk', file_name)
 
     # Check if file exists
     if not os.path.exists(file_path):
@@ -350,7 +356,10 @@ def download_gff_data(request):
 
     # Construct file path
     file_name = f"{genome.unique_id}.gff.gz"
-    file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gff', file_name)
+    if archaea_type == 'monoisolate':
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'gff', file_name)
+    else:
+        file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gff', file_name)
 
     # Check if file exists
     if not os.path.exists(file_path):
