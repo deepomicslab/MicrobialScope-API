@@ -517,12 +517,11 @@ def download_annotation_data(request):
 
     # For protein, arg, and tp, serve pre-existing CSV file
     if annotation in ['protein', 'arg', 'tmh']:
-        file_name = f"{unique_id}.csv"
+        file_name = f"{unique_id}.tsv"
         if archaea_type == 'monoisolate':
             file_path = os.path.join(NEW_MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', annotation+'s', file_name)
         else:
             file_path = os.path.join(NEW_MEDIA_DATA_DIR, microbe.capitalize(), 'MAG', annotation+'s', file_name)
-        print(file_path)
         if not os.path.exists(file_path):
             return JsonResponse({
                 'error': f"File not found: {file_name}"
