@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     "microbe_database",
     "large_table_api",
     "analysis",
-    "django_crontab"
+    "django_crontab",
+    "download_api",
 ]
 
 MIDDLEWARE = [
