@@ -11,7 +11,7 @@ from microbe_database.models import MicrobeStatistic
 from microbe_database.serializers import ProteinCIFSerializer, DownloadMetaSerializer
 from utils.esm_fold_utils import esm_fold_cif_api
 
-from MicrobialScope_api.constant import MEDIA_DATA_DIR
+from MicrobialScope_api.constant import NEW_MEDIA_DATA_DIR
 
 
 # Create your views here.
@@ -44,6 +44,12 @@ class ProteinCIFView(APIView):
 
 
 class DownloadMetaView(APIView):
+    microbe_map = {
+        'Archaea': 'Archaea',
+        'Bacteria': 'Bacteria',
+        'Fungi': 'Fungi',
+        'Virus': 'Viruses'
+    }
     mag_map = {
         'MAG': 'MAG',
         'Monoisolate': 'unMAG'
@@ -59,7 +65,7 @@ class DownloadMetaView(APIView):
             file_type = serializer.validated_data['type']
 
             file_name = self.mag_map[mag_status] + '_' + microbe + base_file_name
-            file_path = os.path.join(MEDIA_DATA_DIR, microbe, self.mag_map[mag_status], 'meta', file_name)
+            file_path = os.path.join(NEW_MEDIA_DATA_DIR, self.microbe_map[microbe], self.mag_map[mag_status], file_name)
 
             if not os.path.exists(file_path):
                 return Response({"error": "File not found."}, status=status.HTTP_404_NOT_FOUND)
