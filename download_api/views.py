@@ -530,7 +530,7 @@ def download_annotation_data(request):
         response = FileResponse(
             open(file_path, 'rb'),
             as_attachment=True,
-            filename=file_name
+            filename=f"{microbe}_{archaea_type}_{annotation}_{unique_id}.tsv"
         )
         return response
 
@@ -606,7 +606,7 @@ def download_annotation_data(request):
             streaming_content=stream_csv_data(),
             content_type='text/csv'
         )
-        response['Content-Disposition'] = f'attachment; filename="{archaea_type}_{microbe}_{annotation}_{unique_id}.csv"'
+        response['Content-Disposition'] = f'attachment; filename="{microbe}_{archaea_type}_{annotation}_{unique_id}.csv"'
         return response
 
     except AttributeError:
