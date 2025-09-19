@@ -536,80 +536,81 @@ def download_annotation_data(request):
 
     # For other annotations, generate CSV from database records
     # Assume each model has get_csv_header and to_csv_row functions defined
-    # try:
-    annotation_model = annotation_model_map[microbe][archaea_type][annotation]
-    # Query records with the given unique_id (assuming archaea_id field in annotation models)
-    if microbe == 'archaea':
-        queryset = annotation_model.objects.filter(archaea_id=unique_id)
-    elif microbe == 'bacteria':
-        queryset = annotation_model.objects.filter(bacteria_id=unique_id)
-    elif microbe == 'fungi':
-        queryset = annotation_model.objects.filter(fungi_id=unique_id)
-    else:
-        queryset = annotation_model.objects.filter(viruses_id=unique_id)
+    try:
+        annotation_model = annotation_model_map[microbe][archaea_type][annotation]
+        # Query records with the given unique_id (assuming archaea_id field in annotation models)
+        if microbe == 'archaea':
+            queryset = annotation_model.objects.filter(archaea_id=unique_id)
+        elif microbe == 'bacteria':
+            queryset = annotation_model.objects.filter(bacteria_id=unique_id)
+        elif microbe == 'fungi':
+            queryset = annotation_model.objects.filter(fungi_id=unique_id)
+        else:
+            queryset = annotation_model.objects.filter(viruses_id=unique_id)
 
-    # Check if records exist
-    if not queryset.exists():
-        return JsonResponse({
-            'error': f"No {annotation} records found for unique_id '{unique_id}' in {microbe} ({archaea_type})."
-        }, status=404)
+        # Check if records exist
+        if not queryset.exists():
+            return JsonResponse({
+                'error': f"No {annotation} records found for unique_id '{unique_id}' in {microbe} ({archaea_type})."
+            }, status=404)
 
-    view_map = {
-        'archaea': archaea_views,
-        'bacteria': bacteria_views,
-        'fungi': fungi_views,
-        'viruses': viruses_views,
-    }
-    view = view_map[microbe]
+        view_map = {
+            'archaea': archaea_views,
+            'bacteria': bacteria_views,
+            'fungi': fungi_views,
+            'viruses': viruses_views,
+        }
+        view = view_map[microbe]
 
-    def stream_csv_data():
-        """Generator function to stream CSV data."""
-        buffer_ = io.StringIO()
-        writer = csv.writer(buffer_, lineterminator='\n')
-        # Get headers using the model's get_csv_header function
-        if annotation == 'rna':
-            writer.writerow(view.tRNAs_views.get_csv_header())
-        elif annotation == 'crispr':
-            writer.writerow(view.crisprcas_views.get_csv_header())
-        elif annotation == 'anti':
-            writer.writerow(view.anti_cripsr_views.get_csv_header())
-        elif annotation == 'sm':
-            writer.writerow(view.secondary_metabolites_views.get_csv_header())
-        elif annotation == 'sp':
-            writer.writerow(view.signal_peptide_views.get_csv_header())
-        elif annotation == 'vf':
-            writer.writerow(view.virulence_factor_views.get_csv_header())
-        yield buffer_.getvalue()
-        buffer_.seek(0)
-        buffer_.truncate()
-
-        # Stream data row by row
-        for record in queryset.iterator():
+        def stream_csv_data():
+            """Generator function to stream CSV data."""
+            buffer_ = io.StringIO()
+            writer = csv.writer(buffer_, lineterminator='\n')
+            # Get headers using the model's get_csv_header function
             if annotation == 'rna':
-                writer.writerow(view.tRNAs_views.to_csv_row(record))
+                writer.writerow(view.tRNAs_views.get_csv_header())
             elif annotation == 'crispr':
-                writer.writerow(view.crisprcas_views.to_csv_row(record))
+                print(view.crisprcas_views.get_csv_header())
+                writer.writerow(view.crisprcas_views.get_csv_header())
             elif annotation == 'anti':
-                writer.writerow(view.anti_cripsr_views.to_csv_row(record))
+                writer.writerow(view.anti_cripsr_views.get_csv_header())
             elif annotation == 'sm':
-                writer.writerow(view.secondary_metabolites_views.to_csv_row(record))
+                writer.writerow(view.secondary_metabolites_views.get_csv_header())
             elif annotation == 'sp':
-                writer.writerow(view.signal_peptide_views.to_csv_row(record))
+                writer.writerow(view.signal_peptide_views.get_csv_header())
             elif annotation == 'vf':
-                writer.writerow(view.virulence_factor_views.to_csv_row(record))
+                writer.writerow(view.virulence_factor_views.get_csv_header())
             yield buffer_.getvalue()
             buffer_.seek(0)
             buffer_.truncate()
 
-    # Create the streaming response
-    response = StreamingHttpResponse(
-        streaming_content=stream_csv_data(),
-        content_type='text/csv'
-    )
-    response['Content-Disposition'] = f'attachment; filename="{microbe}_{archaea_type}_{annotation}_{unique_id}.csv"'
-    return response
+            # Stream data row by row
+            for record in queryset.iterator():
+                if annotation == 'rna':
+                    writer.writerow(view.tRNAs_views.to_csv_row(record))
+                elif annotation == 'crispr':
+                    writer.writerow(view.crisprcas_views.to_csv_row(record))
+                elif annotation == 'anti':
+                    writer.writerow(view.anti_cripsr_views.to_csv_row(record))
+                elif annotation == 'sm':
+                    writer.writerow(view.secondary_metabolites_views.to_csv_row(record))
+                elif annotation == 'sp':
+                    writer.writerow(view.signal_peptide_views.to_csv_row(record))
+                elif annotation == 'vf':
+                    writer.writerow(view.virulence_factor_views.to_csv_row(record))
+                yield buffer_.getvalue()
+                buffer_.seek(0)
+                buffer_.truncate()
 
-    # except AttributeError:
-    #     return JsonResponse({
-    #         'error': f"Model for {annotation} in {microbe} ({archaea_type}) does not have required get_csv_header or to_csv_row methods."
-    #     }, status=500)
+        # Create the streaming response
+        response = StreamingHttpResponse(
+            streaming_content=stream_csv_data(),
+            content_type='text/csv'
+        )
+        response['Content-Disposition'] = f'attachment; filename="{microbe}_{archaea_type}_{annotation}_{unique_id}.csv"'
+        return response
+
+    except AttributeError:
+        return JsonResponse({
+            'error': f"Model for {annotation} in {microbe} ({archaea_type}) does not have required get_csv_header or to_csv_row methods."
+        }, status=500)
