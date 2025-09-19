@@ -25,6 +25,6 @@ urlpatterns = [
     path('api/fungi/', include('fungi_database.urls')),
     path('api/viruses/', include('viruses_database.urls')),
     path('api/largetable/', include('large_table_api.urls')),
-    path('api/analysis/', include('analysis.urls'))
-    path('api/download/', include('download_api.urls'))
+    path('api/analysis/', include('analysis.urls')),
+    path('api/download/', include('download_api.urls')),
 ]
