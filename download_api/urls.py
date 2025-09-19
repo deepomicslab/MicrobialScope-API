@@ -2,5 +2,9 @@ from django.urls import path
 from download_api.views import *
 
 urlpatterns = [
-    path('download-genome-data', download_genome_data, name='download_genome_data'),
+    path('meta', download_meta_data, name='download_meta_data'),
+    path('fasta', download_fasta_data, name='download_fasta_data'),
+    path('gbk', download_gbk_data, name='download_gbk_data'),
+    path('gff', download_gff_data, name='download_gff_data'),
+
 ]

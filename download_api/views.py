@@ -1,7 +1,9 @@
-from django.http import StreamingHttpResponse, JsonResponse
+from django.http import StreamingHttpResponse, JsonResponse, FileResponse
 from django.db.models import Q
+from django.conf import settings
 import csv
 import io
+import os
 
 from archaea_database.models import *
 from bacteria_database.models import *
@@ -17,7 +19,7 @@ class Echo:
     def write(self, value):
         return value
 
-def download_genome_data(request):
+def download_meta_data(request):
     """
     API endpoint to download filtered microbe data as CSV.
     Supports filtering by organism_name, species, total_sequence_length range, and gc_content range.
@@ -169,4 +171,196 @@ def download_genome_data(request):
     )
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     
+    return response
+
+def download_fasta_data(request):
+    """
+    API endpoint to download a FASTA file (.fna.gz) for a specific genome.
+    Parameters:
+    - microbe: 'archaea', 'bacteria', 'fungi', or 'viruses'
+    - type: 'mag' or 'monoisolate'
+    - unique_id: The unique identifier of the genome
+    """
+    # Get query parameters
+    microbe = request.GET.get('microbe', '').lower()
+    archaea_type = request.GET.get('type', '').lower()
+    unique_id = request.GET.get('unique_id', '')
+
+    # Validate parameters
+    if microbe not in ['archaea', 'bacteria', 'fungi', 'viruses']:
+        return JsonResponse({
+            'error': "Invalid 'microbe' parameter. Must be 'archaea', 'bacteria', 'fungi', or 'viruses'."
+        }, status=400)
+
+    if archaea_type not in ['mag', 'monoisolate']:
+        return JsonResponse({
+            'error': "Invalid 'type' parameter. Must be 'mag' or 'monoisolate'."
+        }, status=400)
+
+    if not unique_id:
+        return JsonResponse({
+            'error': "'unique_id' parameter is required."
+        }, status=400)
+
+    # Select model based on microbe and type
+    model_map = {
+        'archaea': {'mag': MAGArchaea, 'monoisolate': UnMAGArchaea},
+        'bacteria': {'mag': MAGBacteria, 'monoisolate': UnMAGBacteria},
+        'fungi': {'mag': MAGFungi, 'monoisolate': UnMAGFungi},
+        'viruses': {'mag': MAGViruses, 'monoisolate': UnMAGViruses},
+    }
+    model = model_map[microbe][archaea_type]
+
+    # Verify the unique_id exists in the model
+    try:
+        genome = model.objects.get(unique_id=unique_id)
+    except model.DoesNotExist:
+        return JsonResponse({
+            'error': f"No genome found with unique_id '{unique_id}' for {microbe} ({archaea_type})."
+        }, status=404)
+
+    # Construct file path
+    file_name = f"{genome.unique_id}.fna.gz"
+    file_path = os.path.join(settings.MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'fna', file_name)
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        return JsonResponse({
+            'error': f"File not found: {file_name}"
+        }, status=404)
+
+    # Serve the file
+    response = FileResponse(
+        open(file_path, 'rb'),
+        as_attachment=True,
+        filename=file_name
+    )
+    return response
+
+def download_gbk_data(request):
+    """
+    API endpoint to download a GenBank file (.gbk.gz) for a specific genome.
+    Parameters:
+    - microbe: 'archaea', 'bacteria', 'fungi', or 'viruses'
+    - type: 'mag' or 'monoisolate'
+    - unique_id: The unique identifier of the genome
+    """
+    # Get query parameters
+    microbe = request.GET.get('microbe', '').lower()
+    archaea_type = request.GET.get('type', '').lower()
+    unique_id = request.GET.get('unique_id', '')
+
+    # Validate parameters
+    if microbe not in ['archaea', 'bacteria', 'fungi', 'viruses']:
+        return JsonResponse({
+            'error': "Invalid 'microbe' parameter. Must be 'archaea', 'bacteria', 'fungi', or 'viruses'."
+        }, status=400)
+
+    if archaea_type not in ['mag', 'monoisolate']:
+        return JsonResponse({
+            'error': "Invalid 'type' parameter. Must be 'mag' or 'monoisolate'."
+        }, status=400)
+
+    if not unique_id:
+        return JsonResponse({
+            'error': "'unique_id' parameter is required."
+        }, status=400)
+
+    # Select model based on microbe and type
+    model_map = {
+        'archaea': {'mag': MAGArchaea, 'monoisolate': UnMAGArchaea},
+        'bacteria': {'mag': MAGBacteria, 'monoisolate': UnMAGBacteria},
+        'fungi': {'mag': MAGFungi, 'monoisolate': UnMAGFungi},
+        'viruses': {'mag': MAGViruses, 'monoisolate': UnMAGViruses},
+    }
+    model = model_map[microbe][archaea_type]
+
+    # Verify the unique_id exists in the model
+    try:
+        genome = model.objects.get(unique_id=unique_id)
+    except model.DoesNotExist:
+        return JsonResponse({
+            'error': f"No genome found with unique_id '{unique_id}' for {microbe} ({archaea_type})."
+        }, status=404)
+
+    # Construct file path
+    file_name = f"{genome.unique_id}.gbk.gz"
+    file_path = os.path.join(settings.MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gbk', file_name)
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        return JsonResponse({
+            'error': f"File not found: {file_name}"
+        }, status=404)
+
+    # Serve the file
+    response = FileResponse(
+        open(file_path, 'rb'),
+        as_attachment=True,
+        filename=file_name
+    )
+    return response
+
+def download_gff_data(request):
+    """
+    API endpoint to download a GFF3 file (.gff.gz) for a specific genome.
+    Parameters:
+    - microbe: 'archaea', 'bacteria', 'fungi', or 'viruses'
+    - type: 'mag' or 'monoisolate'
+    - unique_id: The unique identifier of the genome
+    """
+    # Get query parameters
+    microbe = request.GET.get('microbe', '').lower()
+    archaea_type = request.GET.get('type', '').lower()
+    unique_id = request.GET.get('unique_id', '')
+
+    # Validate parameters
+    if microbe not in ['archaea', 'bacteria', 'fungi', 'viruses']:
+        return JsonResponse({
+            'error': "Invalid 'microbe' parameter. Must be 'archaea', 'bacteria', 'fungi', or 'viruses'."
+        }, status=400)
+
+    if archaea_type not in ['mag', 'monoisolate']:
+        return JsonResponse({
+            'error': "Invalid 'type' parameter. Must be 'mag' or 'monoisolate'."
+        }, status=400)
+
+    if not unique_id:
+        return JsonResponse({
+            'error': "'unique_id' parameter is required."
+        }, status=400)
+
+    # Select model based on microbe and type
+    model_map = {
+        'archaea': {'mag': MAGArchaea, 'monoisolate': UnMAGArchaea},
+        'bacteria': {'mag': MAGBacteria, 'monoisolate': UnMAGBacteria},
+        'fungi': {'mag': MAGFungi, 'monoisolate': UnMAGFungi},
+        'viruses': {'mag': MAGViruses, 'monoisolate': UnMAGViruses},
+    }
+    model = model_map[microbe][archaea_type]
+
+    # Verify the unique_id exists in the model
+    try:
+        genome = model.objects.get(unique_id=unique_id)
+    except model.DoesNotExist:
+        return JsonResponse({
+            'error': f"No genome found with unique_id '{unique_id}' for {microbe} ({archaea_type})."
+        }, status=404)
+
+    # Construct file path
+    file_name = f"{genome.unique_id}.gff.gz"
+    file_path = os.path.join(settings.MEDIA_DATA_DIR, microbe.capitalize(), archaea_type.capitalize(), 'gff', file_name)
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        return JsonResponse({
+            'error': f"File not found: {file_name}"
+        }, status=404)
+
+    # Serve the file
+    response = FileResponse(
+        open(file_path, 'rb'),
+        as_attachment=True,
+        filename=file_name
+    )
     return response
