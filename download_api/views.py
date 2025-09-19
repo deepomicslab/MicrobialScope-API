@@ -431,7 +431,7 @@ def download_annotation_data(request):
             'mag': {
                 'protein': MAGArchaeaProtein,
                 'rna': MAGArchaeaTRNA,
-                'crispr': MAGArchaeaCRISPR,
+                'crispr': MAGArchaeaCRISPRCas,
                 'anti': MAGArchaeaAntiCRISPRAnnotation,
                 'sm': MAGArchaeaSecondaryMetaboliteRegion,
                 'sp': MAGArchaeaSignalPeptidePrediction,
@@ -442,7 +442,7 @@ def download_annotation_data(request):
             'monoisolate': {
                 'protein': UnMAGArchaeaProtein,
                 'rna': UnMAGArchaeaTRNA,
-                'crispr': UnMAGArchaeaCRISPR,
+                'crispr': UnMAGArchaeaCRISPRCas,
                 'anti': UnMAGArchaeaAntiCRISPRAnnotation,
                 'sm': UnMAGArchaeaSecondaryMetaboliteRegion,
                 'sp': UnMAGArchaeaSignalPeptidePrediction,
@@ -455,7 +455,7 @@ def download_annotation_data(request):
             'mag': {
                 'protein': MAGBacteriaProtein,
                 'rna': MAGBacteriaTRNA,
-                'crispr': MAGBacteriaCRISPR,
+                'crispr': MAGBacteriaCRISPRCas,
                 'anti': MAGBacteriaAntiCRISPRAnnotation,
                 'sm': MAGBacteriaSecondaryMetaboliteRegion,
                 'sp': MAGBacteriaSignalPeptidePrediction,
@@ -466,7 +466,7 @@ def download_annotation_data(request):
             'monoisolate': {
                 'protein': UnMAGBacteriaProtein,
                 'rna': UnMAGBacteriaTRNA,
-                'crispr': UnMAGBacteriaCRISPR,
+                'crispr': UnMAGBacteriaCRISPRCas,
                 'anti': UnMAGBacteriaAntiCRISPRAnnotation,
                 'sm': UnMAGBacteriaSecondaryMetaboliteRegion,
                 'sp': UnMAGBacteriaSignalPeptidePrediction,
@@ -499,7 +499,7 @@ def download_annotation_data(request):
             'mag': {
                 'protein': MAGVirusesProtein,
                 'rna': MAGVirusesTRNA,
-                'crispr': MAGVirusesCRISPR,
+                'crispr': MAGVirusesCRISPRCas,
                 'anti': MAGVirusesAntiCRISPRAnnotation,
                 'vf': MAGVirusesVirulenceFactor,
                 'tmh': MAGVirusesTransmembraneHelices,
@@ -507,7 +507,7 @@ def download_annotation_data(request):
             'monoisolate': {
                 'protein': UnMAGVirusesProtein,
                 'rna': UnMAGVirusesTRNA,
-                'crispr': UnMAGVirusesCRISPR,
+                'crispr': UnMAGVirusesCRISPRCas,
                 'anti': UnMAGVirusesAntiCRISPRAnnotation,
                 'vf': UnMAGVirusesVirulenceFactor,
                 'tmh': UnMAGVirusesTransmembraneHelices,
