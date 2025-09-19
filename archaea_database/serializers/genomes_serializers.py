@@ -37,10 +37,12 @@ class MAGArchaeaSerializer(serializers.ModelSerializer):
         self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
 
     def get_gtdb(self, obj):
-        g = self._gtdb_map.get(obj.unique_id)
-        if not g:
-            return None
-        return MAGArchaeaGTDBSerializer(g, context=self.context).data
+        for archaea_id in obj.archaea_id:
+            g = self._gtdb_map.get(archaea_id)
+            if g:
+                return MAGArchaeaGTDBSerializer(g, context=self.context).data
+
+        return None
 
 
 class MAGArchaeaDetailSerializer(serializers.ModelSerializer):
@@ -124,10 +126,12 @@ class UnMAGArchaeaSerializer(serializers.ModelSerializer):
         self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
 
     def get_gtdb(self, obj):
-        g = self._gtdb_map.get(obj.unique_id)
-        if not g:
-            return None
-        return UnMAGArchaeaGTDBSerializer(g, context=self.context).data
+        for archaea_id in obj.archaea_id:
+            g = self._gtdb_map.get(archaea_id)
+            if g:
+                return UnMAGArchaeaGTDBSerializer(g, context=self.context).data
+
+        return None
 
 
 class UnMAGArchaeaDetailSerializer(serializers.ModelSerializer):

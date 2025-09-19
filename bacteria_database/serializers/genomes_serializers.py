@@ -32,10 +32,12 @@ class MAGBacteriaSerializer(serializers.ModelSerializer):
         self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
 
     def get_gtdb(self, obj):
-        g = self._gtdb_map.get(obj.unique_id)
-        if not g:
-            return None
-        return MAGBacteriaGTDBSerializer(g, context=self.context).data
+        for bacteria_id in obj.bacteria_id:
+            g = self._gtdb_map.get(bacteria_id)
+            if g:
+                return MAGBacteriaGTDBSerializer(g, context=self.context).data
+
+        return None
 
 
 class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
@@ -118,10 +120,12 @@ class UnMAGBacteriaSerializer(serializers.ModelSerializer):
         self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
 
     def get_gtdb(self, obj):
-        g = self._gtdb_map.get(obj.unique_id)
-        if not g:
-            return None
-        return UnMAGBacteriaGTDBSerializer(g, context=self.context).data
+        for bacteria_id in obj.bacteria_id:
+            g = self._gtdb_map.get(bacteria_id)
+            if g:
+                return UnMAGBacteriaGTDBSerializer(g, context=self.context).data
+
+        return None
 
 
 class UnMAGBacteriaDetailSerializer(serializers.ModelSerializer):

@@ -112,7 +112,7 @@ class ArchaeaGenomesView(GenericTableQueryView):
         return get_genome_search_q(search_content)
 
     def get_context(self, page, request):
-        unique_ids = [obj.unique_id for obj in page if obj.unique_id]
+        unique_ids = [id for obj in page if obj.archaea_id for id in obj.archaea_id]
         gtdb_qs = MAGArchaeaGTDB.objects.filter(unique_id__in=unique_ids)
         gtdb_map = {x.unique_id: x for x in gtdb_qs}
         return {
@@ -449,7 +449,7 @@ class UnMAGArchaeaGenomesView(GenericTableQueryView):
         return get_unmag_archaea_filter_q(filters)
 
     def get_context(self, page, request):
-        unique_ids = [obj.unique_id for obj in page if obj.unique_id]
+        unique_ids = [id for obj in page if obj.archaea_id for id in obj.archaea_id]
         if not unique_ids:
             return {"gtdb_map": {}}
         gtdb_qs = UnMAGArchaeaGTDB.objects.filter(unique_id__in=unique_ids)
