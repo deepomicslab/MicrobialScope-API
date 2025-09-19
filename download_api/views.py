@@ -522,7 +522,7 @@ def download_annotation_data(request):
             file_path = os.path.join(NEW_MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', annotation+'s', file_name)
         else:
             file_path = os.path.join(NEW_MEDIA_DATA_DIR, microbe.capitalize(), 'MAG', annotation+'s', file_name)
-
+        print(file_path)
         if not os.path.exists(file_path):
             return JsonResponse({
                 'error': f"File not found: {file_name}"
