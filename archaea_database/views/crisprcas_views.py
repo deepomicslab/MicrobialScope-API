@@ -63,7 +63,7 @@ def to_csv_row(crispr, cas):
         crispr.crispr_start,
         crispr.crispr_end,
         crispr.crispr_subtype,
-        cas.consensus_prediction,
+        crispr.consensus_prediction,
         crispr.repeat_sequence,
         cas.cas_genes
     ]
