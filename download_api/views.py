@@ -221,7 +221,6 @@ def download_fasta_data(request):
         file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'unMAG', 'fna', file_name)
     else:
         file_path = os.path.join(MEDIA_DATA_DIR, microbe.capitalize(), 'MAG', 'fna', file_name)
-    print(file_path)
     # Check if file exists
     if not os.path.exists(file_path):
         return JsonResponse({
@@ -570,7 +569,6 @@ def download_annotation_data(request):
             if annotation == 'rna':
                 writer.writerow(view.tRNAs_views.get_csv_header())
             elif annotation == 'crispr':
-                print(view.crisprcas_views.get_csv_header())
                 writer.writerow(view.crisprcas_views.get_csv_header())
             elif annotation == 'anti':
                 writer.writerow(view.anti_cripsr_views.get_csv_header())
@@ -589,7 +587,8 @@ def download_annotation_data(request):
                 if annotation == 'rna':
                     writer.writerow(view.tRNAs_views.to_csv_row(record))
                 elif annotation == 'crispr':
-                    writer.writerow(view.crisprcas_views.to_csv_row(record))
+                    cas = record.cas
+                    writer.writerow(view.crisprcas_views.to_csv_row(record, cas))
                 elif annotation == 'anti':
                     writer.writerow(view.anti_cripsr_views.to_csv_row(record))
                 elif annotation == 'sm':
