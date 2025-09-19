@@ -49,7 +49,7 @@ from MicrobialScope_api.constant import MEDIA_DATA_DIR
 
 def get_csv_header():
     return ['Unique_ID', 'Archaea_ID', 'Organism Name', 'Taxonomic ID', 'Species', 'Total Sequence Length',
-            'GC Content', 'Assembly Level', 'Total Number of Chromosomes', 'Contig N50', 'Scaffold N50']
+            'GC Content', 'Assembly Level', 'Total Number of Chromosomes', 'Contig N50', 'Scaffold N50', 'CheckM Completeness', 'CheckM Contamination']
 
 
 def to_csv_row(genome):
@@ -64,7 +64,9 @@ def to_csv_row(genome):
         genome.assembly_level,
         genome.total_chromosomes,
         genome.contig_n50,
-        genome.scaffold_n50
+        genome.scaffold_n50,
+        genome.checkM_completeness,
+        genome.checkM_contamination
     ]
 
 
