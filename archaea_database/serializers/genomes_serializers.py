@@ -102,10 +102,32 @@ class MAGArchaeaDetailSerializer(serializers.ModelSerializer):
         # return MAGArchaeaTransmembraneHelices.objects.filter(archaea_id=obj.unique_id).count()
 
 
+class UnMAGArchaeaGTDBSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnMAGArchaeaGTDB
+        fields = (
+            'unique_id', 'tax', 'domain', 'phylum', 'class_name',
+            'order', 'family', 'genus', 'species',
+        )
+
+
 class UnMAGArchaeaSerializer(serializers.ModelSerializer):
+    gtdb = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = UnMAGArchaea
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 缓存 gtdb_map，避免每次调用 get_gtdb 时都去 context 查
+        self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
+
+    def get_gtdb(self, obj):
+        g = self._gtdb_map.get(obj.unique_id)
+        if not g:
+            return None
+        return UnMAGArchaeaGTDBSerializer(g, context=self.context).data
 
 
 class UnMAGArchaeaDetailSerializer(serializers.ModelSerializer):

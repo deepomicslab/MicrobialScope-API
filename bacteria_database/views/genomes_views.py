@@ -19,7 +19,7 @@ from bacteria_database.models import MAGBacteria, UnMAGBacteria, MAGBacteriaProt
     UnMAGBacteriaSecondaryMetaboliteRegion, MAGBacteriaAntiCRISPRAnnotation, UnMAGBacteriaAntiCRISPRAnnotation, \
     MAGBacteriaSignalPeptidePrediction, UnMAGBacteriaSignalPeptidePrediction, MAGBacteriaVirulenceFactor, \
     UnMAGBacteriaVirulenceFactor, MAGBacteriaTransmembraneHelices, MAGBacteriaAntibioticResistance, \
-    UnMAGBacteriaAntibioticResistance, UnMAGBacteriaTransmembraneHelices
+    UnMAGBacteriaAntibioticResistance, UnMAGBacteriaTransmembraneHelices, MAGBacteriaGTDB, UnMAGBacteriaGTDB
 from bacteria_database.serializers.genomes_serializers import MAGBacteriaSerializer, UnMAGBacteriaSerializer, \
     MAGBacteriaDetailSerializer, UnMAGBacteriaDetailSerializer
 from bacteria_database.serializers.proteins_serializers import MAGBacteriaProteinSerializer, \
@@ -96,6 +96,14 @@ class BacteriaGenomesView(GenericTableQueryView):
 
     def get_search_q(self, search_content):
         return get_genome_search_q(search_content)
+
+    def get_context(self, page, request):
+        unique_ids = [obj.unique_id for obj in page if obj.unique_id]
+        if not unique_ids:
+            return {"gtdb_map": {}}
+        gtdb_qs = MAGBacteriaGTDB.objects.filter(unique_id__in=unique_ids)
+        gtdb_map = {x.unique_id: x for x in gtdb_qs}
+        return {"gtdb_map": gtdb_map}
 
 
 class BacteriaGenomeDetailView(APIView):
@@ -422,6 +430,14 @@ class UnMAGBacteriaGenomesView(GenericTableQueryView):
 
     def get_search_q(self, search_content):
         return get_genome_search_q(search_content)
+
+    def get_context(self, page, request):
+        unique_ids = [obj.unique_id for obj in page if obj.unique_id]
+        if not unique_ids:
+            return {"gtdb_map": {}}
+        gtdb_qs = UnMAGBacteriaGTDB.objects.filter(unique_id__in=unique_ids)
+        gtdb_map = {x.unique_id: x for x in gtdb_qs}
+        return {"gtdb_map": gtdb_map}
 
 
 class UnBacteriaGenomeDetailView(APIView):

@@ -7,13 +7,35 @@ from bacteria_database.models import MAGBacteria, UnMAGBacteria, UnMAGBacteriaPr
     UnMAGBacteriaSecondaryMetaboliteRegion, UnMAGBacteriaSignalPeptidePrediction, UnMAGBacteriaVirulenceFactor, \
     UnMAGBacteriaTransmembraneHelices, MAGBacteriaTransmembraneHelices, MAGBacteriaAntibioticResistance, \
     MAGBacteriaVirulenceFactor, MAGBacteriaSignalPeptidePrediction, MAGBacteriaSecondaryMetaboliteRegion, \
-    MAGBacteriaAntiCRISPRAnnotation, MAGBacteriaCRISPR, MAGBacteriaTRNA, MAGBacteriaProtein
+    MAGBacteriaAntiCRISPRAnnotation, MAGBacteriaCRISPR, MAGBacteriaTRNA, MAGBacteriaProtein, MAGBacteriaGTDB, \
+    UnMAGBacteriaGTDB
+
+
+class MAGBacteriaGTDBSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MAGBacteriaGTDB
+        fields = (
+            'unique_id', 'tax', 'domain', 'phylum', 'class_name',
+            'order', 'family', 'genus', 'species',
+        )
 
 
 class MAGBacteriaSerializer(serializers.ModelSerializer):
+    gtdb = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = MAGBacteria
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
+
+    def get_gtdb(self, obj):
+        g = self._gtdb_map.get(obj.unique_id)
+        if not g:
+            return None
+        return MAGBacteriaGTDBSerializer(g, context=self.context).data
 
 
 class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
@@ -75,10 +97,31 @@ class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
         # return MAGBacteriaTransmembraneHelices.objects.filter(bacteria_id=obj.unique_id).count()
 
 
+class UnMAGBacteriaGTDBSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnMAGBacteriaGTDB
+        fields = (
+            'unique_id', 'tax', 'domain', 'phylum', 'class_name',
+            'order', 'family', 'genus', 'species',
+        )
+
+
 class UnMAGBacteriaSerializer(serializers.ModelSerializer):
+    gtdb = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = UnMAGBacteria
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
+
+    def get_gtdb(self, obj):
+        g = self._gtdb_map.get(obj.unique_id)
+        if not g:
+            return None
+        return UnMAGBacteriaGTDBSerializer(g, context=self.context).data
 
 
 class UnMAGBacteriaDetailSerializer(serializers.ModelSerializer):

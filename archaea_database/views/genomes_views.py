@@ -19,7 +19,7 @@ from archaea_database.models import MAGArchaea, UnMAGArchaea, MAGArchaeaProtein,
     UnMAGArchaeaSecondaryMetaboliteRegion, MAGArchaeaAntiCRISPRAnnotation, UnMAGArchaeaAntiCRISPRAnnotation, \
     MAGArchaeaSignalPeptidePrediction, UnMAGArchaeaSignalPeptidePrediction, MAGArchaeaVirulenceFactor, \
     UnMAGArchaeaVirulenceFactor, MAGArchaeaTransmembraneHelices, UnMAGArchaeaTransmembraneHelices, \
-    MAGArchaeaAntibioticResistance, UnMAGArchaeaAntibioticResistance, MAGArchaeaGTDB
+    MAGArchaeaAntibioticResistance, UnMAGArchaeaAntibioticResistance, MAGArchaeaGTDB, UnMAGArchaeaGTDB
 from archaea_database.serializers.genomes_serializers import MAGArchaeaSerializer, UnMAGArchaeaSerializer, \
     MAGArchaeaDetailSerializer, UnMAGArchaeaDetailSerializer
 from archaea_database.serializers.proteins_serializers import MAGArchaeaProteinSerializer, UnMAGArchaeaProteinSerializer
@@ -447,6 +447,14 @@ class UnMAGArchaeaGenomesView(GenericTableQueryView):
 
     def get_filter_params(self, filters):
         return get_unmag_archaea_filter_q(filters)
+
+    def get_context(self, page, request):
+        unique_ids = [obj.unique_id for obj in page if obj.unique_id]
+        if not unique_ids:
+            return {"gtdb_map": {}}
+        gtdb_qs = UnMAGArchaeaGTDB.objects.filter(unique_id__in=unique_ids)
+        gtdb_map = {x.unique_id: x for x in gtdb_qs}
+        return {"gtdb_map": gtdb_map}
 
 
 class UnArchaeaGenomeDetailView(APIView):
