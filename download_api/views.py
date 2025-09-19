@@ -587,8 +587,8 @@ def download_annotation_data(request):
                 if annotation == 'rna':
                     writer.writerow(view.tRNAs_views.to_csv_row(record))
                 elif annotation == 'crispr':
-                    cas = record.cas
-                    writer.writerow(view.crisprcas_views.to_csv_row(record, cas))
+                    for crispr in record.CRISPRs.all():
+                        writer.writerow(view.crisprcas_views.to_csv_row(crispr, record))
                 elif annotation == 'anti':
                     writer.writerow(view.anti_cripsr_views.to_csv_row(record))
                 elif annotation == 'sm':
