@@ -6,5 +6,6 @@ urlpatterns = [
     path('fasta', download_fasta_data, name='download_fasta_data'),
     path('gbk', download_gbk_data, name='download_gbk_data'),
     path('gff', download_gff_data, name='download_gff_data'),
+    path('annotation', download_annotation_data, name='download_annotation_data'),
 
 ]
