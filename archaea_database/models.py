@@ -58,6 +58,18 @@ class MAGArchaeaTaxonomy(models.Model):
         return f"{self.organism_name} ({self.archaea_id})"
 
 
+class MAGArchaeaGTDB(models.Model):
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    tax = models.TextField(blank=True)
+    domain = models.CharField(max_length=255, blank=True)
+    phylum = models.CharField(max_length=255, blank=True)
+    class_name = models.CharField(max_length=255, blank=True)
+    order = models.CharField(max_length=255, blank=True)
+    family = models.CharField(max_length=255, blank=True)
+    genus = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True)
+
+
 class MAGArchaeaProtein(models.Model):
     STRAND = (
         (0, '+'),
@@ -425,6 +437,18 @@ class UnMAGArchaeaTaxonomy(models.Model):
 
     def __str__(self):
         return f"{self.organism_name} ({self.archaea_id})"
+
+
+class UnMAGArchaeaGTDB(models.Model):
+    unique_id = models.CharField(max_length=100, db_index=True, blank=True)
+    tax = models.TextField(blank=True)
+    domain = models.CharField(max_length=255, blank=True)
+    phylum = models.CharField(max_length=255, blank=True)
+    class_name = models.CharField(max_length=255, blank=True)
+    order = models.CharField(max_length=255, blank=True)
+    family = models.CharField(max_length=255, blank=True)
+    genus = models.CharField(max_length=255, blank=True)
+    species = models.CharField(max_length=255, blank=True)
 
 
 class UnMAGArchaeaProtein(models.Model):

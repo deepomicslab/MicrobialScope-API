@@ -7,13 +7,40 @@ from archaea_database.models import MAGArchaea, UnMAGArchaea, UnMAGArchaeaProtei
     UnMAGArchaeaSignalPeptidePrediction, UnMAGArchaeaVirulenceFactor, UnMAGArchaeaTransmembraneHelices, \
     MAGArchaeaTransmembraneHelices, MAGArchaeaAntibioticResistance, MAGArchaeaVirulenceFactor, \
     MAGArchaeaSignalPeptidePrediction, MAGArchaeaSecondaryMetaboliteRegion, MAGArchaeaAntiCRISPRAnnotation, \
-    MAGArchaeaCRISPR, MAGArchaeaTRNA, MAGArchaeaProtein
+    MAGArchaeaCRISPR, MAGArchaeaTRNA, MAGArchaeaProtein, MAGArchaeaGTDB, UnMAGArchaeaGTDB
+
+
+class MAGArchaeaGTDBSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MAGArchaeaGTDB
+        fields = (
+            'unique_id', 'tax', 'domain', 'phylum', 'class_name',
+            'order', 'family', 'genus', 'species',
+        )
 
 
 class MAGArchaeaSerializer(serializers.ModelSerializer):
+    gtdb = serializers.SerializerMethodField()
+
     class Meta:
         model = MAGArchaea
-        fields = '__all__'
+        fields = (
+            'id', 'unique_id', 'archaea_id', 'organism_name', 'taxonomic_id',
+            'species', 'total_sequence_length', 'gc_content', 'assembly_level',
+            'total_chromosomes', 'contig_n50', 'scaffold_n50',
+            'checkM_completeness', 'checkM_contamination',
+            'gtdb',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._gtdb_map = (self.context or {}).get('gtdb_map') or {}
+
+    def get_gtdb(self, obj):
+        g = self._gtdb_map.get(obj.unique_id)
+        if not g:
+            return None
+        return MAGArchaeaGTDBSerializer(g, context=self.context).data
 
 
 class MAGArchaeaDetailSerializer(serializers.ModelSerializer):

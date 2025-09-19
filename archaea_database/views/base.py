@@ -48,6 +48,9 @@ class GenericTableQueryView(APIView):
 
         return Q(**{f"{search_content['field']}__startswith": search_content['value'].strip()})
 
+    def get_context(self, page, request):
+        return {}
+
     def post(self, request):
         if self.request_serializer_class is None:
             raise RuntimeError("You must define 'request_serializer_class'.")
@@ -82,7 +85,8 @@ class GenericTableQueryView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            serializer = self.get_serializer_class()(page, many=True)
+            context = self.get_context(page, request)
+            serializer = self.get_serializer_class()(page, many=True, context=context)
             return Response({
                 "count": paginator.page.paginator.count,
                 "page": paginator.page.number,
