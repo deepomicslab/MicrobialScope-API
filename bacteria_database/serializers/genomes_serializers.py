@@ -56,7 +56,7 @@ class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_protein_count(self, obj):
-        profile_file = f'/delta_microbia/data/Bacteria/MAG/meta/proteins/{obj.unique_id}.tsv'
+        profile_file = f'/delta_microbia/new_data/Bacteria/MAG/proteins/{obj.unique_id}.tsv'
         if not os.path.exists(profile_file):
             return 0
         df = pd.read_csv(profile_file, sep='\t')
@@ -82,7 +82,7 @@ class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
         return MAGBacteriaVirulenceFactor.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        arg_file = f'/delta_microbia/data/Bacteria/MAG/meta/args/{obj.unique_id}.tsv'
+        arg_file = f'/delta_microbia/new_data/Bacteria/MAG/args/{obj.unique_id}.tsv'
         if not os.path.exists(arg_file):
             return 0
         df = pd.read_csv(arg_file, sep='\t')
@@ -90,7 +90,7 @@ class MAGBacteriaDetailSerializer(serializers.ModelSerializer):
         # return MAGBacteriaAntibioticResistance.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
-        tmh_file = f'/delta_microbia/data/Bacteria/MAG/meta/tmhs/{obj.unique_id}.tsv'
+        tmh_file = f'/delta_microbia/new_data/Bacteria/MAG/tmhs/{obj.unique_id}.tsv'
         if not os.path.exists(tmh_file):
             return 0
         df = pd.read_csv(tmh_file, sep='\t')
@@ -144,7 +144,7 @@ class UnMAGBacteriaDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_protein_count(self, obj):
-        profile_file = f'/delta_microbia/data/Bacteria/unMAG/meta/proteins/{obj.unique_id}.tsv'
+        profile_file = f'/delta_microbia/new_data/Bacteria/unMAG/proteins/{obj.unique_id}.tsv'
         if not os.path.exists(profile_file):
             return 0
         df = pd.read_csv(profile_file, sep='\t')
@@ -170,7 +170,7 @@ class UnMAGBacteriaDetailSerializer(serializers.ModelSerializer):
         return UnMAGBacteriaVirulenceFactor.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        arg_file = f'/delta_microbia/data/Bacteria/unMAG/meta/args/{obj.unique_id}.tsv'
+        arg_file = f'/delta_microbia/new_data/Bacteria/unMAG/args/{obj.unique_id}.tsv'
         if not os.path.exists(arg_file):
             return 0
         df = pd.read_csv(arg_file, sep='\t')
@@ -178,7 +178,7 @@ class UnMAGBacteriaDetailSerializer(serializers.ModelSerializer):
         # return UnMAGBacteriaAntibioticResistance.objects.filter(bacteria_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
-        tmh_file = f'/delta_microbia/data/Bacteria/unMAG/meta/tmhs/{obj.unique_id}.tsv'
+        tmh_file = f'/delta_microbia/new_data/Bacteria/unMAG/tmhs/{obj.unique_id}.tsv'
         if not os.path.exists(tmh_file):
             return 0
         df = pd.read_csv(tmh_file, sep='\t')
