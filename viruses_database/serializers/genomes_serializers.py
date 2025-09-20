@@ -50,7 +50,7 @@ class MAGVirusesDetailSerializer(serializers.ModelSerializer):
         return MAGVirusesVirulenceFactor.objects.filter(viruses_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        return 0
+        return None
         # return MAGVirusesAntibioticResistance.objects.filter(viruses_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
@@ -111,7 +111,7 @@ class UnMAGVirusesDetailSerializer(serializers.ModelSerializer):
     #     return UnMAGVirusesTransmembraneHelices.objects.filter(viruses_id=obj.unique_id).count()
 
     def get_arg_count(self, obj):
-        return 0
+        return None
         # return MAGVirusesAntibioticResistance.objects.filter(viruses_id=obj.unique_id).count()
 
     def get_tmh_count(self, obj):
